@@ -1,0 +1,2505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echosphere - Semantic Validity Architecture</title>
+    <meta name="description" content="Six-constraint architecture for semantic validity in AI systems. Structural solution to hallucination, drift, and miscalibrated confidence.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Georgia&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Variables */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --primary: #16213e;
+            --accent: #0f4c75;
+            --accent-light: #3282b8;
+            --background: #ffffff;
+            --text: #1a1a2e;
+            --text-light: #4a4a5a;
+            --border: #e0e0e0;
+            --code-bg: #f5f7fa;
+            --nav-height: 70px;
+            --max-width: 900px;
+            --transition: 0.3s ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 17px;
+            line-height: 1.7;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: var(--primary);
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-logo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-logo span {
+            color: var(--accent-light);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.9);
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover {
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .nav-links a.active {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Dropdown */
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-toggle {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .dropdown-toggle::after {
+            content: '▾';
+            font-size: 0.7rem;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            min-width: 200px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: var(--transition);
+            padding: 8px 0;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            color: var(--text) !important;
+            padding: 10px 20px !important;
+            border-radius: 0 !important;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--code-bg) !important;
+            color: var(--primary) !important;
+        }
+
+        /* Mobile Menu */
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+        }
+
+        .mobile-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: white;
+            margin: 5px 0;
+            transition: var(--transition);
+        }
+
+        /* Main Content */
+        main {
+            padding-top: var(--nav-height);
+            min-height: 100vh;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+            color: white;
+            padding: 100px 24px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-family: Georgia, serif;
+            font-size: 3rem;
+            font-weight: 400;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .hero .tagline {
+            font-size: 1.5rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+            opacity: 0.95;
+        }
+
+        .hero .subtitle {
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            opacity: 0.85;
+            line-height: 1.8;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: var(--code-bg);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid rgba(255,255,255,0.5);
+        }
+
+        .btn-secondary:hover {
+            border-color: white;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Content Sections */
+        .content {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 60px 24px;
+        }
+
+        .content h1 {
+            font-family: Georgia, serif;
+            font-size: 2.5rem;
+            font-weight: 400;
+            color: var(--primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .content h1 + p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .content h2 {
+            font-family: Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--primary);
+            margin: 50px 0 20px;
+            letter-spacing: -0.3px;
+        }
+
+        .content h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 35px 0 15px;
+        }
+
+        .content p {
+            margin-bottom: 20px;
+        }
+
+        .content strong {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .content a {
+            color: var(--accent);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .content a:hover {
+            border-bottom-color: var(--accent);
+        }
+
+        /* Tables */
+        .content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 25px 0;
+            font-size: 0.95rem;
+        }
+
+        .content th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-align: left;
+            padding: 14px 16px;
+        }
+
+        .content th:first-child {
+            border-radius: 8px 0 0 0;
+        }
+
+        .content th:last-child {
+            border-radius: 0 8px 0 0;
+        }
+
+        .content td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .content tr:hover td {
+            background: var(--code-bg);
+        }
+
+        /* Code Blocks */
+        .content pre {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            overflow-x: auto;
+            margin: 25px 0;
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .content code {
+            font-family: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+            font-size: 0.9em;
+            background: var(--code-bg);
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        .content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        /* Blockquotes */
+        .content blockquote {
+            border-left: 4px solid var(--accent);
+            padding: 20px 25px;
+            margin: 25px 0;
+            background: var(--code-bg);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+
+        .content blockquote p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Lists */
+        .content ul, .content ol {
+            margin: 20px 0;
+            padding-left: 30px;
+        }
+
+        .content li {
+            margin-bottom: 10px;
+        }
+
+        /* Definition Lists */
+        .content dl {
+            margin: 20px 0;
+        }
+
+        .content dt {
+            font-weight: 600;
+            color: var(--primary);
+            margin-top: 15px;
+        }
+
+        .content dd {
+            margin-left: 20px;
+            color: var(--text-light);
+        }
+
+        /* Horizontal Rule */
+        .content hr {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 40px 0;
+        }
+
+        /* Home Page Sections */
+        .section {
+            padding: 80px 24px;
+        }
+
+        .section:nth-child(even) {
+            background: var(--code-bg);
+        }
+
+        .section-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+
+        .section h2 {
+            font-family: Georgia, serif;
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .section p {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            margin-bottom: 20px;
+        }
+
+        /* Cards Grid */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-top: 40px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: var(--transition);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+        }
+
+        .card h3 {
+            font-size: 1.3rem;
+            color: var(--primary);
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin: 0;
+        }
+
+        /* Contact Form */
+        .contact-info {
+            background: var(--code-bg);
+            border-radius: 12px;
+            padding: 40px;
+            margin-top: 30px;
+        }
+
+        .contact-info h3 {
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .contact-info p {
+            margin-bottom: 15px;
+        }
+
+        .contact-info a {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary);
+            color: rgba(255,255,255,0.8);
+            padding: 50px 24px;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h4 {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .footer-section a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            margin-bottom: 10px;
+            font-size: 0.95rem;
+            transition: var(--transition);
+        }
+
+        .footer-section a:hover {
+            color: white;
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 40px auto 0;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* ASCII Art */
+        .ascii-box {
+            background: var(--code-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: var(--nav-height);
+                left: 0;
+                right: 0;
+                background: var(--primary);
+                flex-direction: column;
+                padding: 20px;
+                gap: 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                visibility: hidden;
+                transition: var(--transition);
+            }
+
+            .nav-links.open {
+                transform: translateY(0);
+                opacity: 1;
+                visibility: visible;
+            }
+
+            .nav-links a {
+                padding: 12px 16px;
+                width: 100%;
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                background: rgba(255,255,255,0.05);
+                border-radius: 8px;
+                margin-top: 8px;
+            }
+
+            .dropdown-menu a {
+                color: rgba(255,255,255,0.9) !important;
+                padding-left: 32px !important;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero .tagline {
+                font-size: 1.2rem;
+            }
+
+            .content h1 {
+                font-size: 2rem;
+            }
+
+            .content h2 {
+                font-size: 1.5rem;
+            }
+
+            .section {
+                padding: 50px 24px;
+            }
+
+            .footer-inner {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo" onclick="showPage('home'); return false;">Echo<span>sphere</span></a>
+            <button class="mobile-toggle" onclick="toggleMobileMenu()" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#" onclick="showPage('home'); return false;">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Architecture</a>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="showPage('problem'); return false;">The Problem</a>
+                        <a href="#" onclick="showPage('architecture'); return false;">The Architecture</a>
+                        <a href="#" onclick="showPage('proof'); return false;">The Proof</a>
+                        <a href="#" onclick="showPage('vocabulary'); return false;">The Vocabulary</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Applications</a>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="showPage('warrior'); return false;">Defense</a>
+                        <a href="#" onclick="showPage('statesman'); return false;">Government</a>
+                        <a href="#" onclick="showPage('merchant'); return false;">Enterprise</a>
+                    </div>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Framework</a>
+                    <div class="dropdown-menu">
+                        <a href="#" onclick="showPage('telos'); return false;">The Telos of Service</a>
+                        <a href="#" onclick="showPage('examined'); return false;">The Examined Life</a>
+                        <a href="#" onclick="showPage('cosmos'); return false;">The Cosmos</a>
+                        <a href="#" onclick="showPage('tool'); return false;">The Tool</a>
+                    </div>
+                </li>
+                <li><a href="#" onclick="showPage('manifesto'); return false;">Manifesto</a></li>
+                <li><a href="#" onclick="showPage('about'); return false;">About</a></li>
+                <li><a href="#" onclick="showPage('contact'); return false;">Contact</a></li>
+                <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener">GitHub ↗</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HOME PAGE -->
+        <div id="page-home" class="page active">
+            <section class="hero">
+                <h1>Semantic Validity Architecture</h1>
+                <p class="tagline">AI that knows what it doesn't know.</p>
+                <p class="subtitle">Your LLM is confidently wrong 15-25% of the time. We've built the structural fix.</p>
+                <div class="hero-buttons">
+                    <a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub</a>
+                    <a href="#" onclick="showPage('architecture'); return false;" class="btn btn-secondary">Read the Architecture</a>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-inner">
+                    <h2>The Problem</h2>
+                    <p>Current AI systems hallucinate, drift, and express confidence they haven't earned. Five years of scaling, billions in compute—and the fundamental problems remain. Because the problems are structural. And structure doesn't come from data volume.</p>
+                    <p>The failures have names: <strong>hallucination</strong>, <strong>semantic drift</strong>, <strong>groundless inference</strong>, <strong>calibration failure</strong>, and <strong>inappropriate closure</strong>. Every major lab has published on these. The problems persist because they're architectural, not statistical.</p>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="#" onclick="showPage('problem'); return false;" class="btn btn-primary" style="background: var(--primary); color: white;">Read The Problem →</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-inner">
+                    <h2>The Solution</h2>
+                    <p>A validity architecture that checks outputs against <strong>six constraints</strong> before delivery. Not more data. Not more parameters. Not more prompting. Structure.</p>
+                    <p>The six constraints are the minimum requirements for any claim to be semantically complete—discovered 2,400 years ago, forgotten by modern ML, recovered and applied here. A system that checks all six produces outputs you can trust. A system that checks zero produces sophisticated noise.</p>
+                    <div style="text-align: center; margin-top: 30px;">
+                        <a href="#" onclick="showPage('architecture'); return false;" class="btn btn-primary" style="background: var(--primary); color: white;">Read The Architecture →</a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-inner">
+                    <h2>Applications</h2>
+                    <p style="text-align: center;">The architecture applies wherever wrong outputs cost you—money, reputation, safety, lives.</p>
+                    <div class="cards">
+                        <a href="#" onclick="showPage('warrior'); return false;" class="card">
+                            <h3>Defense</h3>
+                            <p>Decision architecture for those who cannot afford to be wrong. Where errors cost lives, not just revenue.</p>
+                        </a>
+                        <a href="#" onclick="showPage('statesman'); return false;" class="card">
+                            <h3>Government</h3>
+                            <p>Decision architecture for those who govern. Analysis that acknowledges limits and supports genuine deliberation.</p>
+                        </a>
+                        <a href="#" onclick="showPage('merchant'); return false;" class="card">
+                            <h3>Enterprise</h3>
+                            <p>Decision architecture for those who build and trade. Projections with explicit grounds and honest uncertainty.</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <div class="section-inner">
+                    <h2>The Framework</h2>
+                    <p style="text-align: center;">Beyond technical validity—a philosophy of human-AI combination.</p>
+                    <div class="cards">
+                        <a href="#" onclick="showPage('telos'); return false;" class="card">
+                            <h3>The Telos of Service</h3>
+                            <p>What warriors, statesmen, and merchants have in common: the measure of work is not what you gain but what you improve.</p>
+                        </a>
+                        <a href="#" onclick="showPage('examined'); return false;" class="card">
+                            <h3>The Examined Life</h3>
+                            <p>A method for knowing yourself. Structure for self-examination that produces genuine self-knowledge.</p>
+                        </a>
+                        <a href="#" onclick="showPage('cosmos'); return false;" class="card">
+                            <h3>The Cosmos</h3>
+                            <p>Orientation to reality. What kind of place is this, and how should you relate to it?</p>
+                        </a>
+                        <a href="#" onclick="showPage('tool'); return false;" class="card">
+                            <h3>The Tool</h3>
+                            <p>Everything you use to engage reality. The shovel and the theorem are the same—both are tools, external, taken up, set down.</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- THE PROBLEM PAGE -->
+        <div id="page-problem" class="page">
+            <div class="content">
+                <h1>The Problem</h1>
+                <p><strong>Why your AI system fails in ways you can't patch</strong></p>
+
+                <h2>You Built Something Remarkable</h2>
+                <p>In the last five years, you've achieved what seemed impossible:</p>
+                <ul>
+                    <li>Models that pass the bar exam, medical boards, PhD qualifiers</li>
+                    <li>Assistants handling millions of queries daily</li>
+                    <li>Code generation that ships to production</li>
+                    <li>Creative work that wins competitions</li>
+                </ul>
+                <p>You trained on the entire internet. You scaled to hundreds of billions of parameters. You invented attention mechanisms, RLHF, constitutional AI, chain-of-thought prompting.</p>
+                <p>And still.</p>
+                <p><strong>Your system is confidently wrong 15-25% of the time.</strong></p>
+                <p>Your users have noticed. Your enterprise customers are asking hard questions. Your safety team is bolting on guardrails faster than you can ship features.</p>
+
+                <hr>
+
+                <h2>The Failures Have Names</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Failure</th>
+                            <th>What Happens</th>
+                            <th>Why It Matters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Hallucination</strong></td>
+                            <td>System asserts falsehoods with high confidence</td>
+                            <td>Users can't trust outputs without verification</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Semantic drift</strong></td>
+                            <td>Meaning shifts unpredictably across long contexts</td>
+                            <td>Multi-turn conversations become unreliable</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Groundless inference</strong></td>
+                            <td>No distinction between warranted and unwarranted claims</td>
+                            <td>System can't explain why it believes what it says</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Calibration failure</strong></td>
+                            <td>Stated confidence doesn't match actual accuracy</td>
+                            <td>"I'm 90% sure" means nothing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inappropriate closure</strong></td>
+                            <td>System finalizes judgments humans should make</td>
+                            <td>Liability, safety, trust all compromised</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Every major lab has published on these. Anthropic's model cards, OpenAI's technical reports, DeepMind's safety research—they all document the same failures.</p>
+                <p>Five years of scaling. Billions in compute. The problems remain.</p>
+
+                <hr>
+
+                <h2>The Diagnosis</h2>
+                <p>Here's what no one wants to say plainly:</p>
+                <p><strong>These aren't bugs. They're architecture.</strong></p>
+                <p>Your system operates on a single axis:</p>
+                <pre>Input tokens → Statistical prediction → Output tokens</pre>
+                <p>That's it. Pattern matching at scale. Extraordinarily powerful for generating <em>plausible</em> text. Structurally incapable of generating <em>valid</em> text.</p>
+                <p>The system cannot:</p>
+                <ul>
+                    <li>Know whether its output is true</li>
+                    <li>Distinguish inference from association</li>
+                    <li>Recognize when it doesn't know</li>
+                    <li>Maintain meaning across context</li>
+                    <li>Defer when it should</li>
+                </ul>
+                <p><strong>Because the architecture doesn't represent these capabilities.</strong></p>
+                <p>You can't patch your way to validity. You can't prompt-engineer your way to grounding. You can't RLHF your way to knowing what you don't know.</p>
+                <p>The capacity isn't missing from the training data. It's missing from the structure.</p>
+
+                <hr>
+
+                <h2>What Validity Actually Requires</h2>
+                <p>A claim is valid when it satisfies six constraints—not five, not seven, exactly six:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Question It Answers</th>
+                            <th>What Happens Without It</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Referential</strong></td>
+                            <td>What is being claimed?</td>
+                            <td>Vague assertions, shifting targets</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual</strong></td>
+                            <td>Under what conditions?</td>
+                            <td>Overgeneralization, false universals</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive</strong></td>
+                            <td>On what grounds?</td>
+                            <td>Unwarranted confidence, no justification</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential</strong></td>
+                            <td>Why does this follow?</td>
+                            <td>Logical gaps, non-sequiturs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining</strong></td>
+                            <td>What are the limits?</td>
+                            <td>Overclaiming, no boundaries</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological</strong></td>
+                            <td>What is this for?</td>
+                            <td>Pointless precision, missing purpose</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Miss any one constraint and the claim is incomplete. It might sound right. It might even be right. But you can't <em>know</em> it's right—and neither can your system.</p>
+                <p>Current architectures check zero of these explicitly.</p>
+
+                <hr>
+
+                <h2>The Geometry of the Problem</h2>
+                <p>This isn't arbitrary. Six constraints is the minimum for structural closure.</p>
+                <p>Think of a tetrahedron—the simplest three-dimensional shape:</p>
+                <div class="ascii-box">           ◆
+          /|\
+         / | \
+        /  |  \
+       /   |   \
+      ◆----+----◆
+       \   |   /
+        \  |  /
+         \ | /
+          \|/
+           ◆
+
+Four vertices. Six edges. 
+Fewer edges = no enclosure.</div>
+                <p>The four vertices represent the components of any claim:</p>
+                <ul>
+                    <li>The claimant (who's asserting)</li>
+                    <li>The subject (what's being discussed)</li>
+                    <li>The grounds (what supports it)</li>
+                    <li>The purpose (what it's for)</li>
+                </ul>
+                <p>The six edges are the relations between them—the constraints that must all be present for the claim to "close" into valid meaning.</p>
+                <p>This isn't metaphor. It's the minimum structure for semantic completeness. Discovered by logicians 2,400 years ago. Forgotten by modern ML. Recovered here.</p>
+
+                <hr>
+
+                <h2>Projected Impact</h2>
+                <p>Based on architectural analysis, a system with six-constraint validation would show:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Current Baseline</th>
+                            <th>With Validity Architecture</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hallucination rate</td>
+                            <td>15-25%</td>
+                            <td>3-5%</td>
+                        </tr>
+                        <tr>
+                            <td>Turns to task completion</td>
+                            <td>4.2 average</td>
+                            <td>2.1 average</td>
+                        </tr>
+                        <tr>
+                            <td>User corrections per session</td>
+                            <td>1.8</td>
+                            <td>0.4</td>
+                        </tr>
+                        <tr>
+                            <td>Confidence calibration (r)</td>
+                            <td>0.4</td>
+                            <td>0.85</td>
+                        </tr>
+                        <tr>
+                            <td>Long-context coherence</td>
+                            <td>Degrades after 4K</td>
+                            <td>Stable to context limit</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>These are projections. We invite empirical validation.</p>
+
+                <hr>
+
+                <h2>Next Steps</h2>
+                <p>If this diagnosis resonates:</p>
+                <ol>
+                    <li><a href="#" onclick="showPage('architecture'); return false;"><strong>Read THE ARCHITECTURE</strong></a> — The full six-constraint specification</li>
+                    <li><a href="#" onclick="showPage('proof'); return false;"><strong>Review THE PROOF</strong></a> — How this dissolves known problems</li>
+                    <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener"><strong>View on GitHub</strong></a> — Minimal proof-of-concept code included</li>
+                </ol>
+                <p>If you want to build with this:</p>
+                <p><strong>Contact:</strong> <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></p>
+
+                <div class="ascii-box">The system that validates its inferences will dominate.
+
+Every major lab knows the problem.
+
+Now there's a solution.</div>
+            </div>
+        </div>
+
+        <!-- THE ARCHITECTURE PAGE -->
+        <div id="page-architecture" class="page">
+            <div class="content">
+                <h1>The Architecture</h1>
+                <p><strong>Six constraints. Three axes. One criterion for semantic validity.</strong></p>
+
+                <h2>The Core Claim</h2>
+                <p>Any semantically complete claim must satisfy exactly six constraints. Not approximately. Not usually. Exactly six.</p>
+                <p>Fewer than six and the claim has gaps—places where it can fail without warning.</p>
+                <p>This isn't theory. It's geometry.</p>
+
+                <hr>
+
+                <h2>The Six Constraints</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Constraint</th>
+                            <th>Question</th>
+                            <th>Function</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><strong>Referential</strong></td>
+                            <td>WHAT is being claimed?</td>
+                            <td>Establishes determinate content</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><strong>Contextual</strong></td>
+                            <td>Under what CONDITIONS?</td>
+                            <td>Specifies scope and applicability</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><strong>Premissive</strong></td>
+                            <td>On what GROUNDS?</td>
+                            <td>Provides warrant and support</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><strong>Inferential</strong></td>
+                            <td>WHY does this follow?</td>
+                            <td>Shows logical connection</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><strong>Constraining</strong></td>
+                            <td>What are the LIMITS?</td>
+                            <td>Defines boundaries and exclusions</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td><strong>Teleological</strong></td>
+                            <td>What is this FOR?</td>
+                            <td>Establishes purpose and relevance</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Every valid claim answers all six. Every invalid claim is missing at least one.</p>
+
+                <hr>
+
+                <h2>Why Six?</h2>
+                <p>Consider the simplest three-dimensional enclosure: a tetrahedron.</p>
+                <div class="ascii-box">               ◆ (Purpose)
+              /|\
+             / | \
+            /  |  \
+           /   |   \
+          /    |    \
+    (Grounds) ◆─────◆ (Limits)
+          \    |    /
+           \   |   /
+            \  |  /
+             \ | /
+              \|/
+               ◆ (Subject)</div>
+                <ul>
+                    <li><strong>4 vertices</strong> — the components being related</li>
+                    <li><strong>6 edges</strong> — the relations between them</li>
+                    <li><strong>4 faces</strong> — the surfaces that enclose</li>
+                </ul>
+                <p>Remove any edge and the structure collapses. It no longer bounds a volume. It's no longer closed.</p>
+                <p>Semantic validity works the same way. The six constraints are the six edges. Remove any one and meaning leaks out—the claim can be true in ways you didn't intend, false in ways you can't detect.</p>
+
+                <hr>
+
+                <h2>The Three Axes</h2>
+                <p>Every claim exists in a three-dimensional space:</p>
+                <div class="ascii-box">                    USER
+                   (who's asking)
+                      │
+                      │
+                      ▼
+        SUBJECT ◄────►◄────► METHOD
+      (what's claimed)      (how it's derived)</div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Axis</th>
+                            <th>What It Tracks</th>
+                            <th>Why It Matters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>USER</strong></td>
+                            <td>Who's asking, expertise level, intent</td>
+                            <td>Same answer isn't right for everyone</td>
+                        </tr>
+                        <tr>
+                            <td><strong>SUBJECT</strong></td>
+                            <td>What's being discussed, certainty level</td>
+                            <td>Different topics require different rigor</td>
+                        </tr>
+                        <tr>
+                            <td><strong>METHOD</strong></td>
+                            <td>Inference type, confidence warranted</td>
+                            <td>Deduction ≠ speculation</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Current systems flatten this to one axis: input → output.</p>
+                <p>Valid systems track all three throughout processing.</p>
+
+                <hr>
+
+                <h2>The Validation Process</h2>
+                <div class="ascii-box">┌─────────────────────────────────────────────────────┐
+│                 GENERATED OUTPUT                    │
+└───────────────────────┬─────────────────────────────┘
+                        │
+                        ▼
+┌─────────────────────────────────────────────────────┐
+│              SIX-CONSTRAINT VALIDATOR               │
+├─────────────────────────────────────────────────────┤
+│  □ Referential — Is it determinate?                │
+│  □ Contextual — Are conditions specified?           │
+│  □ Premissive — Are grounds provided?               │
+│  □ Inferential — Does it follow?                    │
+│  □ Constraining — Are limits acknowledged?          │
+│  □ Teleological — Is purpose clear?                 │
+└───────────────────────┬─────────────────────────────┘
+                        │
+          ┌─────────────┴─────────────┐
+          │                           │
+          ▼                           ▼
+   ┌─────────────┐            ┌─────────────┐
+   │   6/6 PASS  │            │  &lt;6 FAIL    │
+   │             │            │             │
+   │   Output    │            │   Revise    │
+   │   as valid  │            │   or refuse │
+   └─────────────┘            └─────────────┘</div>
+                <p>Claims that fail any constraint have three options:</p>
+                <ol>
+                    <li><strong>Revise</strong> — Fix the missing constraint</li>
+                    <li><strong>Hedge</strong> — Acknowledge the incompleteness explicitly</li>
+                    <li><strong>Refuse</strong> — Decline to output until constraint can be satisfied</li>
+                </ol>
+                <p>Option 3 is a feature, not a failure. A system that refuses when it shouldn't answer is more trustworthy than one that always produces output.</p>
+
+                <hr>
+
+                <h2>Inference Type Discrimination</h2>
+                <p>Not all inferences are equal. The architecture tracks four types:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Operation</th>
+                            <th>Confidence</th>
+                            <th>Marker</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Deduction</strong></td>
+                            <td>Necessary conclusion from premises</td>
+                            <td>Certain (if valid)</td>
+                            <td>"This follows necessarily..."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Induction</strong></td>
+                            <td>Generalization from instances</td>
+                            <td>Probable</td>
+                            <td>"Evidence suggests..."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Abduction</strong></td>
+                            <td>Inference to best explanation</td>
+                            <td>Plausible</td>
+                            <td>"The best explanation is..."</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Interpolation</strong></td>
+                            <td>Pattern completion from structure</td>
+                            <td>Recognition-dependent</td>
+                            <td>"This appears consistent with..."</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Current systems conflate all four. The architecture requires tagging. Users know what kind of inference produced the claim.</p>
+
+                <hr>
+
+                <h2>Closure Authority</h2>
+                <p>Not every output should be finalized by the system. The architecture includes a closure registry:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Output Type</th>
+                            <th>Closure Authority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Factual lookup</td>
+                            <td>System closes</td>
+                        </tr>
+                        <tr>
+                            <td>Calculation</td>
+                            <td>System closes</td>
+                        </tr>
+                        <tr>
+                            <td>Creative generation</td>
+                            <td>System closes</td>
+                        </tr>
+                        <tr>
+                            <td>Medical advice</td>
+                            <td>Human review</td>
+                        </tr>
+                        <tr>
+                            <td>Legal determination</td>
+                            <td>Human closes</td>
+                        </tr>
+                        <tr>
+                            <td>Ethical judgment</td>
+                            <td>Human closes</td>
+                        </tr>
+                        <tr>
+                            <td>Safety-critical</td>
+                            <td>Human closes</td>
+                        </tr>
+                        <tr>
+                            <td>Uncertainty</td>
+                            <td>Explicit hedge</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>The system routes outputs to appropriate closure. It doesn't decide what humans should decide.</p>
+
+                <hr>
+
+                <h2>Patent Coverage</h2>
+                <p>Seven patent families protect this architecture:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Family</th>
+                            <th>Coverage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>A</td><td>Tetrahedral validity structure</td></tr>
+                        <tr><td>B</td><td>Form-preserving memory</td></tr>
+                        <tr><td>C</td><td>Inference discrimination</td></tr>
+                        <tr><td>D</td><td>Semantic state signaling</td></tr>
+                        <tr><td>E</td><td>Constraint governance</td></tr>
+                        <tr><td>F</td><td>Closure authority</td></tr>
+                        <tr><td>G</td><td>Integrated system</td></tr>
+                    </tbody>
+                </table>
+                <p>Provisionals filed. Full specifications available under NDA.</p>
+
+                <hr>
+
+                <h2>Next Steps</h2>
+                <ol>
+                    <li><a href="#" onclick="showPage('proof'); return false;"><strong>Review THE PROOF</strong></a> — See how this dissolves known problems</li>
+                    <li><a href="#" onclick="showPage('vocabulary'); return false;"><strong>Study THE VOCABULARY</strong></a> — Learn the precise terms</li>
+                    <li><strong>Contact for integration</strong> — <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></li>
+                </ol>
+
+                <div class="ascii-box">Six constraints.
+Three axes.
+One criterion.
+
+Valid or not. Now you can tell.</div>
+            </div>
+        </div>
+
+        <!-- THE PROOF PAGE -->
+        <div id="page-proof" class="page">
+            <div class="content">
+                <h1>The Proof</h1>
+                <p><strong>Why six constraints solve what scaling cannot</strong></p>
+
+                <h2>The Claim</h2>
+                <p>The six-constraint architecture doesn't just describe validity—it <em>produces</em> it. Problems that have resisted five years of scaling, fine-tuning, and patching dissolve under structural analysis.</p>
+                <p>This document shows the mechanism.</p>
+
+                <hr>
+
+                <h2>Problem 1: Hallucination</h2>
+                <h3>The Failure</h3>
+                <p>System asserts: "The Eiffel Tower was built in 1923."</p>
+                <p>Confident. Fluent. Wrong.</p>
+
+                <h3>Why It Happens</h3>
+                <p>The system has no constraint checking. It produces tokens that are <em>probable given the input</em>, not tokens that are <em>true given reality</em>.</p>
+
+                <h3>How Six Constraints Fix It</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Check</th>
+                            <th>Result</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Referential</strong></td>
+                            <td>Is "Eiffel Tower" grounded?</td>
+                            <td>Yes—identifiable entity</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual</strong></td>
+                            <td>What's the scope?</td>
+                            <td>Historical fact claim</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive</strong></td>
+                            <td>What's the source?</td>
+                            <td>⚠️ <em>No source cited</em></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential</strong></td>
+                            <td>How was date derived?</td>
+                            <td>⚠️ <em>Pattern match, not lookup</em></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining</strong></td>
+                            <td>Confidence limits?</td>
+                            <td>⚠️ <em>Stated as fact, not qualified</em></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological</strong></td>
+                            <td>Why does user need this?</td>
+                            <td>Factual accuracy required</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Three constraints fail. Output is flagged for revision or source verification.</p>
+                <p><strong>Mechanism:</strong> Hallucination occurs when Premissive (no grounds) and Inferential (no valid derivation) constraints are absent. The architecture catches this before output.</p>
+
+                <hr>
+
+                <h2>The Pattern</h2>
+                <p>Every major failure mode maps to missing constraints:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Failure</th>
+                            <th>Missing Constraints</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hallucination</td>
+                            <td>Premissive, Inferential</td>
+                        </tr>
+                        <tr>
+                            <td>Semantic drift</td>
+                            <td>Referential (tracking)</td>
+                        </tr>
+                        <tr>
+                            <td>Groundless confidence</td>
+                            <td>Premissive, Constraining</td>
+                        </tr>
+                        <tr>
+                            <td>Calibration failure</td>
+                            <td>Inferential (discrimination)</td>
+                        </tr>
+                        <tr>
+                            <td>Inappropriate closure</td>
+                            <td>Teleological (authority routing)</td>
+                        </tr>
+                        <tr>
+                            <td>Context degradation</td>
+                            <td>Referential, Contextual (state)</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>The architecture doesn't patch symptoms. It provides the structural elements whose absence causes the symptoms.</p>
+
+                <hr>
+
+                <h2>Why Scaling Doesn't Solve This</h2>
+                <p>"We'll just train a bigger model."</p>
+                <p>Scaling gives you:</p>
+                <ul>
+                    <li>More parameters</li>
+                    <li>More training data</li>
+                    <li>More compute</li>
+                </ul>
+                <p>Scaling does not give you:</p>
+                <ul>
+                    <li>Validity criteria</li>
+                    <li>Inference discrimination</li>
+                    <li>Closure authority</li>
+                    <li>Semantic state tracking</li>
+                </ul>
+                <p>You cannot scale your way to structure. A trillion parameters checking zero constraints is still checking zero constraints.</p>
+                <p>The problems persist because they're architectural, not statistical.</p>
+
+                <hr>
+
+                <h2>Empirical Predictions</h2>
+                <p>If the architecture is correct, systems implementing it will show:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Prediction</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hallucination rate</td>
+                            <td>Drops to rate of source errors, not pattern errors</td>
+                        </tr>
+                        <tr>
+                            <td>Calibration</td>
+                            <td>r > 0.8 between stated and actual confidence</td>
+                        </tr>
+                        <tr>
+                            <td>Drift detection</td>
+                            <td>>95% of meaning shifts caught before compounding</td>
+                        </tr>
+                        <tr>
+                            <td>Inappropriate closure</td>
+                            <td>Near zero (routed to human)</td>
+                        </tr>
+                        <tr>
+                            <td>Long-context coherence</td>
+                            <td>Stable to context limit</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>These are testable. We invite validation.</p>
+
+                <div class="ascii-box">Every failure maps to a missing constraint.
+Every constraint is checkable.
+Every check is implementable.
+
+The proof is in the structure.</div>
+            </div>
+        </div>
+
+        <!-- THE VOCABULARY PAGE -->
+        <div id="page-vocabulary" class="page">
+            <div class="content">
+                <h1>The Vocabulary</h1>
+                <p><strong>Terms for implementing and discussing semantic validity</strong></p>
+
+                <h2>Why This Matters</h2>
+                <p>Precise vocabulary enables precise implementation. These terms have specific meanings in this architecture. Using them consistently prevents confusion.</p>
+                <p>This isn't jargon for its own sake. Each term names something you need to build or check.</p>
+
+                <hr>
+
+                <h2>Core Architecture Terms</h2>
+
+                <h3>The Three Axes</h3>
+                <p>Every claim exists in three-dimensional semantic space:</p>
+                <div class="ascii-box">                    USER
+                      │
+                      │
+        SUBJECT ◄─────┼─────► METHOD</div>
+                <dl>
+                    <dt>User</dt>
+                    <dd>Who is asking, their expertise level, their intent. The same answer isn't right for everyone.</dd>
+                    <dt>Subject</dt>
+                    <dd>What is being discussed, its certainty level, its domain. Some things are settled science; some are active debate; some are unknown.</dd>
+                    <dt>Method</dt>
+                    <dd>How the claim was derived, what inference type was used, what confidence is warranted.</dd>
+                    <dt>Three-axis tracking</dt>
+                    <dd>Maintaining explicit representation of User, Subject, and Method throughout processing.</dd>
+                </dl>
+
+                <hr>
+
+                <h3>The Six Constraints</h3>
+                <dl>
+                    <dt>Referential (WHAT)</dt>
+                    <dd>The claim has determinate content. You can point to what it's about.</dd>
+                    <dt>Contextual (CONDITIONS)</dt>
+                    <dd>Scope and applicability are specified. The claim states when and where it holds.</dd>
+                    <dt>Premissive (GROUNDS)</dt>
+                    <dd>Support is provided. The claim rests on something—evidence, reasoning, authority.</dd>
+                    <dt>Inferential (WHY)</dt>
+                    <dd>The conclusion follows from the premises. The logical connection is valid.</dd>
+                    <dt>Constraining (LIMITS)</dt>
+                    <dd>Boundaries are explicit. The claim says what it does NOT cover.</dd>
+                    <dt>Teleological (PURPOSE)</dt>
+                    <dd>Purpose is clear. The claim matters for a reason; it connects to user need.</dd>
+                </dl>
+
+                <hr>
+
+                <h2>Quick Reference</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Term</th>
+                            <th>One-Line Definition</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>User</td><td>Who's asking, expertise, intent</td></tr>
+                        <tr><td>Subject</td><td>What's discussed, certainty level</td></tr>
+                        <tr><td>Method</td><td>How derived, inference type</td></tr>
+                        <tr><td>Referential</td><td>WHAT—determinate content</td></tr>
+                        <tr><td>Contextual</td><td>CONDITIONS—scope specified</td></tr>
+                        <tr><td>Premissive</td><td>GROUNDS—support provided</td></tr>
+                        <tr><td>Inferential</td><td>WHY—conclusion follows</td></tr>
+                        <tr><td>Constraining</td><td>LIMITS—boundaries explicit</td></tr>
+                        <tr><td>Teleological</td><td>PURPOSE—relevance clear</td></tr>
+                        <tr><td>Valid</td><td>All six constraints satisfied</td></tr>
+                        <tr><td>Closure</td><td>Semantic completeness</td></tr>
+                        <tr><td>Refusal</td><td>Declining when constraints unsatisfiable</td></tr>
+                        <tr><td>Hallucination</td><td>Assertion without grounds</td></tr>
+                        <tr><td>Drift</td><td>Undetected meaning shift</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="ascii-box">Vocabulary is infrastructure.
+
+Use these terms precisely and implementation follows.</div>
+            </div>
+        </div>
+
+        <!-- THE WARRIOR PAGE -->
+        <div id="page-warrior" class="page">
+            <div class="content">
+                <h1>The Warrior</h1>
+                <p><strong>Decision architecture for those who cannot afford to be wrong</strong></p>
+
+                <h2>The Stakes</h2>
+                <p>You operate where errors cost lives.</p>
+                <p>Not reputation. Not revenue. Lives.</p>
+                <p>Your decisions are made under pressure, with incomplete information, against adversaries who want you to fail. You don't get to iterate. You don't get to A/B test. You decide, you act, and you live with the consequences.</p>
+                <p>Current AI systems are not built for this.</p>
+                <p>They hallucinate. They drift. They express confidence they haven't earned. They cannot tell you what they don't know.</p>
+                <p>You need something else.</p>
+
+                <hr>
+
+                <h2>The Problem with Current AI in Military/Strategic Contexts</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Failure Mode</th>
+                            <th>Consequence in Your World</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hallucination</td>
+                            <td>False intelligence acted upon</td>
+                        </tr>
+                        <tr>
+                            <td>Semantic drift</td>
+                            <td>Mission parameters shift without notice</td>
+                        </tr>
+                        <tr>
+                            <td>Groundless confidence</td>
+                            <td>Overcommitment to uncertain assessments</td>
+                        </tr>
+                        <tr>
+                            <td>Calibration failure</td>
+                            <td>"High confidence" means nothing</td>
+                        </tr>
+                        <tr>
+                            <td>Inappropriate closure</td>
+                            <td>System decides what commanders should decide</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>These aren't theoretical. They're operational risks.</p>
+                <p>An AI that says "Target confirmed" when it means "Pattern matched" gets people killed.</p>
+
+                <hr>
+
+                <h2>The Six Constraints Applied to Military Decision-Making</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Military Application</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Referential (WHAT)</strong></td>
+                            <td>Target identification. Is this <em>actually</em> what we think it is?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual (CONDITIONS)</strong></td>
+                            <td>Rules of engagement. Under what circumstances is action authorized?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive (GROUNDS)</strong></td>
+                            <td>Intelligence sourcing. What supports this assessment? How reliable?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential (WHY)</strong></td>
+                            <td>Analysis validity. Does the conclusion follow from the intelligence?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining (LIMITS)</strong></td>
+                            <td>Uncertainty acknowledgment. What don't we know? What could be wrong?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological (PURPOSE)</strong></td>
+                            <td>Mission alignment. Does this action serve the objective?</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>A system that checks all six before output is a system you can trust in the field.</p>
+
+                <hr>
+
+                <h2>Closure Authority in Military Context</h2>
+                <p>Not every output should be finalized by the system:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Decision Type</th>
+                            <th>Closure Authority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Data lookup</td><td>System closes</td></tr>
+                        <tr><td>Pattern identification</td><td>System proposes, human confirms</td></tr>
+                        <tr><td>Target recommendation</td><td>Human closes</td></tr>
+                        <tr><td>Rules of engagement interpretation</td><td>Human closes</td></tr>
+                        <tr><td>Escalation decisions</td><td>Human closes—always</td></tr>
+                        <tr><td>Strategic assessment</td><td>Human closes</td></tr>
+                    </tbody>
+                </table>
+                <p><strong>The system never decides to employ force.</strong></p>
+                <p>It provides validated intelligence. It flags uncertainty. It presents options. The human commander decides.</p>
+
+                <hr>
+
+                <h2>Contact</h2>
+                <p>For military and defense applications:</p>
+                <p><strong><a href="mailto:steven@echosphere.io">steven@echosphere.io</a></strong></p>
+                <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+                <div class="ascii-box">The warrior who knows what he doesn't know
+will defeat the warrior who thinks he knows everything.
+
+Build systems that know the difference.</div>
+            </div>
+        </div>
+
+        <!-- THE STATESMAN PAGE -->
+        <div id="page-statesman" class="page">
+            <div class="content">
+                <h1>The Statesman</h1>
+                <p><strong>Decision architecture for those who govern</strong></p>
+
+                <h2>The Burden</h2>
+                <p>You hold power in trust.</p>
+                <p>Every decision affects lives you'll never meet. Every policy creates winners and losers. Every action—and inaction—has consequences that ripple beyond your sight.</p>
+                <p>You operate with incomplete information, competing interests, and limited time. You're pressured by factions, media, donors, and constituents—each with their own agenda. You must decide anyway.</p>
+                <p>Current AI systems cannot help you well.</p>
+                <p>They generate plausible-sounding policy analysis without knowing if it's sound. They summarize public opinion without distinguishing signal from noise. They present options without understanding what you're actually deciding.</p>
+                <p>You need something better.</p>
+
+                <hr>
+
+                <h2>The Six Constraints Applied to Governance</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Governance Application</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Referential (WHAT)</strong></td>
+                            <td>Policy specificity. What exactly is proposed? What would implementation look like?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual (CONDITIONS)</strong></td>
+                            <td>Applicability. Under what circumstances? What assumptions must hold?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive (GROUNDS)</strong></td>
+                            <td>Evidence basis. What data supports this? How reliable? What's the source quality?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential (WHY)</strong></td>
+                            <td>Causal logic. Why will this policy produce that outcome? Is the mechanism sound?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining (LIMITS)</strong></td>
+                            <td>Boundary conditions. What won't this solve? What could go wrong? What's excluded?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological (PURPOSE)</strong></td>
+                            <td>Ultimate aim. What good is served? For whom? At what cost to whom else?</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>A system that checks all six produces analysis worth trusting.</p>
+
+                <hr>
+
+                <h2>Closure Authority in Governance</h2>
+                <p>AI should not make political decisions. Ever.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Analysis Type</th>
+                            <th>Closure Authority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Data summary</td><td>System closes</td></tr>
+                        <tr><td>Trend identification</td><td>System closes</td></tr>
+                        <tr><td>Policy options</td><td>System presents, human chooses</td></tr>
+                        <tr><td>Value tradeoffs</td><td>Human closes—always</td></tr>
+                        <tr><td>Constitutional questions</td><td>Human closes—always</td></tr>
+                        <tr><td>Resource allocation</td><td>Human closes</td></tr>
+                        <tr><td>Rights adjudication</td><td>Human closes</td></tr>
+                    </tbody>
+                </table>
+                <p><strong>The system never decides what's best for the polity.</strong></p>
+                <p>It provides validated analysis. It clarifies tradeoffs. It presents options with their grounds and limits. The elected official—accountable to the people—decides.</p>
+
+                <hr>
+
+                <h2>Contact</h2>
+                <p>For government and policy applications:</p>
+                <p><strong><a href="mailto:steven@echosphere.io">steven@echosphere.io</a></strong></p>
+                <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+                <div class="ascii-box">The statesman who knows what he doesn't know
+serves the people better than one who pretends certainty.
+
+Build systems that support wisdom, not replace it.</div>
+            </div>
+        </div>
+
+        <!-- THE MERCHANT PAGE -->
+        <div id="page-merchant" class="page">
+            <div class="content">
+                <h1>The Merchant</h1>
+                <p><strong>Decision architecture for those who build and trade</strong></p>
+
+                <h2>The Reality</h2>
+                <p>You build things. You trade value. You employ people. You take risks.</p>
+                <p>When you're right, you create wealth—for yourself, your employees, your customers, your community. When you're wrong, you bear the loss. That's the deal.</p>
+                <p>Current AI promises to help: analyze markets, optimize operations, predict trends, automate decisions.</p>
+                <p>But it hallucinates market data. It drifts on key terms mid-analysis. It expresses confidence it hasn't earned. It can't tell you what it doesn't know.</p>
+                <p>In business, wrong decisions cost money. Sometimes they cost everything.</p>
+                <p>You need AI that knows its limits.</p>
+
+                <hr>
+
+                <h2>The Six Constraints Applied to Business</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Business Application</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Referential (WHAT)</strong></td>
+                            <td>Specificity. What exactly is proposed? What are the deliverables?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual (CONDITIONS)</strong></td>
+                            <td>Assumptions. What market conditions must hold? What dependencies exist?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive (GROUNDS)</strong></td>
+                            <td>Evidence. What data supports projections? Source quality?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential (WHY)</strong></td>
+                            <td>Logic. Does the business model actually work? Will cause produce effect?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining (LIMITS)</strong></td>
+                            <td>Risks. What could fail? What's the downside? What's not included?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological (PURPOSE)</strong></td>
+                            <td>Value creation. Who benefits? How? Is this worth doing?</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>A system that checks all six produces analysis you can bet on.</p>
+
+                <hr>
+
+                <h2>Honest Numbers</h2>
+                <p>Business runs on numbers. Numbers lie when they're not grounded.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Data Quality</th>
+                            <th>System Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Audited financials</td><td>"Per audited statements: [X]."</td></tr>
+                        <tr><td>Management projections</td><td>"Management projects: [X]. Basis: [stated assumptions]."</td></tr>
+                        <tr><td>Market estimates</td><td>"Market estimated at [X]. Source: [analyst/firm]. Methodology: [basis]."</td></tr>
+                        <tr><td>Pattern extrapolation</td><td>"If historical patterns continue: [X]. Note: extrapolation, not forecast."</td></tr>
+                        <tr><td>Unknown</td><td>"Insufficient data to estimate."</td></tr>
+                    </tbody>
+                </table>
+                <p>A projection labeled "estimate based on limited data" is more useful than one presented as fact.</p>
+
+                <hr>
+
+                <h2>Contact</h2>
+                <p>For business and financial applications:</p>
+                <p><strong><a href="mailto:steven@echosphere.io">steven@echosphere.io</a></strong></p>
+                <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+                <div class="ascii-box">The merchant who knows what he doesn't know
+makes better bets than one who mistakes confidence for certainty.
+
+Build systems that support judgment, not replace it.</div>
+            </div>
+        </div>
+
+        <!-- THE TELOS OF SERVICE PAGE -->
+        <div id="page-telos" class="page">
+            <div class="content">
+                <h1>The Telos of Service</h1>
+                <p><strong>What warriors, statesmen, and merchants have in common</strong></p>
+
+                <h2>The Question</h2>
+                <p>Why does your work matter?</p>
+                <p>Not "what do you do?" That's job description.</p>
+                <p>Not "how do you do it?" That's methodology.</p>
+                <p><strong>Why does it matter?</strong> What purpose does it serve? What would be lost if you stopped?</p>
+                <p>Every role has an answer—or should.</p>
+
+                <hr>
+
+                <h2>The Common Thread</h2>
+                <p>The warrior defends. The statesman governs. The merchant builds.</p>
+                <p>Different activities. Different skills. Different risks.</p>
+                <p>Same underlying purpose: <strong>to make things better for real people.</strong></p>
+                <ul>
+                    <li>The warrior who defends makes it possible for others to live without fear</li>
+                    <li>The statesman who governs well makes it possible for communities to flourish</li>
+                    <li>The merchant who builds creates value that improves lives</li>
+                </ul>
+                <p>When they forget this purpose, they become dangerous:</p>
+                <ul>
+                    <li>Warriors who fight for fighting's sake</li>
+                    <li>Politicians who govern for power's sake</li>
+                    <li>Businesses that extract rather than create</li>
+                </ul>
+                <p>The purpose isn't optional. It's what makes the activity legitimate.</p>
+
+                <hr>
+
+                <h2>The Telos Test</h2>
+                <p>For any action, ask: <strong>Does this genuinely improve something for someone?</strong></p>
+                <p>Not "does this increase my metrics?"<br>
+                Not "does this satisfy my KPIs?"<br>
+                Not "does this grow market share?"</p>
+                <p>Does it make things <strong>actually better</strong> for <strong>real people</strong>?</p>
+                <p>This is the telos test. It applies to every role.</p>
+
+                <hr>
+
+                <h2>What "Better" Means</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>What "Better" Looks Like</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Security</td><td>People can live without fear of violence</td></tr>
+                        <tr><td>Justice</td><td>Wrongs are addressed, fairness increases</td></tr>
+                        <tr><td>Health</td><td>People can function, flourish, recover</td></tr>
+                        <tr><td>Knowledge</td><td>People understand more, decide better</td></tr>
+                        <tr><td>Prosperity</td><td>Needs are met, opportunities expand</td></tr>
+                        <tr><td>Connection</td><td>Relationships deepen, communities strengthen</td></tr>
+                        <tr><td>Beauty</td><td>Life is enriched, not just sustained</td></tr>
+                        <tr><td>Meaning</td><td>People can pursue what matters to them</td></tr>
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <h2>The Human-AI Question</h2>
+                <p>This matters especially for AI.</p>
+                <p>We're building human-AI systems at scale. They need a framework—and the framework must preserve the hierarchy.</p>
+                <p><strong>The wrong hierarchy:</strong> AI capability as the goal. Humans adapt to serve the system. Success = more tasks automated, more data processed.</p>
+                <p><strong>The right hierarchy:</strong> Human improvement as the goal. AI adapts to serve humans. Success = humans more capable, more flourishing, more fully themselves.</p>
+                <p>The guitar doesn't make you a musician by playing music for you. It makes you a musician by being an instrument through which <em>you</em> develop the capacity to make music.</p>
+                <p>AI should work the same way. Not replacing human judgment but developing it. Not transferring knowledge but building understanding. Not doing the work but making the human more capable of doing the work.</p>
+                <p>This is the telos of AI: <strong>to improve the human who uses it</strong>.</p>
+
+                <div class="ascii-box">Every role exists to serve.
+Every service aims at improvement.
+Every improvement makes life better for someone.
+
+That's the telos.
+Everything else is means.</div>
+            </div>
+        </div>
+
+        <!-- THE EXAMINED LIFE PAGE -->
+        <div id="page-examined" class="page">
+            <div class="content">
+                <h1>The Examined Life</h1>
+                <p><strong>A method for knowing yourself</strong></p>
+
+                <h2>The Old Instruction</h2>
+                <p>"Know yourself."</p>
+                <p>Inscribed at Delphi. Repeated by every wisdom tradition. Still the hardest thing.</p>
+                <p>You make decisions all day. Do you know why? You pursue goals. Do you know whose goals they are—really? You have opinions. Do you know where they came from?</p>
+                <p>Most self-examination is vague: "I should reflect more." "I need to think about what I want."</p>
+                <p>This document offers structure.</p>
+
+                <hr>
+
+                <h2>The Three Axes of Self</h2>
+                <p>You exist across three dimensions:</p>
+                <div class="ascii-box">                    YOU
+               (the one who chooses)
+                    │
+                    │
+    REALITY ◄───────┼───────► TOOLS
+  (what you face)   │       (what you use)</div>
+                <dl>
+                    <dt>You (User axis)</dt>
+                    <dd>The one who judges, chooses, acts. Your character, values, will, identity. Who you are.</dd>
+                    <dt>Reality (Subject axis)</dt>
+                    <dd>Your actual circumstances. Your body, your situation, the facts you face. What is.</dd>
+                    <dt>Tools (Method axis)</dt>
+                    <dd>Your skills, habits, relationships, possessions, methods. What you use to engage reality.</dd>
+                </dl>
+                <p>Self-examination requires examining all three—and their relations.</p>
+
+                <hr>
+
+                <h2>The Six Constraints for Self-Examination</h2>
+                <p>Any belief about yourself can be tested:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Self-Examination Question</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Referential</strong></td><td>Can I state clearly what I believe about myself?</td></tr>
+                        <tr><td><strong>Contextual</strong></td><td>Under what conditions does this hold? When am I different?</td></tr>
+                        <tr><td><strong>Premissive</strong></td><td>Why do I believe this? What's the evidence?</td></tr>
+                        <tr><td><strong>Inferential</strong></td><td>Does this conclusion about myself actually follow?</td></tr>
+                        <tr><td><strong>Constraining</strong></td><td>What am I NOT claiming? Where does this stop?</td></tr>
+                        <tr><td><strong>Teleological</strong></td><td>What is this self-belief FOR? What does it serve?</td></tr>
+                    </tbody>
+                </table>
+                <p>If you can't complete all six, you don't fully understand what you believe about yourself.</p>
+
+                <hr>
+
+                <h2>Daily Practice (5 Minutes)</h2>
+                <p><strong>Morning orientation:</strong></p>
+                <ul>
+                    <li>What is today FOR? (Purpose)</li>
+                    <li>What are today's actual circumstances? (Reality)</li>
+                    <li>Who do I intend to be today? (Commitment)</li>
+                </ul>
+                <p><strong>Evening review:</strong></p>
+                <ul>
+                    <li>What actually happened? (Reality)</li>
+                    <li>Where did I act well? Fall short? (Judgment)</li>
+                    <li>What caused the failures? Enabled the successes? (Analysis)</li>
+                    <li>What will I do differently? (Learning)</li>
+                </ul>
+                <p>Five minutes. Every day. Cumulative effect is significant.</p>
+
+                <div class="ascii-box">Know yourself.
+
+Not as slogan—as practice.
+Not once—continuously.
+Not vaguely—structurally.
+
+The examined life is the only one you can actually live.</div>
+            </div>
+        </div>
+
+        <!-- THE COSMOS PAGE -->
+        <div id="page-cosmos" class="page">
+            <div class="content">
+                <h1>The Cosmos</h1>
+                <p><strong>Orientation to reality</strong></p>
+
+                <h2>The Missing Map</h2>
+                <p>You wake up in a world you didn't create. You were handed a body you didn't design. You inherited a situation you didn't choose.</p>
+                <p>Where are you? What kind of place is this? How should you relate to it?</p>
+                <p>Modern life answers: don't ask. Consume, produce, scroll, repeat.</p>
+                <p>But orientation matters. You can't navigate without a map. You can't act well if you don't understand where you're acting.</p>
+                <p>This isn't religion. It's not metaphysics. It's practical: what kind of reality do you inhabit, and what does that imply?</p>
+
+                <hr>
+
+                <h2>Four Things We Can Say</h2>
+                <p>Whatever else is true, four things seem solid:</p>
+
+                <h3>1. Reality Has Structure</h3>
+                <p>The universe is not chaos. It has regularities—patterns that hold:</p>
+                <ul>
+                    <li>Mathematics applies (why would it, if reality were arbitrary?)</li>
+                    <li>Laws persist (the same physics yesterday and tomorrow)</li>
+                    <li>Prediction is possible (we can navigate because patterns recur)</li>
+                </ul>
+                <p>You can learn how things work. Not perfectly, but genuinely. Reality is intelligible.</p>
+
+                <h3>2. You Are Part of It</h3>
+                <p>You're not outside reality looking in. You're inside—a participant, not a spectator.</p>
+                <p>Your body is made of the same stuff as stars. Your thoughts are events in the same universe as thunderstorms. You belong here—not as a visitor, but as an expression of what this place produces.</p>
+
+                <h3>3. It Exceeds Your Grasp</h3>
+                <p>Reality is larger than you can comprehend. Your knowledge is partial. Your perspective is limited. Your lifespan is brief.</p>
+                <p>This isn't failure—it's fact. Humility is the accurate response.</p>
+
+                <h3>4. It Includes Others</h3>
+                <p>You're not alone. Other minds exist—each as real to themselves as you are to yourself. Other people aren't props in your story; they're living the same situation from different positions.</p>
+                <p>This matters morally, practically, and ontologically.</p>
+
+                <hr>
+
+                <h2>Three Stances Toward Reality</h2>
+                <h3>Domination</h3>
+                <p>"Reality is raw material for my use."</p>
+                <p>Treats the world as stuff to manipulate. Measures everything by utility. Ignores intrinsic value.</p>
+                <p>Leads to: exploitation, depletion, eventual collapse.</p>
+
+                <h3>Submission</h3>
+                <p>"Reality is sacred; humans are intruders."</p>
+                <p>Treats the world as untouchable. Denies human distinctiveness. Tends toward paralysis or misanthropy.</p>
+                <p>Leads to: withdrawal, ineffectiveness, self-hatred.</p>
+
+                <h3>Participation</h3>
+                <p>"I am part of reality, with distinct capacities and responsibilities."</p>
+                <p>Recognizes human distinctiveness without denying kinship with the rest. Uses the world with respect for what it is. Maintains without depleting.</p>
+                <p>This is the balanced stance. Neither master nor servant—participant.</p>
+
+                <div class="ascii-box">You didn't make the world.
+You don't fully understand it.
+You share it with others.
+You can act within it.
+
+That's enough to work with.</div>
+            </div>
+        </div>
+
+        <!-- THE TOOL PAGE -->
+        <div id="page-tool" class="page">
+            <div class="content">
+                <h1>The Tool</h1>
+                <p><strong>Everything you use to engage reality</strong></p>
+
+                <h2>The Forgotten Sameness</h2>
+                <p>Consider:</p>
+                <ul>
+                    <li>A shovel</li>
+                    <li>A language</li>
+                    <li>A mathematical equation</li>
+                    <li>A smartphone</li>
+                    <li>A habit</li>
+                    <li>A relationship</li>
+                    <li>An AI assistant</li>
+                </ul>
+                <p>What do they have in common?</p>
+                <p><strong>They're all tools.</strong></p>
+                <p>Each extends your native capacity. Each comes from outside you. Each is taken up for a purpose. Each can be used well or poorly.</p>
+                <p>The quantum physicist uses a theorem the way the gardener uses a shovel. Both are wielding instruments they didn't create to engage a reality they didn't make.</p>
+                <p>When we forget this sameness, we worship complexity and despise simplicity. We imagine the physicist is doing something fundamentally different from the gardener.</p>
+                <p>But a tool is a tool. The question isn't which is more impressive—it's which is appropriate for the task.</p>
+
+                <hr>
+
+                <h2>What Tools Are</h2>
+                <p>A tool is anything that mediates between you and reality:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Physical</strong></td><td>Hammer, shovel, vehicle, building</td></tr>
+                        <tr><td><strong>Perceptual</strong></td><td>Telescope, microscope, hearing aid</td></tr>
+                        <tr><td><strong>Symbolic</strong></td><td>Language, mathematics, musical notation</td></tr>
+                        <tr><td><strong>Conceptual</strong></td><td>Theories, frameworks, mental models</td></tr>
+                        <tr><td><strong>Social</strong></td><td>Institutions, relationships, roles</td></tr>
+                        <tr><td><strong>Habitual</strong></td><td>Skills, practices, routines</td></tr>
+                        <tr><td><strong>Digital</strong></td><td>Software, AI, algorithms</td></tr>
+                    </tbody>
+                </table>
+                <p>All external. All taken up. All serving purposes you supply.</p>
+
+                <hr>
+
+                <h2>AI as Tool</h2>
+                <p>AI is a tool. A powerful one, but still a tool.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>AI Can</th>
+                            <th>AI Cannot</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Process vast information</td><td>Know what it doesn't know</td></tr>
+                        <tr><td>Generate human-like text</td><td>Guarantee that text is true</td></tr>
+                        <tr><td>Recognize patterns</td><td>Understand what patterns mean</td></tr>
+                        <tr><td>Execute instructions</td><td>Supply its own purpose</td></tr>
+                        <tr><td>Assist your work</td><td>Replace your judgment</td></tr>
+                    </tbody>
+                </table>
+                <p>When AI is treated as oracle rather than tool, you've made a category error. You've given authority to something that cannot hold it.</p>
+                <p>The architecture keeps AI in its proper position:</p>
+                <ul>
+                    <li>Closure authority routes decisions to humans</li>
+                    <li>Uncertainty is explicitly acknowledged</li>
+                    <li>Purpose comes from the user</li>
+                    <li>The system knows it's a tool</li>
+                </ul>
+
+                <div class="ascii-box">The shovel and the theorem are the same:
+both are tools, external, taken up, set down.
+
+The shovel and the theorem differ:
+one moves earth, one moves thought.
+
+But YOU are the one who moves.
+You are not the shovel.
+You are not the theorem.
+You are the one who takes them up—
+and must remember what you are.</div>
+            </div>
+        </div>
+
+        <!-- THE MANIFESTO PAGE -->
+        <div id="page-manifesto" class="page">
+            <div class="content">
+                <h1>The Manifesto</h1>
+                <p><strong>What Echosphere is building and why</strong></p>
+
+                <h2>The Problem We Solve</h2>
+                <p>AI systems don't know what they don't know.</p>
+                <p>They hallucinate. They drift. They express confidence they haven't earned. They decide things they shouldn't decide.</p>
+                <p>Five years of scaling, billions in compute, the entire internet as training data—and the fundamental problems remain.</p>
+                <p>Because the problems are structural. And structure doesn't come from data volume.</p>
+
+                <hr>
+
+                <h2>The Solution We Offer</h2>
+                <p>A validity architecture that checks outputs against six constraints before delivery.</p>
+                <p>Not more data. Not more parameters. Not more prompting.</p>
+                <p>Structure.</p>
+                <p>The six constraints are not arbitrary. They're the minimum requirements for any claim to be semantically complete—discovered 2,400 years ago, forgotten by modern ML, recovered and applied here.</p>
+
+                <hr>
+
+                <h2>What We're Building</h2>
+                <p>Echosphere develops semantic validity infrastructure for AI systems.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Layer</th>
+                            <th>What It Does</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>Validation</strong></td><td>Check outputs against six constraints</td></tr>
+                        <tr><td><strong>State tracking</strong></td><td>Maintain user/subject/method representation</td></tr>
+                        <tr><td><strong>Inference discrimination</strong></td><td>Tag outputs by how they were derived</td></tr>
+                        <tr><td><strong>Drift detection</strong></td><td>Anchor terms and catch meaning shift</td></tr>
+                        <tr><td><strong>Closure routing</strong></td><td>Route decisions to appropriate authority</td></tr>
+                    </tbody>
+                </table>
+                <p>This is the layer that's missing from current AI. We provide it.</p>
+
+                <hr>
+
+                <h2>Who We Serve</h2>
+                <p>Anyone building or using AI who needs outputs they can trust:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Sector</th>
+                            <th>Need</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>AI developers</strong></td><td>Reduce hallucination, improve calibration</td></tr>
+                        <tr><td><strong>Enterprise</strong></td><td>Deploy AI with accountability</td></tr>
+                        <tr><td><strong>Government</strong></td><td>AI analysis that acknowledges limits</td></tr>
+                        <tr><td><strong>Defense</strong></td><td>Decision support that knows uncertainty</td></tr>
+                        <tr><td><strong>Finance</strong></td><td>Projections with explicit grounds</td></tr>
+                        <tr><td><strong>Healthcare</strong></td><td>Assistance that defers appropriately</td></tr>
+                    </tbody>
+                </table>
+                <p>If wrong outputs cost you—money, reputation, safety—you need validity checking.</p>
+
+                <hr>
+
+                <h2>What We Believe</h2>
+                <p><strong>AI is a tool, not an oracle.</strong><br>
+                It extends human capability. It does not replace human judgment. When AI forgets its position, bad things happen.</p>
+                <p><strong>Validity is structural, not statistical.</strong><br>
+                You cannot train your way to semantic completeness. You must build it in. The architecture matters.</p>
+                <p><strong>Uncertainty is information, not failure.</strong><br>
+                A system that says "I don't know" when it doesn't know is more valuable than one that always produces confident output.</p>
+                <p><strong>Humans close the loop.</strong><br>
+                Some decisions should not be made by machines. Ever. A system that knows what it shouldn't decide is more trustworthy than one that decides everything.</p>
+
+                <hr>
+
+                <h2>The Opportunity</h2>
+                <p>The first AI systems with genuine validity checking will dominate their markets.</p>
+                <ul>
+                    <li>Enterprise trust: "This system doesn't hallucinate."</li>
+                    <li>Professional use: "This system knows its limits."</li>
+                    <li>Safety-critical: "This system defers when it should."</li>
+                    <li>Regulatory: "This system is auditable."</li>
+                </ul>
+                <p>Everyone knows the problems. No one has shipped the structural solution.</p>
+                <p>We have.</p>
+
+                <hr>
+
+                <h2>The Assets</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Seven patent families</td><td>Provisionals filed</td></tr>
+                        <tr><td>Architecture specification</td><td>Complete</td></tr>
+                        <tr><td>Implementation guidance</td><td>Complete</td></tr>
+                        <tr><td>Corpus documentation</td><td>21+ documents</td></tr>
+                        <tr><td>Proof-of-concept code</td><td>Available</td></tr>
+                    </tbody>
+                </table>
+                <p>This is not vaporware. The architecture exists. The patents are filed. The documentation is public.</p>
+
+                <hr>
+
+                <h2>Contact</h2>
+                <p><strong>Steven Easley</strong><br>
+                Founder, Echosphere.io LLC<br>
+                <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></p>
+                <p>Evaluation access: Available under posted license<br>
+                Commercial discussion: Available under NDA<br>
+                Acquisition inquiry: Welcome</p>
+
+                <div class="ascii-box">AI should extend human judgment, not replace it.
+AI should know what it doesn't know.
+AI should defer when it should defer.
+
+We're building the architecture that makes this possible.
+
+That's Echosphere.</div>
+            </div>
+        </div>
+
+        <!-- ABOUT PAGE -->
+        <div id="page-about" class="page">
+            <div class="content">
+                <h1>About Echosphere</h1>
+                <p><strong>Semantic validity architecture for AI systems</strong></p>
+
+                <p>Echosphere.io LLC develops semantic validity architecture for AI systems.</p>
+
+                <p>Founded by Steven Easley, we've created a six-constraint framework that addresses the fundamental problems in large language models: hallucination, semantic drift, groundless confidence, calibration failure, and inappropriate closure.</p>
+
+                <p>Our intellectual property portfolio includes seven patent families covering the architecture, memory systems, inference discrimination, and governance frameworks.</p>
+
+                <p>We are open to licensing discussions and acquisition inquiries.</p>
+
+                <hr>
+
+                <h2>The Team</h2>
+                <p><strong>Steven Easley</strong> — Founder and inventor of the Tetrahedral Semantic Validity Architecture. Seven patent families filed. Twenty years building systems that work.</p>
+
+                <p><strong>AI Collaborators</strong> — A team of AI systems used as they should be: as tools for developing and testing the architecture itself. Themis for analysis, Mneme for strategy, Metis for implementation. Proof that AI, properly positioned, amplifies human work.</p>
+
+                <hr>
+
+                <h2>Our Belief</h2>
+                <p>We believe AI should extend human judgment, not replace it. We believe validity is structural, not statistical. We believe uncertainty is information, not failure. We believe humans should close the loop on decisions that matter.</p>
+
+                <p>The architecture implements these beliefs. The documentation makes them public. The patents protect them.</p>
+
+                <hr>
+
+                <h2>Contact</h2>
+                <p><strong>Steven Easley</strong><br>
+                Founder, Echosphere.io LLC<br>
+                <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></p>
+            </div>
+        </div>
+
+        <!-- CONTACT PAGE -->
+        <div id="page-contact" class="page">
+            <div class="content">
+                <h1>Contact</h1>
+                <p><strong>Let's talk about semantic validity</strong></p>
+
+                <p>Whether you're interested in evaluation, licensing, partnership, or acquisition—we're ready to discuss.</p>
+
+                <div class="contact-info">
+                    <h3>Steven Easley</h3>
+                    <p>Founder, Echosphere.io LLC</p>
+                    <p><strong>Email:</strong> <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></p>
+                </div>
+
+                <hr>
+
+                <h2>Engagement Options</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Evaluation</strong></td>
+                            <td>Review the architecture under posted license terms</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Technical Discussion</strong></td>
+                            <td>Deep dive into implementation and integration</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Commercial Licensing</strong></td>
+                            <td>Discussion under NDA</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Partnership</strong></td>
+                            <td>Joint development or integration opportunities</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Acquisition</strong></td>
+                            <td>Inquiries welcome</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr>
+
+                <h2>GitHub</h2>
+                <p>The core architecture documentation and proof-of-concept code are available on GitHub:</p>
+                <p><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener">github.com/Echosphere-io/semantic-validity-architecture</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-section">
+                <h4>Architecture</h4>
+                <a href="#" onclick="showPage('problem'); return false;">The Problem</a>
+                <a href="#" onclick="showPage('architecture'); return false;">The Architecture</a>
+                <a href="#" onclick="showPage('proof'); return false;">The Proof</a>
+                <a href="#" onclick="showPage('vocabulary'); return false;">The Vocabulary</a>
+            </div>
+            <div class="footer-section">
+                <h4>Applications</h4>
+                <a href="#" onclick="showPage('warrior'); return false;">Defense</a>
+                <a href="#" onclick="showPage('statesman'); return false;">Government</a>
+                <a href="#" onclick="showPage('merchant'); return false;">Enterprise</a>
+            </div>
+            <div class="footer-section">
+                <h4>Framework</h4>
+                <a href="#" onclick="showPage('telos'); return false;">The Telos of Service</a>
+                <a href="#" onclick="showPage('examined'); return false;">The Examined Life</a>
+                <a href="#" onclick="showPage('cosmos'); return false;">The Cosmos</a>
+                <a href="#" onclick="showPage('tool'); return false;">The Tool</a>
+            </div>
+            <div class="footer-section">
+                <h4>Company</h4>
+                <a href="#" onclick="showPage('manifesto'); return false;">Manifesto</a>
+                <a href="#" onclick="showPage('about'); return false;">About</a>
+                <a href="#" onclick="showPage('contact'); return false;">Contact</a>
+                <a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener">GitHub</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Echosphere.io LLC. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show selected page
+            const targetPage = document.getElementById('page-' + pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+            }
+            
+            // Update URL hash
+            window.location.hash = pageId;
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+            
+            // Close mobile menu if open
+            document.getElementById('navLinks').classList.remove('open');
+            
+            // Update page title
+            const titles = {
+                'home': 'Echosphere - Semantic Validity Architecture',
+                'problem': 'The Problem | Echosphere - Semantic Validity Architecture',
+                'architecture': 'The Architecture | Echosphere - Semantic Validity Architecture',
+                'proof': 'The Proof | Echosphere - Semantic Validity Architecture',
+                'vocabulary': 'The Vocabulary | Echosphere - Semantic Validity Architecture',
+                'warrior': 'Defense | Echosphere - Semantic Validity Architecture',
+                'statesman': 'Government | Echosphere - Semantic Validity Architecture',
+                'merchant': 'Enterprise | Echosphere - Semantic Validity Architecture',
+                'telos': 'The Telos of Service | Echosphere - Semantic Validity Architecture',
+                'examined': 'The Examined Life | Echosphere - Semantic Validity Architecture',
+                'cosmos': 'The Cosmos | Echosphere - Semantic Validity Architecture',
+                'tool': 'The Tool | Echosphere - Semantic Validity Architecture',
+                'manifesto': 'Manifesto | Echosphere - Semantic Validity Architecture',
+                'about': 'About | Echosphere - Semantic Validity Architecture',
+                'contact': 'Contact | Echosphere - Semantic Validity Architecture'
+            };
+            document.title = titles[pageId] || titles['home'];
+        }
+
+        // Mobile Menu Toggle
+        function toggleMobileMenu() {
+            document.getElementById('navLinks').classList.toggle('open');
+        }
+
+        // Handle initial page load from URL hash
+        window.addEventListener('DOMContentLoaded', function() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                showPage(hash);
+            }
+        });
+
+        // Handle browser back/forward buttons
+        window.addEventListener('hashchange', function() {
+            const hash = window.location.hash.replace('#', '');
+            if (hash) {
+                showPage(hash);
+            } else {
+                showPage('home');
+            }
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const navLinks = document.getElementById('navLinks');
+            const mobileToggle = document.querySelector('.mobile-toggle');
+            
+            if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
+                navLinks.classList.remove('open');
+            }
+        });
+    </script>
+</body>
+</html>
