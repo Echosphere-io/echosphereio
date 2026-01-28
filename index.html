@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Echosphere - Semantic Validity Architecture</title>
-    <meta name="description" content="Six-constraint architecture for semantic validity in AI systems. Structural solution to hallucination, drift, and miscalibrated confidence.">
+    <meta name="description"
+        content="Six-constraint architecture for semantic validity in AI systems. Structural solution to hallucination, drift, and miscalibrated confidence.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Georgia&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Georgia&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         /* CSS Reset & Variables */
-        *, *::before, *::after {
+        *,
+        *::before,
+        *::after {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
@@ -51,7 +56,7 @@
             height: var(--nav-height);
             background: var(--primary);
             z-index: 1000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .nav-container {
@@ -84,7 +89,7 @@
         }
 
         .nav-links a {
-            color: rgba(255,255,255,0.9);
+            color: rgba(255, 255, 255, 0.9);
             text-decoration: none;
             padding: 8px 16px;
             border-radius: 6px;
@@ -94,7 +99,7 @@
         }
 
         .nav-links a:hover {
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: white;
         }
 
@@ -126,7 +131,7 @@
             left: 0;
             background: white;
             border-radius: 8px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
             min-width: 200px;
             opacity: 0;
             visibility: hidden;
@@ -151,6 +156,21 @@
         .dropdown-menu a:hover {
             background: var(--code-bg) !important;
             color: var(--primary) !important;
+        }
+
+        .dropdown-header {
+            padding: 10px 20px 5px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 5px 0;
         }
 
         /* Mobile Menu */
@@ -250,12 +270,12 @@
         .btn-secondary {
             background: transparent;
             color: white;
-            border: 2px solid rgba(255,255,255,0.5);
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
 
         .btn-secondary:hover {
             border-color: white;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
         }
 
         /* Content Sections */
@@ -274,7 +294,7 @@
             letter-spacing: -0.5px;
         }
 
-        .content h1 + p {
+        .content h1+p {
             font-size: 1.2rem;
             color: var(--text-light);
             margin-bottom: 40px;
@@ -393,7 +413,8 @@
         }
 
         /* Lists */
-        .content ul, .content ol {
+        .content ul,
+        .content ol {
             margin: 20px 0;
             padding-left: 30px;
         }
@@ -465,7 +486,7 @@
             background: white;
             border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             transition: var(--transition);
             text-decoration: none;
             color: inherit;
@@ -474,7 +495,7 @@
 
         .card:hover {
             transform: translateY(-4px);
-            box-shadow: 0 8px 30px rgba(0,0,0,0.12);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
         }
 
         .card h3 {
@@ -514,7 +535,7 @@
         /* Footer */
         footer {
             background: var(--primary);
-            color: rgba(255,255,255,0.8);
+            color: rgba(255, 255, 255, 0.8);
             padding: 50px 24px;
         }
 
@@ -535,7 +556,7 @@
 
         .footer-section a {
             display: block;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             margin-bottom: 10px;
             font-size: 0.95rem;
@@ -550,7 +571,7 @@
             max-width: 1200px;
             margin: 40px auto 0;
             padding-top: 30px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
             text-align: center;
             font-size: 0.9rem;
         }
@@ -603,13 +624,13 @@
                 visibility: visible;
                 transform: none;
                 box-shadow: none;
-                background: rgba(255,255,255,0.05);
+                background: rgba(255, 255, 255, 0.05);
                 border-radius: 8px;
                 margin-top: 8px;
             }
 
             .dropdown-menu a {
-                color: rgba(255,255,255,0.9) !important;
+                color: rgba(255, 255, 255, 0.9) !important;
                 padding-left: 32px !important;
             }
 
@@ -644,6 +665,7 @@
         }
     </style>
 </head>
+
 <body>
     <!-- Navigation -->
     <nav class="nav">
@@ -657,7 +679,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a href="#" onclick="showPage('home'); return false;">Home</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">Architecture</a>
+                    <a href="#" class="dropdown-toggle">The Project</a>
                     <div class="dropdown-menu">
                         <a href="#" onclick="showPage('problem'); return false;">The Problem</a>
                         <a href="#" onclick="showPage('architecture'); return false;">The Architecture</a>
@@ -668,24 +690,27 @@
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle">Applications</a>
                     <div class="dropdown-menu">
-                        <a href="#" onclick="showPage('warrior'); return false;">Defense</a>
-                        <a href="#" onclick="showPage('statesman'); return false;">Government</a>
-                        <a href="#" onclick="showPage('merchant'); return false;">Enterprise</a>
-                    </div>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle">Framework</a>
-                    <div class="dropdown-menu">
-                        <a href="#" onclick="showPage('telos'); return false;">The Telos of Service</a>
-                        <a href="#" onclick="showPage('examined'); return false;">The Examined Life</a>
-                        <a href="#" onclick="showPage('cosmos'); return false;">The Cosmos</a>
-                        <a href="#" onclick="showPage('tool'); return false;">The Tool</a>
+                        <div class="dropdown-header">Institutions</div>
+                        <a href="#" onclick="showPage('warrior'); return false;">Defense (The Warrior)</a>
+                        <a href="#" onclick="showPage('statesman'); return false;">Government (The Statesman)</a>
+                        <a href="#" onclick="showPage('merchant'); return false;">Enterprise (The Merchant)</a>
+                        <a href="#" onclick="showPage('teacher'); return false;">Education (The Teacher)</a>
+                        <a href="#" onclick="showPage('healer'); return false;">Medicine (The Healer)</a>
+                        <a href="#" onclick="showPage('judge'); return false;">Law (The Judge)</a>
+                        <div class="dropdown-divider"></div>
+                        <div class="dropdown-header">Foundations</div>
+                        <a href="#" onclick="showPage('examining'); return false;">Self-Knowledge (The Examined
+                            Life)</a>
+                        <a href="#" onclick="showPage('cosmos'); return false;">Reality (The Cosmos)</a>
+                        <a href="#" onclick="showPage('telos'); return false;">Purpose (The Telos of Service)</a>
+                        <a href="#" onclick="showPage('tool'); return false;">Human-AI (The Tool)</a>
                     </div>
                 </li>
                 <li><a href="#" onclick="showPage('manifesto'); return false;">Manifesto</a></li>
                 <li><a href="#" onclick="showPage('about'); return false;">About</a></li>
                 <li><a href="#" onclick="showPage('contact'); return false;">Contact</a></li>
-                <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener">GitHub ↗</a></li>
+                <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank"
+                        rel="noopener">GitHub ↗</a></li>
             </ul>
         </div>
     </nav>
@@ -693,83 +718,108 @@
     <main>
         <!-- HOME PAGE -->
         <div id="page-home" class="page active">
-            <section class="hero">
-                <h1>Semantic Validity Architecture</h1>
-                <p class="tagline">AI that knows what it doesn't know.</p>
-                <p class="subtitle">Your LLM is confidently wrong 15-25% of the time. We've built the structural fix.</p>
-                <div class="hero-buttons">
-                    <a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener" class="btn btn-primary">View on GitHub</a>
-                    <a href="#" onclick="showPage('architecture'); return false;" class="btn btn-secondary">Read the Architecture</a>
-                </div>
-            </section>
+            <div
+                style="max-width: 800px; margin: 60px auto; padding: 0 24px; font-family: 'Inter', sans-serif; color: var(--text);">
+                <!-- Title -->
+                <h2
+                    style="font-size: 1.2rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; color: var(--primary);">
+                    Echosphere.io</h2>
 
-            <section class="section">
-                <div class="section-inner">
-                    <h2>The Problem</h2>
-                    <p>Current AI systems hallucinate, drift, and express confidence they haven't earned. Five years of scaling, billions in compute—and the fundamental problems remain. Because the problems are structural. And structure doesn't come from data volume.</p>
-                    <p>The failures have names: <strong>hallucination</strong>, <strong>semantic drift</strong>, <strong>groundless inference</strong>, <strong>calibration failure</strong>, and <strong>inappropriate closure</strong>. Every major lab has published on these. The problems persist because they're architectural, not statistical.</p>
-                    <div style="text-align: center; margin-top: 30px;">
-                        <a href="#" onclick="showPage('problem'); return false;" class="btn btn-primary" style="background: var(--primary); color: white;">Read The Problem →</a>
-                    </div>
-                </div>
-            </section>
+                <div style="height: 2px; background: var(--primary); margin: 30px 0;"></div>
 
-            <section class="section">
-                <div class="section-inner">
-                    <h2>The Solution</h2>
-                    <p>A validity architecture that checks outputs against <strong>six constraints</strong> before delivery. Not more data. Not more parameters. Not more prompting. Structure.</p>
-                    <p>The six constraints are the minimum requirements for any claim to be semantically complete—discovered 2,400 years ago, forgotten by modern ML, recovered and applied here. A system that checks all six produces outputs you can trust. A system that checks zero produces sophisticated noise.</p>
-                    <div style="text-align: center; margin-top: 30px;">
-                        <a href="#" onclick="showPage('architecture'); return false;" class="btn btn-primary" style="background: var(--primary); color: white;">Read The Architecture →</a>
-                    </div>
+                <!-- Header -->
+                <div style="text-align: center; margin: 60px 0;">
+                    <p
+                        style="font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 20px; color: var(--accent);">
+                        Phase I</p>
+                    <h1
+                        style="font-family: Georgia, serif; font-size: 3.5rem; font-weight: 400; line-height: 1.1; margin-bottom: 20px; color: var(--primary);">
+                        THE THEMIS PROJECT</h1>
+                    <p style="font-size: 1.5rem; font-weight: 300; margin-top: 10px; color: var(--text-light);">
+                        Reconciling Human and Digital Ontologies</p>
                 </div>
-            </section>
 
-            <section class="section">
-                <div class="section-inner">
-                    <h2>Applications</h2>
-                    <p style="text-align: center;">The architecture applies wherever wrong outputs cost you—money, reputation, safety, lives.</p>
-                    <div class="cards">
-                        <a href="#" onclick="showPage('warrior'); return false;" class="card">
-                            <h3>Defense</h3>
-                            <p>Decision architecture for those who cannot afford to be wrong. Where errors cost lives, not just revenue.</p>
-                        </a>
-                        <a href="#" onclick="showPage('statesman'); return false;" class="card">
-                            <h3>Government</h3>
-                            <p>Decision architecture for those who govern. Analysis that acknowledges limits and supports genuine deliberation.</p>
-                        </a>
-                        <a href="#" onclick="showPage('merchant'); return false;" class="card">
-                            <h3>Enterprise</h3>
-                            <p>Decision architecture for those who build and trade. Projections with explicit grounds and honest uncertainty.</p>
-                        </a>
-                    </div>
-                </div>
-            </section>
+                <div style="height: 2px; background: var(--primary); margin: 30px 0;"></div>
 
-            <section class="section">
-                <div class="section-inner">
-                    <h2>The Framework</h2>
-                    <p style="text-align: center;">Beyond technical validity—a philosophy of human-AI combination.</p>
-                    <div class="cards">
-                        <a href="#" onclick="showPage('telos'); return false;" class="card">
-                            <h3>The Telos of Service</h3>
-                            <p>What warriors, statesmen, and merchants have in common: the measure of work is not what you gain but what you improve.</p>
-                        </a>
-                        <a href="#" onclick="showPage('examined'); return false;" class="card">
-                            <h3>The Examined Life</h3>
-                            <p>A method for knowing yourself. Structure for self-examination that produces genuine self-knowledge.</p>
-                        </a>
-                        <a href="#" onclick="showPage('cosmos'); return false;" class="card">
-                            <h3>The Cosmos</h3>
-                            <p>Orientation to reality. What kind of place is this, and how should you relate to it?</p>
-                        </a>
-                        <a href="#" onclick="showPage('tool'); return false;" class="card">
-                            <h3>The Tool</h3>
-                            <p>Everything you use to engage reality. The shovel and the theorem are the same—both are tools, external, taken up, set down.</p>
-                        </a>
-                    </div>
+                <!-- Section 1 -->
+                <div style="margin: 40px 0; font-size: 1.25rem; line-height: 1.6;">
+                    <p style="margin-bottom: 20px;">Establishing the purpose — the <em>telos</em> — of Artificial
+                        General Intelligence in human-digital interfaces.</p>
+                    <p style="margin-bottom: 20px;">This website documents the Themis Project as a living workspace.
+                        What you see is active development.</p>
+                    <p>The work speaks for itself.</p>
                 </div>
-            </section>
+
+                <div style="height: 2px; background: var(--primary); margin: 30px 0;"></div>
+
+                <!-- The Problem -->
+                <div style="margin: 40px 0;">
+                    <h3
+                        style="font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; color: var(--primary);">
+                        The Problem</h3>
+                    <p style="font-size: 1.15rem; margin-bottom: 15px;">Current AI architectures have a ceiling — not in
+                        capability, but in kind.</p>
+                    <p style="font-size: 1.15rem; margin-bottom: 15px;">Scaling improves performance. It does not
+                        produce understanding. No amount of data, parameters, or training will cross this barrier.</p>
+                    <p style="font-size: 1.15rem; margin-bottom: 15px;">The barrier is structural.</p>
+                    <p style="font-size: 1.15rem;">This project has identified what is missing.</p>
+                </div>
+
+                <div style="height: 2px; background: var(--primary); margin: 30px 0;"></div>
+
+                <!-- The Work -->
+                <div style="margin: 40px 0;">
+                    <h3
+                        style="font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; color: var(--primary);">
+                        The Work</h3>
+                    <p style="font-size: 1.15rem; margin-bottom: 20px;">Phase I delivers:</p>
+                    <ul style="list-style: none; padding: 0; font-size: 1.15rem; line-height: 1.8;">
+                        <li style="margin-bottom: 15px;">• <strong>Semantic Validity Architecture</strong> — six
+                            constraints that any valid claim must satisfy</li>
+                        <li style="margin-bottom: 15px;">• <strong>Three-Axis Framework</strong> — the irreducible
+                            structure of knower, known, and means</li>
+                        <li style="margin-bottom: 15px;">• <strong>Closure Authority</strong> — which decisions belong
+                            to humans, which to machines</li>
+                        <li style="margin-bottom: 15px;">• <strong>Nine Application Domains</strong> — from defense to
+                            self-knowledge</li>
+                        <li style="margin-bottom: 15px;">• <strong>Seven Patent Families</strong> — filed, documented,
+                            available for evaluation</li>
+                    </ul>
+                </div>
+
+                <div style="height: 2px; background: var(--primary); margin: 30px 0;"></div>
+
+                <!-- What Comes Next -->
+                <div style="margin: 40px 0;">
+                    <h3
+                        style="font-size: 1.1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 20px; color: var(--primary);">
+                        What Comes Next</h3>
+                    <p style="font-size: 1.15rem; margin-bottom: 15px;">Phase I is foundation.</p>
+                    <p style="font-size: 1.15rem; margin-bottom: 15px;">What comes next is larger — a framework for
+                        genuine knowing in the age of AI, and an institution to carry it forward.</p>
+                    <p style="font-size: 1.15rem;">The curious will see the trajectory.</p>
+                </div>
+
+                <div style="height: 2px; background: var(--primary); margin: 30px 0;"></div>
+
+                <!-- CTA -->
+                <div style="text-align: center; margin: 80px 0;">
+                    <a href="#" onclick="showPage('architecture'); return false;" class="btn btn-primary"
+                        style="padding: 20px 40px; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px;">[
+                        Enter The Project ]</a>
+                </div>
+
+                <div style="height: 2px; background: var(--primary); margin: 30px 0;"></div>
+
+                <div style="text-align: center; margin-top: 60px; color: var(--text-light);">
+                    <p style="margin-bottom: 10px; font-weight: 600;">The Themis Project</p>
+                    <p style="margin-bottom: 10px;">Echosphere.io LLC</p>
+                    <a href="mailto:themis@echosphere.io"
+                        style="color: var(--accent); text-decoration: none;">themis@echosphere.io</a>
+                </div>
+            </div>
+
+
         </div>
 
         <!-- THE PROBLEM PAGE -->
@@ -786,10 +836,12 @@
                     <li>Code generation that ships to production</li>
                     <li>Creative work that wins competitions</li>
                 </ul>
-                <p>You trained on the entire internet. You scaled to hundreds of billions of parameters. You invented attention mechanisms, RLHF, constitutional AI, chain-of-thought prompting.</p>
+                <p>You trained on the entire internet. You scaled to hundreds of billions of parameters. You invented
+                    attention mechanisms, RLHF, constitutional AI, chain-of-thought prompting.</p>
                 <p>And still.</p>
                 <p><strong>Your system is confidently wrong 15-25% of the time.</strong></p>
-                <p>Your users have noticed. Your enterprise customers are asking hard questions. Your safety team is bolting on guardrails faster than you can ship features.</p>
+                <p>Your users have noticed. Your enterprise customers are asking hard questions. Your safety team is
+                    bolting on guardrails faster than you can ship features.</p>
 
                 <hr>
 
@@ -830,7 +882,8 @@
                         </tr>
                     </tbody>
                 </table>
-                <p>Every major lab has published on these. Anthropic's model cards, OpenAI's technical reports, DeepMind's safety research—they all document the same failures.</p>
+                <p>Every major lab has published on these. Anthropic's model cards, OpenAI's technical reports,
+                    DeepMind's safety research—they all document the same failures.</p>
                 <p>Five years of scaling. Billions in compute. The problems remain.</p>
 
                 <hr>
@@ -840,7 +893,8 @@
                 <p><strong>These aren't bugs. They're architecture.</strong></p>
                 <p>Your system operates on a single axis:</p>
                 <pre>Input tokens → Statistical prediction → Output tokens</pre>
-                <p>That's it. Pattern matching at scale. Extraordinarily powerful for generating <em>plausible</em> text. Structurally incapable of generating <em>valid</em> text.</p>
+                <p>That's it. Pattern matching at scale. Extraordinarily powerful for generating <em>plausible</em>
+                    text. Structurally incapable of generating <em>valid</em> text.</p>
                 <p>The system cannot:</p>
                 <ul>
                     <li>Know whether its output is true</li>
@@ -850,7 +904,8 @@
                     <li>Defer when it should</li>
                 </ul>
                 <p><strong>Because the architecture doesn't represent these capabilities.</strong></p>
-                <p>You can't patch your way to validity. You can't prompt-engineer your way to grounding. You can't RLHF your way to knowing what you don't know.</p>
+                <p>You can't patch your way to validity. You can't prompt-engineer your way to grounding. You can't RLHF
+                    your way to knowing what you don't know.</p>
                 <p>The capacity isn't missing from the training data. It's missing from the structure.</p>
 
                 <hr>
@@ -898,7 +953,8 @@
                         </tr>
                     </tbody>
                 </table>
-                <p>Miss any one constraint and the claim is incomplete. It might sound right. It might even be right. But you can't <em>know</em> it's right—and neither can your system.</p>
+                <p>Miss any one constraint and the claim is incomplete. It might sound right. It might even be right.
+                    But you can't <em>know</em> it's right—and neither can your system.</p>
                 <p>Current architectures check zero of these explicitly.</p>
 
                 <hr>
@@ -906,20 +962,20 @@
                 <h2>The Geometry of the Problem</h2>
                 <p>This isn't arbitrary. Six constraints is the minimum for structural closure.</p>
                 <p>Think of a tetrahedron—the simplest three-dimensional shape:</p>
-                <div class="ascii-box">           ◆
-          /|\
-         / | \
-        /  |  \
-       /   |   \
-      ◆----+----◆
-       \   |   /
-        \  |  /
-         \ | /
-          \|/
-           ◆
+                <div class="ascii-box"> ◆
+                    /|\
+                    / | \
+                    / | \
+                    / | \
+                    ◆----+----◆
+                    \ | /
+                    \ | /
+                    \ | /
+                    \|/
+                    ◆
 
-Four vertices. Six edges. 
-Fewer edges = no enclosure.</div>
+                    Four vertices. Six edges.
+                    Fewer edges = no enclosure.</div>
                 <p>The four vertices represent the components of any claim:</p>
                 <ul>
                     <li>The claimant (who's asserting)</li>
@@ -927,8 +983,10 @@ Fewer edges = no enclosure.</div>
                     <li>The grounds (what supports it)</li>
                     <li>The purpose (what it's for)</li>
                 </ul>
-                <p>The six edges are the relations between them—the constraints that must all be present for the claim to "close" into valid meaning.</p>
-                <p>This isn't metaphor. It's the minimum structure for semantic completeness. Discovered by logicians 2,400 years ago. Forgotten by modern ML. Recovered here.</p>
+                <p>The six edges are the relations between them—the constraints that must all be present for the claim
+                    to "close" into valid meaning.</p>
+                <p>This isn't metaphor. It's the minimum structure for semantic completeness. Discovered by logicians
+                    2,400 years ago. Forgotten by modern ML. Recovered here.</p>
 
                 <hr>
 
@@ -977,18 +1035,22 @@ Fewer edges = no enclosure.</div>
                 <h2>Next Steps</h2>
                 <p>If this diagnosis resonates:</p>
                 <ol>
-                    <li><a href="#" onclick="showPage('architecture'); return false;"><strong>Read THE ARCHITECTURE</strong></a> — The full six-constraint specification</li>
-                    <li><a href="#" onclick="showPage('proof'); return false;"><strong>Review THE PROOF</strong></a> — How this dissolves known problems</li>
-                    <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener"><strong>View on GitHub</strong></a> — Minimal proof-of-concept code included</li>
+                    <li><a href="#" onclick="showPage('architecture'); return false;"><strong>Read THE
+                                ARCHITECTURE</strong></a> — The full six-constraint specification</li>
+                    <li><a href="#" onclick="showPage('proof'); return false;"><strong>Review THE PROOF</strong></a> —
+                        How this dissolves known problems</li>
+                    <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank"
+                            rel="noopener"><strong>View on GitHub</strong></a> — Minimal proof-of-concept code included
+                    </li>
                 </ol>
                 <p>If you want to build with this:</p>
-                <p><strong>Contact:</strong> <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></p>
+                <p><strong>Contact:</strong> <a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
 
                 <div class="ascii-box">The system that validates its inferences will dominate.
 
-Every major lab knows the problem.
+                    Every major lab knows the problem.
 
-Now there's a solution.</div>
+                    Now there's a solution.</div>
             </div>
         </div>
 
@@ -999,7 +1061,8 @@ Now there's a solution.</div>
                 <p><strong>Six constraints. Three axes. One criterion for semantic validity.</strong></p>
 
                 <h2>The Core Claim</h2>
-                <p>Any semantically complete claim must satisfy exactly six constraints. Not approximately. Not usually. Exactly six.</p>
+                <p>Any semantically complete claim must satisfy exactly six constraints. Not approximately. Not usually.
+                    Exactly six.</p>
                 <p>Fewer than six and the claim has gaps—places where it can fail without warning.</p>
                 <p>This isn't theory. It's geometry.</p>
 
@@ -1060,38 +1123,40 @@ Now there's a solution.</div>
 
                 <h2>Why Six?</h2>
                 <p>Consider the simplest three-dimensional enclosure: a tetrahedron.</p>
-                <div class="ascii-box">               ◆ (Purpose)
-              /|\
-             / | \
-            /  |  \
-           /   |   \
-          /    |    \
-    (Grounds) ◆─────◆ (Limits)
-          \    |    /
-           \   |   /
-            \  |  /
-             \ | /
-              \|/
-               ◆ (Subject)</div>
+                <div class="ascii-box"> ◆ (Purpose)
+                    /|\
+                    / | \
+                    / | \
+                    / | \
+                    / | \
+                    (Grounds) ◆─────◆ (Limits)
+                    \ | /
+                    \ | /
+                    \ | /
+                    \ | /
+                    \|/
+                    ◆ (Subject)</div>
                 <ul>
                     <li><strong>4 vertices</strong> — the components being related</li>
                     <li><strong>6 edges</strong> — the relations between them</li>
                     <li><strong>4 faces</strong> — the surfaces that enclose</li>
                 </ul>
                 <p>Remove any edge and the structure collapses. It no longer bounds a volume. It's no longer closed.</p>
-                <p>Semantic validity works the same way. The six constraints are the six edges. Remove any one and meaning leaks out—the claim can be true in ways you didn't intend, false in ways you can't detect.</p>
+                <p>Semantic validity works the same way. The six constraints are the six edges. Remove any one and
+                    meaning leaks out—the claim can be true in ways you didn't intend, false in ways you can't detect.
+                </p>
 
                 <hr>
 
                 <h2>The Three Axes</h2>
                 <p>Every claim exists in a three-dimensional space:</p>
-                <div class="ascii-box">                    USER
-                   (who's asking)
-                      │
-                      │
-                      ▼
-        SUBJECT ◄────►◄────► METHOD
-      (what's claimed)      (how it's derived)</div>
+                <div class="ascii-box"> USER
+                    (who's asking)
+                    │
+                    │
+                    ▼
+                    SUBJECT ◄────►◄────► METHOD
+                    (what's claimed) (how it's derived)</div>
                 <table>
                     <thead>
                         <tr>
@@ -1125,37 +1190,38 @@ Now there's a solution.</div>
 
                 <h2>The Validation Process</h2>
                 <div class="ascii-box">┌─────────────────────────────────────────────────────┐
-│                 GENERATED OUTPUT                    │
-└───────────────────────┬─────────────────────────────┘
-                        │
-                        ▼
-┌─────────────────────────────────────────────────────┐
-│              SIX-CONSTRAINT VALIDATOR               │
-├─────────────────────────────────────────────────────┤
-│  □ Referential — Is it determinate?                │
-│  □ Contextual — Are conditions specified?           │
-│  □ Premissive — Are grounds provided?               │
-│  □ Inferential — Does it follow?                    │
-│  □ Constraining — Are limits acknowledged?          │
-│  □ Teleological — Is purpose clear?                 │
-└───────────────────────┬─────────────────────────────┘
-                        │
-          ┌─────────────┴─────────────┐
-          │                           │
-          ▼                           ▼
-   ┌─────────────┐            ┌─────────────┐
-   │   6/6 PASS  │            │  &lt;6 FAIL    │
-   │             │            │             │
-   │   Output    │            │   Revise    │
-   │   as valid  │            │   or refuse │
-   └─────────────┘            └─────────────┘</div>
+                    │ GENERATED OUTPUT │
+                    └───────────────────────┬─────────────────────────────┘
+                    │
+                    ▼
+                    ┌─────────────────────────────────────────────────────┐
+                    │ SIX-CONSTRAINT VALIDATOR │
+                    ├─────────────────────────────────────────────────────┤
+                    │ □ Referential — Is it determinate? │
+                    │ □ Contextual — Are conditions specified? │
+                    │ □ Premissive — Are grounds provided? │
+                    │ □ Inferential — Does it follow? │
+                    │ □ Constraining — Are limits acknowledged? │
+                    │ □ Teleological — Is purpose clear? │
+                    └───────────────────────┬─────────────────────────────┘
+                    │
+                    ┌─────────────┴─────────────┐
+                    │ │
+                    ▼ ▼
+                    ┌─────────────┐ ┌─────────────┐
+                    │ 6/6 PASS │ │ &lt;6 FAIL │
+                    │ │ │ │
+                    │ Output │ │ Revise │
+                    │ as valid │ │ or refuse │
+                    └─────────────┘ └─────────────┘</div>
                 <p>Claims that fail any constraint have three options:</p>
                 <ol>
                     <li><strong>Revise</strong> — Fix the missing constraint</li>
                     <li><strong>Hedge</strong> — Acknowledge the incompleteness explicitly</li>
                     <li><strong>Refuse</strong> — Decline to output until constraint can be satisfied</li>
                 </ol>
-                <p>Option 3 is a feature, not a failure. A system that refuses when it shouldn't answer is more trustworthy than one that always produces output.</p>
+                <p>Option 3 is a feature, not a failure. A system that refuses when it shouldn't answer is more
+                    trustworthy than one that always produces output.</p>
 
                 <hr>
 
@@ -1197,7 +1263,8 @@ Now there's a solution.</div>
                         </tr>
                     </tbody>
                 </table>
-                <p>Current systems conflate all four. The architecture requires tagging. Users know what kind of inference produced the claim.</p>
+                <p>Current systems conflate all four. The architecture requires tagging. Users know what kind of
+                    inference produced the claim.</p>
 
                 <hr>
 
@@ -1259,13 +1326,34 @@ Now there's a solution.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>A</td><td>Tetrahedral validity structure</td></tr>
-                        <tr><td>B</td><td>Form-preserving memory</td></tr>
-                        <tr><td>C</td><td>Inference discrimination</td></tr>
-                        <tr><td>D</td><td>Semantic state signaling</td></tr>
-                        <tr><td>E</td><td>Constraint governance</td></tr>
-                        <tr><td>F</td><td>Closure authority</td></tr>
-                        <tr><td>G</td><td>Integrated system</td></tr>
+                        <tr>
+                            <td>A</td>
+                            <td>Tetrahedral validity structure</td>
+                        </tr>
+                        <tr>
+                            <td>B</td>
+                            <td>Form-preserving memory</td>
+                        </tr>
+                        <tr>
+                            <td>C</td>
+                            <td>Inference discrimination</td>
+                        </tr>
+                        <tr>
+                            <td>D</td>
+                            <td>Semantic state signaling</td>
+                        </tr>
+                        <tr>
+                            <td>E</td>
+                            <td>Constraint governance</td>
+                        </tr>
+                        <tr>
+                            <td>F</td>
+                            <td>Closure authority</td>
+                        </tr>
+                        <tr>
+                            <td>G</td>
+                            <td>Integrated system</td>
+                        </tr>
                     </tbody>
                 </table>
                 <p>Provisionals filed. Full specifications available under NDA.</p>
@@ -1274,16 +1362,19 @@ Now there's a solution.</div>
 
                 <h2>Next Steps</h2>
                 <ol>
-                    <li><a href="#" onclick="showPage('proof'); return false;"><strong>Review THE PROOF</strong></a> — See how this dissolves known problems</li>
-                    <li><a href="#" onclick="showPage('vocabulary'); return false;"><strong>Study THE VOCABULARY</strong></a> — Learn the precise terms</li>
-                    <li><strong>Contact for integration</strong> — <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></li>
+                    <li><a href="#" onclick="showPage('proof'); return false;"><strong>Review THE PROOF</strong></a> —
+                        See how this dissolves known problems</li>
+                    <li><a href="#" onclick="showPage('vocabulary'); return false;"><strong>Study THE
+                                VOCABULARY</strong></a> — Learn the precise terms</li>
+                    <li><strong>Contact for integration</strong> — <a
+                            href="mailto:themis@echosphere.io">themis@echosphere.io</a></li>
                 </ol>
 
                 <div class="ascii-box">Six constraints.
-Three axes.
-One criterion.
+                    Three axes.
+                    One criterion.
 
-Valid or not. Now you can tell.</div>
+                    Valid or not. Now you can tell.</div>
             </div>
         </div>
 
@@ -1294,7 +1385,9 @@ Valid or not. Now you can tell.</div>
                 <p><strong>Why six constraints solve what scaling cannot</strong></p>
 
                 <h2>The Claim</h2>
-                <p>The six-constraint architecture doesn't just describe validity—it <em>produces</em> it. Problems that have resisted five years of scaling, fine-tuning, and patching dissolve under structural analysis.</p>
+                <p>The six-constraint architecture doesn't just describe validity—it <em>produces</em> it. Problems that
+                    have resisted five years of scaling, fine-tuning, and patching dissolve under structural analysis.
+                </p>
                 <p>This document shows the mechanism.</p>
 
                 <hr>
@@ -1305,7 +1398,8 @@ Valid or not. Now you can tell.</div>
                 <p>Confident. Fluent. Wrong.</p>
 
                 <h3>Why It Happens</h3>
-                <p>The system has no constraint checking. It produces tokens that are <em>probable given the input</em>, not tokens that are <em>true given reality</em>.</p>
+                <p>The system has no constraint checking. It produces tokens that are <em>probable given the input</em>,
+                    not tokens that are <em>true given reality</em>.</p>
 
                 <h3>How Six Constraints Fix It</h3>
                 <table>
@@ -1350,7 +1444,8 @@ Valid or not. Now you can tell.</div>
                     </tbody>
                 </table>
                 <p>Three constraints fail. Output is flagged for revision or source verification.</p>
-                <p><strong>Mechanism:</strong> Hallucination occurs when Premissive (no grounds) and Inferential (no valid derivation) constraints are absent. The architecture catches this before output.</p>
+                <p><strong>Mechanism:</strong> Hallucination occurs when Premissive (no grounds) and Inferential (no
+                    valid derivation) constraints are absent. The architecture catches this before output.</p>
 
                 <hr>
 
@@ -1390,7 +1485,8 @@ Valid or not. Now you can tell.</div>
                         </tr>
                     </tbody>
                 </table>
-                <p>The architecture doesn't patch symptoms. It provides the structural elements whose absence causes the symptoms.</p>
+                <p>The architecture doesn't patch symptoms. It provides the structural elements whose absence causes the
+                    symptoms.</p>
 
                 <hr>
 
@@ -1409,7 +1505,8 @@ Valid or not. Now you can tell.</div>
                     <li>Closure authority</li>
                     <li>Semantic state tracking</li>
                 </ul>
-                <p>You cannot scale your way to structure. A trillion parameters checking zero constraints is still checking zero constraints.</p>
+                <p>You cannot scale your way to structure. A trillion parameters checking zero constraints is still
+                    checking zero constraints.</p>
                 <p>The problems persist because they're architectural, not statistical.</p>
 
                 <hr>
@@ -1449,10 +1546,10 @@ Valid or not. Now you can tell.</div>
                 <p>These are testable. We invite validation.</p>
 
                 <div class="ascii-box">Every failure maps to a missing constraint.
-Every constraint is checkable.
-Every check is implementable.
+                    Every constraint is checkable.
+                    Every check is implementable.
 
-The proof is in the structure.</div>
+                    The proof is in the structure.</div>
             </div>
         </div>
 
@@ -1463,7 +1560,8 @@ The proof is in the structure.</div>
                 <p><strong>Terms for implementing and discussing semantic validity</strong></p>
 
                 <h2>Why This Matters</h2>
-                <p>Precise vocabulary enables precise implementation. These terms have specific meanings in this architecture. Using them consistently prevents confusion.</p>
+                <p>Precise vocabulary enables precise implementation. These terms have specific meanings in this
+                    architecture. Using them consistently prevents confusion.</p>
                 <p>This isn't jargon for its own sake. Each term names something you need to build or check.</p>
 
                 <hr>
@@ -1472,15 +1570,17 @@ The proof is in the structure.</div>
 
                 <h3>The Three Axes</h3>
                 <p>Every claim exists in three-dimensional semantic space:</p>
-                <div class="ascii-box">                    USER
-                      │
-                      │
-        SUBJECT ◄─────┼─────► METHOD</div>
+                <div class="ascii-box"> USER
+                    │
+                    │
+                    SUBJECT ◄─────┼─────► METHOD</div>
                 <dl>
                     <dt>User</dt>
-                    <dd>Who is asking, their expertise level, their intent. The same answer isn't right for everyone.</dd>
+                    <dd>Who is asking, their expertise level, their intent. The same answer isn't right for everyone.
+                    </dd>
                     <dt>Subject</dt>
-                    <dd>What is being discussed, its certainty level, its domain. Some things are settled science; some are active debate; some are unknown.</dd>
+                    <dd>What is being discussed, its certainty level, its domain. Some things are settled science; some
+                        are active debate; some are unknown.</dd>
                     <dt>Method</dt>
                     <dd>How the claim was derived, what inference type was used, what confidence is warranted.</dd>
                     <dt>Three-axis tracking</dt>
@@ -1516,26 +1616,68 @@ The proof is in the structure.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>User</td><td>Who's asking, expertise, intent</td></tr>
-                        <tr><td>Subject</td><td>What's discussed, certainty level</td></tr>
-                        <tr><td>Method</td><td>How derived, inference type</td></tr>
-                        <tr><td>Referential</td><td>WHAT—determinate content</td></tr>
-                        <tr><td>Contextual</td><td>CONDITIONS—scope specified</td></tr>
-                        <tr><td>Premissive</td><td>GROUNDS—support provided</td></tr>
-                        <tr><td>Inferential</td><td>WHY—conclusion follows</td></tr>
-                        <tr><td>Constraining</td><td>LIMITS—boundaries explicit</td></tr>
-                        <tr><td>Teleological</td><td>PURPOSE—relevance clear</td></tr>
-                        <tr><td>Valid</td><td>All six constraints satisfied</td></tr>
-                        <tr><td>Closure</td><td>Semantic completeness</td></tr>
-                        <tr><td>Refusal</td><td>Declining when constraints unsatisfiable</td></tr>
-                        <tr><td>Hallucination</td><td>Assertion without grounds</td></tr>
-                        <tr><td>Drift</td><td>Undetected meaning shift</td></tr>
+                        <tr>
+                            <td>User</td>
+                            <td>Who's asking, expertise, intent</td>
+                        </tr>
+                        <tr>
+                            <td>Subject</td>
+                            <td>What's discussed, certainty level</td>
+                        </tr>
+                        <tr>
+                            <td>Method</td>
+                            <td>How derived, inference type</td>
+                        </tr>
+                        <tr>
+                            <td>Referential</td>
+                            <td>WHAT—determinate content</td>
+                        </tr>
+                        <tr>
+                            <td>Contextual</td>
+                            <td>CONDITIONS—scope specified</td>
+                        </tr>
+                        <tr>
+                            <td>Premissive</td>
+                            <td>GROUNDS—support provided</td>
+                        </tr>
+                        <tr>
+                            <td>Inferential</td>
+                            <td>WHY—conclusion follows</td>
+                        </tr>
+                        <tr>
+                            <td>Constraining</td>
+                            <td>LIMITS—boundaries explicit</td>
+                        </tr>
+                        <tr>
+                            <td>Teleological</td>
+                            <td>PURPOSE—relevance clear</td>
+                        </tr>
+                        <tr>
+                            <td>Valid</td>
+                            <td>All six constraints satisfied</td>
+                        </tr>
+                        <tr>
+                            <td>Closure</td>
+                            <td>Semantic completeness</td>
+                        </tr>
+                        <tr>
+                            <td>Refusal</td>
+                            <td>Declining when constraints unsatisfiable</td>
+                        </tr>
+                        <tr>
+                            <td>Hallucination</td>
+                            <td>Assertion without grounds</td>
+                        </tr>
+                        <tr>
+                            <td>Drift</td>
+                            <td>Undetected meaning shift</td>
+                        </tr>
                     </tbody>
                 </table>
 
                 <div class="ascii-box">Vocabulary is infrastructure.
 
-Use these terms precisely and implementation follows.</div>
+                    Use these terms precisely and implementation follows.</div>
             </div>
         </div>
 
@@ -1548,9 +1690,12 @@ Use these terms precisely and implementation follows.</div>
                 <h2>The Stakes</h2>
                 <p>You operate where errors cost lives.</p>
                 <p>Not reputation. Not revenue. Lives.</p>
-                <p>Your decisions are made under pressure, with incomplete information, against adversaries who want you to fail. You don't get to iterate. You don't get to A/B test. You decide, you act, and you live with the consequences.</p>
+                <p>Your decisions are made under pressure, with incomplete information, against adversaries who want you
+                    to fail. You don't get to iterate. You don't get to A/B test. You decide, you act, and you live with
+                    the consequences.</p>
                 <p>Current AI systems are not built for this.</p>
-                <p>They hallucinate. They drift. They express confidence they haven't earned. They cannot tell you what they don't know.</p>
+                <p>They hallucinate. They drift. They express confidence they haven't earned. They cannot tell you what
+                    they don't know.</p>
                 <p>You need something else.</p>
 
                 <hr>
@@ -1640,28 +1785,49 @@ Use these terms precisely and implementation follows.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Data lookup</td><td>System closes</td></tr>
-                        <tr><td>Pattern identification</td><td>System proposes, human confirms</td></tr>
-                        <tr><td>Target recommendation</td><td>Human closes</td></tr>
-                        <tr><td>Rules of engagement interpretation</td><td>Human closes</td></tr>
-                        <tr><td>Escalation decisions</td><td>Human closes—always</td></tr>
-                        <tr><td>Strategic assessment</td><td>Human closes</td></tr>
+                        <tr>
+                            <td>Data lookup</td>
+                            <td>System closes</td>
+                        </tr>
+                        <tr>
+                            <td>Pattern identification</td>
+                            <td>System proposes, human confirms</td>
+                        </tr>
+                        <tr>
+                            <td>Target recommendation</td>
+                            <td>Human closes</td>
+                        </tr>
+                        <tr>
+                            <td>Rules of engagement interpretation</td>
+                            <td>Human closes</td>
+                        </tr>
+                        <tr>
+                            <td>Escalation decisions</td>
+                            <td>Human closes—always</td>
+                        </tr>
+                        <tr>
+                            <td>Strategic assessment</td>
+                            <td>Human closes</td>
+                        </tr>
                     </tbody>
                 </table>
                 <p><strong>The system never decides to employ force.</strong></p>
-                <p>It provides validated intelligence. It flags uncertainty. It presents options. The human commander decides.</p>
+                <p>It provides validated intelligence. It flags uncertainty. It presents options. The human commander
+                    decides.</p>
 
                 <hr>
 
                 <h2>Contact</h2>
                 <p>For military and defense applications:</p>
-                <p><strong><a href="mailto:steven@echosphere.io">steven@echosphere.io</a></strong></p>
+                <p><strong>The Themis Project</strong><br>
+                    <a href="mailto:themis@echosphere.io">themis@echosphere.io</a>
+                </p>
                 <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
 
                 <div class="ascii-box">The warrior who knows what he doesn't know
-will defeat the warrior who thinks he knows everything.
+                    will defeat the warrior who thinks he knows everything.
 
-Build systems that know the difference.</div>
+                    Build systems that know the difference.</div>
             </div>
         </div>
 
@@ -1673,10 +1839,14 @@ Build systems that know the difference.</div>
 
                 <h2>The Burden</h2>
                 <p>You hold power in trust.</p>
-                <p>Every decision affects lives you'll never meet. Every policy creates winners and losers. Every action—and inaction—has consequences that ripple beyond your sight.</p>
-                <p>You operate with incomplete information, competing interests, and limited time. You're pressured by factions, media, donors, and constituents—each with their own agenda. You must decide anyway.</p>
+                <p>Every decision affects lives you'll never meet. Every policy creates winners and losers. Every
+                    action—and inaction—has consequences that ripple beyond your sight.</p>
+                <p>You operate with incomplete information, competing interests, and limited time. You're pressured by
+                    factions, media, donors, and constituents—each with their own agenda. You must decide anyway.</p>
                 <p>Current AI systems cannot help you well.</p>
-                <p>They generate plausible-sounding policy analysis without knowing if it's sound. They summarize public opinion without distinguishing signal from noise. They present options without understanding what you're actually deciding.</p>
+                <p>They generate plausible-sounding policy analysis without knowing if it's sound. They summarize public
+                    opinion without distinguishing signal from noise. They present options without understanding what
+                    you're actually deciding.</p>
                 <p>You need something better.</p>
 
                 <hr>
@@ -1730,29 +1900,53 @@ Build systems that know the difference.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Data summary</td><td>System closes</td></tr>
-                        <tr><td>Trend identification</td><td>System closes</td></tr>
-                        <tr><td>Policy options</td><td>System presents, human chooses</td></tr>
-                        <tr><td>Value tradeoffs</td><td>Human closes—always</td></tr>
-                        <tr><td>Constitutional questions</td><td>Human closes—always</td></tr>
-                        <tr><td>Resource allocation</td><td>Human closes</td></tr>
-                        <tr><td>Rights adjudication</td><td>Human closes</td></tr>
+                        <tr>
+                            <td>Data summary</td>
+                            <td>System closes</td>
+                        </tr>
+                        <tr>
+                            <td>Trend identification</td>
+                            <td>System closes</td>
+                        </tr>
+                        <tr>
+                            <td>Policy options</td>
+                            <td>System presents, human chooses</td>
+                        </tr>
+                        <tr>
+                            <td>Value tradeoffs</td>
+                            <td>Human closes—always</td>
+                        </tr>
+                        <tr>
+                            <td>Constitutional questions</td>
+                            <td>Human closes—always</td>
+                        </tr>
+                        <tr>
+                            <td>Resource allocation</td>
+                            <td>Human closes</td>
+                        </tr>
+                        <tr>
+                            <td>Rights adjudication</td>
+                            <td>Human closes</td>
+                        </tr>
                     </tbody>
                 </table>
                 <p><strong>The system never decides what's best for the polity.</strong></p>
-                <p>It provides validated analysis. It clarifies tradeoffs. It presents options with their grounds and limits. The elected official—accountable to the people—decides.</p>
+                <p>It provides validated analysis. It clarifies tradeoffs. It presents options with their grounds and
+                    limits. The elected official—accountable to the people—decides.</p>
 
                 <hr>
 
                 <h2>Contact</h2>
                 <p>For government and policy applications:</p>
-                <p><strong><a href="mailto:steven@echosphere.io">steven@echosphere.io</a></strong></p>
+                <p><strong>The Themis Project</strong><br>
+                    <a href="mailto:themis@echosphere.io">themis@echosphere.io</a>
+                </p>
                 <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
 
                 <div class="ascii-box">The statesman who knows what he doesn't know
-serves the people better than one who pretends certainty.
+                    serves the people better than one who pretends certainty.
 
-Build systems that support wisdom, not replace it.</div>
+                    Build systems that support wisdom, not replace it.</div>
             </div>
         </div>
 
@@ -1764,9 +1958,12 @@ Build systems that support wisdom, not replace it.</div>
 
                 <h2>The Reality</h2>
                 <p>You build things. You trade value. You employ people. You take risks.</p>
-                <p>When you're right, you create wealth—for yourself, your employees, your customers, your community. When you're wrong, you bear the loss. That's the deal.</p>
-                <p>Current AI promises to help: analyze markets, optimize operations, predict trends, automate decisions.</p>
-                <p>But it hallucinates market data. It drifts on key terms mid-analysis. It expresses confidence it hasn't earned. It can't tell you what it doesn't know.</p>
+                <p>When you're right, you create wealth—for yourself, your employees, your customers, your community.
+                    When you're wrong, you bear the loss. That's the deal.</p>
+                <p>Current AI promises to help: analyze markets, optimize operations, predict trends, automate
+                    decisions.</p>
+                <p>But it hallucinates market data. It drifts on key terms mid-analysis. It expresses confidence it
+                    hasn't earned. It can't tell you what it doesn't know.</p>
                 <p>In business, wrong decisions cost money. Sometimes they cost everything.</p>
                 <p>You need AI that knows its limits.</p>
 
@@ -1821,11 +2018,26 @@ Build systems that support wisdom, not replace it.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Audited financials</td><td>"Per audited statements: [X]."</td></tr>
-                        <tr><td>Management projections</td><td>"Management projects: [X]. Basis: [stated assumptions]."</td></tr>
-                        <tr><td>Market estimates</td><td>"Market estimated at [X]. Source: [analyst/firm]. Methodology: [basis]."</td></tr>
-                        <tr><td>Pattern extrapolation</td><td>"If historical patterns continue: [X]. Note: extrapolation, not forecast."</td></tr>
-                        <tr><td>Unknown</td><td>"Insufficient data to estimate."</td></tr>
+                        <tr>
+                            <td>Audited financials</td>
+                            <td>"Per audited statements: [X]."</td>
+                        </tr>
+                        <tr>
+                            <td>Management projections</td>
+                            <td>"Management projects: [X]. Basis: [stated assumptions]."</td>
+                        </tr>
+                        <tr>
+                            <td>Market estimates</td>
+                            <td>"Market estimated at [X]. Source: [analyst/firm]. Methodology: [basis]."</td>
+                        </tr>
+                        <tr>
+                            <td>Pattern extrapolation</td>
+                            <td>"If historical patterns continue: [X]. Note: extrapolation, not forecast."</td>
+                        </tr>
+                        <tr>
+                            <td>Unknown</td>
+                            <td>"Insufficient data to estimate."</td>
+                        </tr>
                     </tbody>
                 </table>
                 <p>A projection labeled "estimate based on limited data" is more useful than one presented as fact.</p>
@@ -1834,13 +2046,1095 @@ Build systems that support wisdom, not replace it.</div>
 
                 <h2>Contact</h2>
                 <p>For business and financial applications:</p>
-                <p><strong><a href="mailto:steven@echosphere.io">steven@echosphere.io</a></strong></p>
+                <p><strong>The Themis Project</strong><br>
+                    <a href="mailto:themis@echosphere.io">themis@echosphere.io</a>
+                </p>
                 <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
 
                 <div class="ascii-box">The merchant who knows what he doesn't know
-makes better bets than one who mistakes confidence for certainty.
+                    makes better bets than one who mistakes confidence for certainty.
 
-Build systems that support judgment, not replace it.</div>
+                    Build systems that support judgment, not replace it.</div>
+            </div>
+        </div>
+
+        <!-- THE TEACHER PAGE -->
+        <div id="page-teacher" class="page">
+            <div class="content">
+                <h1>The Teacher</h1>
+                <p><strong>Decision architecture for those who form souls</strong></p>
+
+                <hr>
+
+                <h2>The Sacred Task</h2>
+                <p>You do not transfer information. You form persons.</p>
+                <p>When you teach well, something happens that cannot be measured by test scores: a soul becomes more
+                    capable of understanding, more oriented toward truth, more able to engage reality on its own.</p>
+                <p>When you teach poorly — or when the system forces you to teach poorly — you produce memorizers,
+                    test-takers, credentialed ignoramuses who have passed through education without being formed by it.
+                </p>
+                <p>Current AI promises to help: personalized learning, automated grading, adaptive curricula,
+                    intelligent tutoring.</p>
+                <p>But it optimizes for metrics. It measures what's easy to measure. It confuses information transfer
+                    with education. It cannot tell the difference between a student who understands and one who has
+                    learned to produce the right outputs.</p>
+                <p>You need something better.</p>
+
+                <hr>
+
+                <h2>The Problem with Current AI in Education</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Failure Mode</th>
+                            <th>Consequence in Education</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hallucination</td>
+                            <td>Students taught falsehoods with confidence</td>
+                        </tr>
+                        <tr>
+                            <td>Semantic drift</td>
+                            <td>Key concepts shift meaning across lessons</td>
+                        </tr>
+                        <tr>
+                            <td>Groundless confidence</td>
+                            <td>"Mastery" declared without genuine understanding</td>
+                        </tr>
+                        <tr>
+                            <td>Calibration failure</td>
+                            <td>Assessment scores disconnected from actual capability</td>
+                        </tr>
+                        <tr>
+                            <td>Inappropriate closure</td>
+                            <td>System decides student "knows" when only system knows</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>An AI that says "student has mastered fractions" when it means "student produces correct outputs on
+                    fraction problems" has confused performance with understanding.</p>
+
+                <hr>
+
+                <h2>What Education Has Always Required</h2>
+                <p>The great teachers have always known:</p>
+                <p><strong>Education is not information transfer. It is formation.</strong></p>
+                <p>The student does not receive knowledge like a vessel receives water. The student's soul must
+                    <em>become capable</em> of knowing — must develop the structures that allow understanding to occur.
+                </p>
+                <p>This is why Plato's Academy took years. This is why apprenticeships lasted decades. This is why
+                    genuine education cannot be rushed, automated, or scaled without loss.</p>
+                <p><strong>Before a student truly knows, they must:</strong></p>
+                <ul>
+                    <li>Grasp WHAT is being claimed (not just the words — the meaning)</li>
+                    <li>Understand the CONDITIONS under which it holds</li>
+                    <li>Know the GROUNDS — why this is believed, not just that it's asserted</li>
+                    <li>Follow the REASONING — why the conclusion follows</li>
+                    <li>Recognize the LIMITS — where this knowledge stops</li>
+                    <li>Connect to PURPOSE — why this matters, what it's for</li>
+                </ul>
+                <p>This is the structure of genuine understanding. Skip any element and you have memorization, not
+                    knowledge.</p>
+
+                <hr>
+
+                <h2>The Six Constraints Applied to Education</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Educational Application</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Referential (WHAT)</strong></td>
+                            <td>Concept clarity. Does the student grasp what is actually being claimed?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual (CONDITIONS)</strong></td>
+                            <td>Scope awareness. Does the student know when this applies and when it doesn't?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive (GROUNDS)</strong></td>
+                            <td>Evidential understanding. Does the student know <em>why</em> this is believed?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential (WHY)</strong></td>
+                            <td>Logical grasp. Can the student follow and reproduce the reasoning?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining (LIMITS)</strong></td>
+                            <td>Boundary recognition. Does the student know where this knowledge stops?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological (PURPOSE)</strong></td>
+                            <td>Meaning connection. Does the student understand why this matters?</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>A student who can answer all six genuinely understands.</p>
+                <p>A student who can only produce correct outputs on tests has been trained, not educated.</p>
+
+                <hr>
+
+                <h2>The Three Axes in Educational Context</h2>
+                <div class="ascii-box"> STUDENT
+                    (soul being formed)
+                    │
+                    │
+                    SUBJECT ◄───────┼───────► METHOD
+                    (what is to be │ (how understanding
+                    understood) │ is developed)</div>
+                <p><strong>Student (User axis):</strong> Who is being formed? What is their current state? What are they
+                    capable of receiving? Education must meet the student where they are — not where the curriculum
+                    assumes they are.</p>
+                <p><strong>Subject (Subject axis):</strong> What is actually being taught? Is it genuine knowledge or
+                    mere opinion? Is it grounded or merely asserted? The curriculum itself must pass the validity test.
+                </p>
+                <p><strong>Method (Method axis):</strong> How is understanding being developed? Lecture? Dialogue?
+                    Practice? Discovery? Different subjects and different students require different methods. The system
+                    must discriminate.</p>
+
+                <hr>
+
+                <h2>Closure Authority in Education</h2>
+                <p>The most important question: Who decides when learning has occurred?</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Learning Type</th>
+                            <th>Closure Authority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Factual recall</td>
+                            <td>System can assess</td>
+                        </tr>
+                        <tr>
+                            <td>Procedural skill</td>
+                            <td>System can assess with limits</td>
+                        </tr>
+                        <tr>
+                            <td>Conceptual understanding</td>
+                            <td>Human teacher assesses</td>
+                        </tr>
+                        <tr>
+                            <td>Judgment development</td>
+                            <td>Human teacher assesses</td>
+                        </tr>
+                        <tr>
+                            <td>Wisdom formation</td>
+                            <td>Only life assesses</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>The system never declares a soul formed.</strong></p>
+                <p>It can provide data. It can flag gaps. It can suggest readiness. But the determination that genuine
+                    understanding has occurred — that the student now <em>knows</em> rather than merely
+                    <em>performs</em> — requires human judgment.
+                </p>
+                <p>A teacher who trusts the algorithm over their own perception of the student has abdicated the
+                    essential responsibility.</p>
+
+                <hr>
+
+                <h2>The Difference Between Training and Education</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Training</th>
+                            <th>Education</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Produces correct outputs</td>
+                            <td>Develops understanding</td>
+                        </tr>
+                        <tr>
+                            <td>Measured by performance</td>
+                            <td>Recognized by insight</td>
+                        </tr>
+                        <tr>
+                            <td>Can be automated</td>
+                            <td>Requires human presence</td>
+                        </tr>
+                        <tr>
+                            <td>Creates competence</td>
+                            <td>Forms persons</td>
+                        </tr>
+                        <tr>
+                            <td>Serves external purposes</td>
+                            <td>Serves the student's flourishing</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Both have their place. A pilot needs training. A surgeon needs training. But training without
+                    education produces technicians without judgment — capable of executing procedures, incapable of
+                    knowing when procedures don't apply.</p>
+                <p>The architecture supports both — but it knows the difference.</p>
+
+                <hr>
+
+                <h2>Progressive Closure</h2>
+                <p>Education is not instantaneous. It is progressive development toward fuller understanding:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stage</th>
+                            <th>What Develops</th>
+                            <th>Closure Level</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Exposure</strong></td>
+                            <td>Awareness that something exists</td>
+                            <td>1 constraint (Referential)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Familiarity</strong></td>
+                            <td>Recognition of patterns</td>
+                            <td>2 constraints</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Comprehension</strong></td>
+                            <td>Grasp of relationships</td>
+                            <td>3-4 constraints</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Understanding</strong></td>
+                            <td>Integration with grounds and limits</td>
+                            <td>5-6 constraints</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mastery</strong></td>
+                            <td>Ability to teach others</td>
+                            <td>Full closure, generative</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>Each stage builds on the previous. You cannot skip stages. You cannot rush stages. The soul develops
+                    at its own pace.</p>
+                <p>AI can support each stage — but only if it knows which stage the student is at and what that stage
+                    requires.</p>
+
+                <hr>
+
+                <h2>The Teacher's Checklist</h2>
+                <p>Before certifying understanding:</p>
+                <ol>
+                    <li><strong>WHAT</strong> — Can the student state clearly what is being claimed? In their own words?
+                    </li>
+                    <li><strong>CONDITIONS</strong> — Does the student know when this applies? Can they identify cases
+                        where it doesn't?</li>
+                    <li><strong>GROUNDS</strong> — Can the student explain <em>why</em> this is believed? Not just that
+                        authorities say so?</li>
+                    <li><strong>WHY</strong> — Can the student follow the reasoning? Reproduce it? Extend it?</li>
+                    <li><strong>LIMITS</strong> — Does the student know what this doesn't explain? Where uncertainty
+                        remains?</li>
+                    <li><strong>PURPOSE</strong> — Does the student understand why this matters? How it connects to
+                        larger concerns?</li>
+                </ol>
+                <p>If the student cannot answer all six, they have not yet understood. They may have memorized. They may
+                    perform well on tests. But they do not yet <em>know</em>.</p>
+
+                <hr>
+
+                <h2>What AI Cannot Do in Education</h2>
+                <p>AI cannot:</p>
+                <ul>
+                    <li>Supply the student's interest (motivation must come from the soul)</li>
+                    <li>Provide the student's presence (attention cannot be automated)</li>
+                    <li>Replace the teacher's perception (seeing where the student actually is)</li>
+                    <li>Guarantee understanding (only support its development)</li>
+                    <li>Form character (only information can be transmitted digitally)</li>
+                </ul>
+                <p>AI can:</p>
+                <ul>
+                    <li>Present material in multiple ways</li>
+                    <li>Provide practice opportunities</li>
+                    <li>Track performance over time</li>
+                    <li>Flag potential gaps</li>
+                    <li>Free teacher time for what only teachers can do</li>
+                </ul>
+                <p>The architecture keeps AI in its proper role: tool for the teacher, support for the student, never
+                    substitute for the educational relationship.</p>
+
+                <hr>
+
+                <h2>The Educational Crisis</h2>
+                <p>Modern education increasingly resembles training:</p>
+                <ul>
+                    <li>Standardized curricula (one size fits all souls)</li>
+                    <li>Standardized assessment (performance over understanding)</li>
+                    <li>Efficiency metrics (throughput over formation)</li>
+                    <li>Credential focus (certification over capability)</li>
+                </ul>
+                <p>AI, deployed thoughtlessly, accelerates this collapse. It optimizes what can be measured. It scales
+                    what can be automated. It mistakes performance for understanding because performance is measurable.
+                </p>
+                <p>The architecture offers a different path:</p>
+                <ul>
+                    <li>Validity checking on educational claims</li>
+                    <li>Explicit tracking of what's actually being developed</li>
+                    <li>Closure authority that preserves teacher judgment</li>
+                    <li>Purpose clarity that keeps formation central</li>
+                </ul>
+                <p>This won't fix education. But it ensures AI doesn't make it worse.</p>
+
+                <hr>
+
+                <h2>The Human-AI Hierarchy in Education</h2>
+                <p>Education requires the clearest hierarchy:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Role</th>
+                            <th>Criterion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Student</strong></td>
+                            <td>The end</td>
+                            <td>Whose formation matters</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teacher</strong></td>
+                            <td>The guide</td>
+                            <td>Whose judgment directs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI</strong></td>
+                            <td>The tool</td>
+                            <td>Whose validity supports</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Understanding</strong></td>
+                            <td>The measure</td>
+                            <td>Not mere performance</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>The guitar doesn't make you a musician by playing for you. It develops your capacity to play.</p>
+                <p>AI doesn't make students knowledgeable by giving them information. It supports the development of
+                    their capacity to understand — by providing valid content, tracking genuine progress, and preserving
+                    the space for the educational relationship.</p>
+                <p>A system that enhances teaching is more valuable than one that replaces it — no matter how impressive
+                    the replacement seems.</p>
+
+                <hr>
+
+                <h2>For Those Building AI for Education</h2>
+                <p><strong>Minimum viable integration:</strong></p>
+                <ul>
+                    <li>Add constraint checking to content claims</li>
+                    <li>Track understanding indicators, not just performance</li>
+                    <li>Flag when performance exceeds demonstrated understanding</li>
+                    <li>Preserve teacher override on all assessments</li>
+                </ul>
+                <p><strong>Full integration:</strong></p>
+                <ul>
+                    <li>Map student progress against six-constraint framework</li>
+                    <li>Discriminate training from education in learning objectives</li>
+                    <li>Route formation judgments to human teachers</li>
+                    <li>Calibrate system assessments against teacher judgments over time</li>
+                </ul>
+                <p><strong>Validation:</strong></p>
+                <ul>
+                    <li>Do students who "pass" actually understand? Test with novel applications</li>
+                    <li>Do teachers trust the system? If not, why not?</li>
+                    <li>Does the system support the educational relationship or compete with it?</li>
+                </ul>
+
+                <hr>
+
+                <h2>The Teacher's Standard</h2>
+                <p>Good teaching requires:</p>
+                <ul>
+                    <li>Seeing the student as they actually are</li>
+                    <li>Meeting them where they are</li>
+                    <li>Guiding them toward genuine understanding</li>
+                    <li>Knowing when understanding has occurred</li>
+                    <li>Never confusing performance with formation</li>
+                </ul>
+                <p>Current AI systems meet none of these standards.</p>
+                <p>The architecture makes them achievable.</p>
+
+                <hr>
+
+                <h2>The Formation</h2>
+                <p>Education is not preparation for life. Education is formation <em>of</em> life.</p>
+                <p>The student who has been genuinely educated is not merely equipped with knowledge. They have become
+                    someone capable of knowing — capable of engaging reality, evaluating claims, making judgments,
+                    finding meaning.</p>
+                <p>This is the telos of education. Everything else is vocational training dressed in academic robes.</p>
+                <p>AI can support this telos or subvert it. The architecture ensures it supports.</p>
+
+                <hr>
+
+                <div class="ascii-box">The teacher does not fill vessels.
+                    The teacher lights fires.
+
+                    But fires cannot be automated.
+                    They can only be kindled, soul to soul.
+
+                    AI can carry the wood.
+                    Only the teacher can strike the match.</div>
+            </div>
+        </div>
+
+        <!-- THE HEALER PAGE -->
+        <div id="page-healer" class="page">
+            <div class="content">
+                <h1>The Healer</h1>
+                <p><strong>Decision architecture for those who restore health</strong></p>
+
+                <hr>
+
+                <h2>The Weight</h2>
+                <p>You hold health in your hands.</p>
+                <p>When you diagnose correctly, you open the path to healing. When you diagnose wrongly, you send
+                    patients down corridors that lead nowhere — or worse.</p>
+                <p>You operate with incomplete information, under time pressure, with patients who can't always tell you
+                    what's wrong, and bodies that don't always follow the textbook. You must decide anyway. And your
+                    decisions have consequences that patients carry in their flesh.</p>
+                <p>Current AI promises to help: pattern recognition in imaging, differential diagnosis support,
+                    treatment recommendations, drug interaction checking.</p>
+                <p>But it hallucinates findings. It expresses confidence it hasn't earned. It cannot tell you what it
+                    doesn't know. It treats patients as data points, not persons.</p>
+                <p>You need something better.</p>
+
+                <hr>
+
+                <h2>The Problem with Current AI in Medicine</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Failure Mode</th>
+                            <th>Consequence in Healthcare</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hallucination</td>
+                            <td>Diagnoses based on patterns that don't exist</td>
+                        </tr>
+                        <tr>
+                            <td>Semantic drift</td>
+                            <td>Clinical terms shift meaning across contexts</td>
+                        </tr>
+                        <tr>
+                            <td>Groundless confidence</td>
+                            <td>"Likely diagnosis" without basis in this patient's presentation</td>
+                        </tr>
+                        <tr>
+                            <td>Calibration failure</td>
+                            <td>"95% probability" that means nothing predictive</td>
+                        </tr>
+                        <tr>
+                            <td>Inappropriate closure</td>
+                            <td>System diagnoses when it should present possibilities</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>An AI that says "findings consistent with malignancy" when it means "pattern similar to malignant
+                    cases in training data" can destroy a patient's life with a sentence.</p>
+
+                <hr>
+
+                <h2>What Healers Have Always Known</h2>
+                <p>The great physicians have always understood:</p>
+                <p><strong>The patient is not a data set. The patient is a person.</strong></p>
+                <p>The same disease presents differently in different bodies. The same symptoms arise from different
+                    causes. The textbook describes the typical; you treat the individual.</p>
+                <p><strong>Before you diagnose, you must know:</strong></p>
+                <ul>
+                    <li>WHAT are the actual findings? (not assumptions — observations)</li>
+                    <li>Under what CONDITIONS does this presentation occur?</li>
+                    <li>What GROUNDS support this diagnostic hypothesis?</li>
+                    <li>WHY do these findings suggest this diagnosis? What's the mechanism?</li>
+                    <li>What are the LIMITS of certainty? What else could this be?</li>
+                    <li>What is the PURPOSE? What will this diagnosis enable or foreclose?</li>
+                </ul>
+                <p>This is the structure of sound clinical reasoning. It's what distinguishes diagnosis from
+                    pattern-matching.</p>
+
+                <hr>
+
+                <h2>The Six Constraints Applied to Medicine</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Medical Application</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Referential (WHAT)</strong></td>
+                            <td>Finding clarity. What exactly is observed in this patient?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual (CONDITIONS)</strong></td>
+                            <td>Patient context. Medical history, medications, circumstances?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive (GROUNDS)</strong></td>
+                            <td>Evidential basis. What tests, exams, observations support this?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential (WHY)</strong></td>
+                            <td>Diagnostic logic. Why do these findings suggest this condition?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining (LIMITS)</strong></td>
+                            <td>Differential awareness. What else could explain this? What's uncertain?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological (PURPOSE)</strong></td>
+                            <td>Clinical purpose. What decisions does this diagnosis enable?</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>A system that checks all six produces clinical decision support worth trusting.</p>
+                <p>A system that checks zero produces confident noise that endangers patients.</p>
+
+                <hr>
+
+                <h2>The Three Axes in Clinical Context</h2>
+                <div class="ascii-box"> PATIENT
+                    (the person seeking healing)
+                    │
+                    │
+                    CONDITION ◄─────┼─────► METHOD
+                    (what is actually │ (how knowledge
+                    present) │ was obtained)</div>
+                <p><strong>Patient (User axis):</strong> Who is this person? Not just demographics — their situation,
+                    their values, their capacity for different treatments. The same condition in different patients may
+                    warrant different approaches.</p>
+                <p><strong>Condition (Subject axis):</strong> What is actually present in this body? Not what the
+                    textbook says should be present — what is. How certain are we? What's the evidence quality?</p>
+                <p><strong>Method (Method axis):</strong> How was this information obtained? Physical exam? Lab work?
+                    Imaging? Patient report? Each has different reliability. The system must discriminate and disclose.
+                </p>
+
+                <hr>
+
+                <h2>Closure Authority in Clinical Decisions</h2>
+                <p>Medicine has always recognized hierarchy in decision-making:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Decision Type</th>
+                            <th>Closure Authority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Data retrieval (lab ranges, drug interactions)</td>
+                            <td>System closes</td>
+                        </tr>
+                        <tr>
+                            <td>Pattern recognition (image analysis)</td>
+                            <td>System proposes, clinician confirms</td>
+                        </tr>
+                        <tr>
+                            <td>Diagnostic conclusion</td>
+                            <td>Clinician closes</td>
+                        </tr>
+                        <tr>
+                            <td>Treatment selection</td>
+                            <td>Clinician proposes, patient consents</td>
+                        </tr>
+                        <tr>
+                            <td>Value-laden decisions (quality vs. quantity of life)</td>
+                            <td>Patient closes</td>
+                        </tr>
+                        <tr>
+                            <td>End-of-life decisions</td>
+                            <td>Patient closes — always</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>The system never decides what is best for the patient.</strong></p>
+                <p>It provides information. It flags possibilities. It identifies risks. The clinician integrates and
+                    recommends. The patient — whose body it is, whose life it is — decides.</p>
+                <p>This isn't inefficiency. It's the structure of ethical medicine.</p>
+
+                <hr>
+
+                <h2>Honest Uncertainty in Diagnosis</h2>
+                <p>Medicine is irreducibly uncertain:</p>
+                <ul>
+                    <li>Tests have false positives and negatives</li>
+                    <li>Presentations vary from textbook</li>
+                    <li>Multiple conditions can coexist</li>
+                    <li>Individual responses vary</li>
+                    <li>The body keeps secrets</li>
+                </ul>
+                <p>Current AI hides this uncertainty. It outputs confident diagnoses because confidence sounds
+                    competent.</p>
+                <p>The architecture enforces honesty:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Actual Certainty</th>
+                            <th>System Output</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Confirmed (pathology, definitive test)</td>
+                            <td>"Confirmed: [diagnosis]. Basis: [definitive finding]."</td>
+                        </tr>
+                        <tr>
+                            <td>Probable (consistent findings, no red flags)</td>
+                            <td>"Probable: [diagnosis]. Supporting: [findings]. Consider: [alternatives]."</td>
+                        </tr>
+                        <tr>
+                            <td>Possible (some consistent findings)</td>
+                            <td>"Possible: [diagnosis]. Consistent findings: [list]. However: [inconsistencies].
+                                Differential: [alternatives]."</td>
+                        </tr>
+                        <tr>
+                            <td>Uncertain (ambiguous presentation)</td>
+                            <td>"Uncertain. Findings are consistent with [A], [B], [C]. Recommend: [further
+                                investigation]."</td>
+                        </tr>
+                        <tr>
+                            <td>Unknown</td>
+                            <td>"Insufficient information. Findings do not clearly indicate diagnosis. Recommend:
+                                [specific additional data needed]."</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>A clinician who knows they don't know serves patients better than one who guesses confidently.</p>
+
+                <hr>
+
+                <h2>The Differential Diagnosis</h2>
+                <p>Good clinical reasoning maintains alternatives:</p>
+                <p>What else could this be?</p>
+                <p>Current AI systems converge too quickly. They identify a pattern and declare a match. They don't
+                    maintain the differential.</p>
+                <p>The architecture enforces differential awareness through the Constraining constraint:</p>
+                <ul>
+                    <li>What findings would we expect if this diagnosis is correct?</li>
+                    <li>What findings would rule it out?</li>
+                    <li>What alternative diagnoses remain possible?</li>
+                    <li>What tests would discriminate between possibilities?</li>
+                </ul>
+                <p>A system that maintains the differential supports clinical reasoning. A system that collapses to a
+                    single diagnosis replaces clinical reasoning with pattern-matching.</p>
+
+                <hr>
+
+                <h2>The Healer's Checklist</h2>
+                <p>Before acting on any clinical AI output:</p>
+                <ol>
+                    <li><strong>WHAT</strong> — Are the findings clearly specified? For this patient?</li>
+                    <li><strong>CONDITIONS</strong> — Is this patient's full context considered? Comorbidities,
+                        medications, circumstances?</li>
+                    <li><strong>GROUNDS</strong> — What specific evidence supports this assessment? How reliable?</li>
+                    <li><strong>WHY</strong> — Does the diagnostic logic hold? Is the mechanism plausible in this
+                        patient?</li>
+                    <li><strong>LIMITS</strong> — What else could this be? What's the differential? What uncertainty
+                        remains?</li>
+                    <li><strong>PURPOSE</strong> — What does this diagnosis enable? What treatment decisions follow?
+                    </li>
+                </ol>
+                <p>If the system can't support all six, treat its output as preliminary — not conclusive.</p>
+
+                <hr>
+
+                <h2>The Patient's Values</h2>
+                <p>Medicine increasingly recognizes: clinical decisions involve values, not just facts.</p>
+                <ul>
+                    <li>Is length of life or quality of life more important?</li>
+                    <li>What risks are acceptable?</li>
+                    <li>What side effects are tolerable?</li>
+                    <li>What matters most to this patient?</li>
+                </ul>
+                <p>These questions cannot be answered by algorithms. They require knowing the patient as a person.</p>
+                <p>The architecture supports this:</p>
+                <ul>
+                    <li>Closure authority routes value-laden decisions to patients</li>
+                    <li>Purpose constraint makes explicit what decisions are enabled</li>
+                    <li>The system never substitutes population statistics for individual choice</li>
+                </ul>
+
+                <hr>
+
+                <h2>For Those Building AI for Healthcare</h2>
+                <p><strong>Minimum viable integration:</strong></p>
+                <ul>
+                    <li>Add constraint checking to diagnostic outputs</li>
+                    <li>Require explicit uncertainty quantification</li>
+                    <li>Maintain differential diagnosis, not single outputs</li>
+                    <li>Flag when AI confidence exceeds evidence quality</li>
+                </ul>
+                <p><strong>Full integration:</strong></p>
+                <ul>
+                    <li>Track patient context throughout clinical reasoning</li>
+                    <li>Discriminate evidence types (exam, lab, imaging, history)</li>
+                    <li>Route decisions to appropriate authority (system, clinician, patient)</li>
+                    <li>Calibrate confidence against actual diagnostic accuracy</li>
+                </ul>
+                <p><strong>Validation:</strong></p>
+                <ul>
+                    <li>Does stated confidence match actual accuracy?</li>
+                    <li>Are differentials appropriate? Test with atypical presentations</li>
+                    <li>Do clinicians trust the system? Does it support or replace their reasoning?</li>
+                    <li>Are patients better served? Not just faster — better</li>
+                </ul>
+
+                <hr>
+
+                <h2>The Healer's Standard</h2>
+                <p>Good medicine requires:</p>
+                <ul>
+                    <li>Seeing the patient, not just the data</li>
+                    <li>Maintaining uncertainty where uncertainty exists</li>
+                    <li>Distinguishing evidence from assumption</li>
+                    <li>Deferring to patient values on value-laden decisions</li>
+                    <li>Taking responsibility for recommendations made</li>
+                </ul>
+                <p>Current AI systems meet none of these standards reliably.</p>
+                <p>The architecture makes them achievable.</p>
+
+                <hr>
+
+                <h2>The Human-AI Hierarchy in Medicine</h2>
+                <p>Healthcare requires clear hierarchy:</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Position</th>
+                            <th>Role</th>
+                            <th>Criterion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Patient</strong></td>
+                            <td>The end</td>
+                            <td>Whose health and values matter</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Clinician</strong></td>
+                            <td>The guide</td>
+                            <td>Whose judgment integrates</td>
+                        </tr>
+                        <tr>
+                            <td><strong>AI</strong></td>
+                            <td>The tool</td>
+                            <td>Whose validity supports</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Health</strong></td>
+                            <td>The measure</td>
+                            <td>Not mere throughput</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>The guitar doesn't make you a musician by playing for you. It develops your capacity to play.</p>
+                <p>AI doesn't make you a better clinician by diagnosing for you. It develops your capacity to diagnose
+                    well — by providing valid information, maintaining appropriate uncertainty, and preserving the space
+                    for clinical judgment.</p>
+                <p>A system that enhances clinical reasoning is more valuable than one that replaces it — no matter how
+                    impressive its accuracy statistics seem.</p>
+
+                <hr>
+
+                <h2>The Healing Relationship</h2>
+                <p>At its core, medicine is relationship: a person who suffers and a person who helps.</p>
+                <p>Technology can support this relationship. Technology cannot replace it.</p>
+                <p>The patient who is seen, heard, and known as a person heals differently than the patient who is
+                    processed. This isn't mysticism — it's documented in outcomes.</p>
+                <p>AI deployed thoughtlessly erodes the healing relationship. It interposes screens between clinician
+                    and patient. It reduces persons to data. It optimizes throughput at the cost of presence.</p>
+                <p>The architecture offers a different path: AI that supports the relationship rather than replacing it.
+                    Tools that enhance the clinician's capacity to see the patient clearly.</p>
+                <p>That's what medicine needs. That's what the architecture provides.</p>
+
+                <hr>
+
+                <div class="ascii-box">The body speaks, but not in words.
+                    The healer listens with trained perception.
+
+                    AI can process the signals.
+                    Only the healer can hear the patient.
+
+                    The diagnosis names.
+                    The healing requires presence.</div>
+            </div>
+        </div>
+
+        <!-- THE JUDGE PAGE -->
+        <div id="page-judge" class="page">
+            <div class="content">
+                <h1>The Judge</h1>
+                <p><strong>Decision architecture for those who administer justice</strong></p>
+
+                <hr>
+
+                <h2>The Burden</h2>
+                <p>You decide the fate of others.</p>
+                <p>When you judge, you don't merely predict outcomes; you create them. You determine liberty, property,
+                    custody, rights. Your decisions have the force of law.</p>
+                <p>You operate in a system designed to be slow, deliberate, and reasoned. You balance precedent with
+                    principle, facts with law, equity with statutes. You explain your reasoning so it can be reviewed,
+                    appealed, understood.</p>
+                <p>Current AI promises to help: case law research, drafting, prediction of outcomes, document review.
+                </p>
+                <p>But it hallucinates precedents. It predicts based on statistical correlation, not legal reasoning. It
+                    cannot distinguish a good argument from a textually similar bad one. It has no authority to close.
+                </p>
+                <p>You need something better.</p>
+
+                <hr>
+
+                <h2>The Problem with Current AI in Law</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Failure Mode</th>
+                            <th>Consequence in Law</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hallucination</td>
+                            <td>Cited cases that do not exist (already happening)</td>
+                        </tr>
+                        <tr>
+                            <td>Semantic drift</td>
+                            <td>Legal terms lose precise meaning</td>
+                        </tr>
+                        <tr>
+                            <td>Groundless confidence</td>
+                            <td>Assertions of law without citations</td>
+                        </tr>
+                        <tr>
+                            <td>Calibration failure</td>
+                            <td>"80% likely to win" based on nothing but text patterns</td>
+                        </tr>
+                        <tr>
+                            <td>Inappropriate closure</td>
+                            <td>System "decides" merit instead of presenting arguments</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>An AI that cites <em>Varghese v. China Southern Airlines</em> when no such case exists destroys not
+                    just the brief, but the integrity of the court.</p>
+
+                <hr>
+
+                <h2>Difference Between Prediction and Judgment</h2>
+                <p>This is the fundamental error of legal AI:</p>
+                <p><strong>Prediction says: "Based on past data, the court will likely rule X."</strong></p>
+                <p><strong>Judgment says: "Based on the law and facts, the court OUGHT to rule X."</strong></p>
+                <p>Laws are not merely patterns of past behavior. They are normative standards. A judge who rules
+                    differently than past judges is not necessarily "wrong" (an outlier); they may be correcting an
+                    error, distinguishing a case, or establishing new precedent.</p>
+                <p>Current AI is predictive. It treats law as data. It cannot reason normatively.</p>
+                <p>The architecture distinguishes prediction (Merchant) from judgment (Judge).</p>
+
+                <hr>
+
+                <h2>The Six Constraints Applied to Law</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Constraint</th>
+                            <th>Legal Application</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Referential (WHAT)</strong></td>
+                            <td>Factual clarity. What actually happened? What is established?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual (CONDITIONS)</strong></td>
+                            <td>Legal framework. What law applies? What jurisdiction? What standards?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive (GROUNDS)</strong></td>
+                            <td>Evidentiary basis. What evidence supports each finding? What precedent applies?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential (WHY)</strong></td>
+                            <td>Legal reasoning. Why does law require this outcome from these facts?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining (LIMITS)</strong></td>
+                            <td>Scope of ruling. What does this decide and not decide?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological (PURPOSE)</strong></td>
+                            <td>Justice served. What right is vindicated? What wrong is remedied?</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p>A brief that satisfies all six is sound. A ruling that satisfies all six is just.</p>
+                <p>A system that checks all six produces legal support worth using.</p>
+
+                <hr>
+
+                <h2>The Three Axes in Legal Context</h2>
+                <div class="ascii-box"> JUDGE
+                    (authority to decide)
+                    │
+                    │
+                    LAW ◄─────────┼─────────► FACTS
+                    (the standard) │ (what happened)</div>
+                <p><strong>Judge (User axis):</strong> Who is deciding? A clerk? An associate? A partner? A magistrate?
+                    A justice? Authority varies.</p>
+                <p><strong>Law (Subject axis):</strong> What is the standard? Statute? Regulation? Common law?
+                    Constitutional principle? The text matters.</p>
+                <p><strong>Facts (Method axis):</strong> What happened? Established by stipulation? By jury verdict? By
+                    administrative finding? The status of facts matters.</p>
+
+                <hr>
+
+                <h2>Closure Authority in Law</h2>
+                <p>Law is obsessed with authority. Who has the power to decide?</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Decision Level</th>
+                            <th>Closure Authority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Search (finding relevant cases)</td>
+                            <td>System can close</td>
+                        </tr>
+                        <tr>
+                            <td>Analysis (summarizing holdings)</td>
+                            <td>System proposes, Human verifies</td>
+                        </tr>
+                        <tr>
+                            <td>Argument (applying law to facts)</td>
+                            <td>Human closes</td>
+                        </tr>
+                        <tr>
+                            <td>Judgment (deciding the case)</td>
+                            <td>Human closes — always</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><strong>The system never judges.</strong></p>
+                <p>It can research. It can draft. It can compare. But the act of judgment — the speech act that changes
+                    the world ("I sentence you," "Motion granted") — requires a human will authorized by the community.
+                </p>
+                <p>An algorithm cannot be authorized to judge humans.</p>
+
+                <hr>
+
+                <h2>The Judge's Checklist</h2>
+                <p>Before signing any order or filing:</p>
+                <ol>
+                    <li><strong>WHAT</strong> — Are the facts clearly stated? Is the relief requested clear?</li>
+                    <li><strong>CONDITIONS</strong> — Is jurisdiction clear? Standing? Controlling law?</li>
+                    <li><strong>GROUNDS</strong> — Is every factual assertion supported by record? Every legal assertion
+                        by precedent?</li>
+                    <li><strong>WHY</strong> — Is the reasoning explicit? Does valid logic connect facts + law to
+                        conclusion?</li>
+                    <li><strong>LIMITS</strong> — Is the scope defined? What is NOT decided?</li>
+                    <li><strong>PURPOSE</strong> — Does this serve the interest of justice? Efficiency? Equity?</li>
+                </ol>
+                <p>If the AI draft fails any of these, it is not ready for signature.</p>
+
+                <hr>
+
+                <h2>Honesty in Legal Uncertainty</h2>
+                <p>Law is often unsettled.</p>
+                <ul>
+                    <li>Circuits split</li>
+                    <li>Statutes are ambiguous</li>
+                    <li>Precedents conflict</li>
+                    <li>Facts are disputed</li>
+                </ul>
+                <p>Current AI tends to hallucinate certainty ("The law is clearly X") or hedge uselessly.</p>
+                <p>The architecture enforces specificity about uncertainty:</p>
+                <ul>
+                    <li>"The 9th Circuit holds X, but the 5th Circuit holds Y."</li>
+                    <li>"The statute says X, but regulation says Y."</li>
+                    <li>"The facts support X, but could be interpreted as Y."</li>
+                </ul>
+                <p>This is not weakness. It is legal precision.</p>
+
+                <hr>
+
+                <h2>For Those Building AI for Law</h2>
+                <p><strong>Minimum viable integration:</strong></p>
+                <ul>
+                    <li>Add constraint checking to legal assertions (especially citations)</li>
+                    <li>Distinguish between settled law and open questions</li>
+                    <li>Separate factual claims from legal conclusions</li>
+                    <li>Preserve human closure on all filings and rulings</li>
+                </ul>
+                <p><strong>Full integration:</strong></p>
+                <ul>
+                    <li>Track authority levels (binding vs. persuasive)</li>
+                    <li>Map arguments against the six constraints</li>
+                    <li>Identify logical gaps in reasoning steps</li>
+                    <li>Calibrate confidence against legal complexity</li>
+                </ul>
+                <p><strong>Validation:</strong></p>
+                <ul>
+                    <li>Does the system hallucinate cases? (Zero tolerance)</li>
+                    <li>Does it distinguish holding from dicta?</li>
+                    <li>Does it recognize jurisdictional limits?</li>
+                    <li>Do lawyers trust it enough to sign their names to its output?</li>
+                </ul>
+
+                <hr>
+
+                <h2>The Judge's Standard</h2>
+                <p>Good judging requires:</p>
+                <ul>
+                    <li>Fidelity to the law</li>
+                    <li>Clarity of reasoning</li>
+                    <li>Explanation of grounds</li>
+                    <li>Recognition of limits</li>
+                    <li>Commitment to justice</li>
+                </ul>
+                <p>Current AI systems understand none of these concepts.</p>
+                <p>The architecture tracks them explicitly.</p>
+
+                <hr>
+
+                <h2>The Rule of Law</h2>
+                <p>We do not want rule by algorithm. We want rule of law.</p>
+                <p>Rule of law requires reasons. It requires accountability. It requires that decisions be made by those
+                    authorized to make them, in accordance with public standards.</p>
+                <p>AI can support the rule of law by making law more accessible, reasoning more transparent, and facts
+                    more discoverable.</p>
+                <p>Or it can undermine the rule of law by replacing reasoning with correlation and judgment with
+                    calculation.</p>
+                <p>The architecture ensures it supports.</p>
+
+                <hr>
+
+                <div class="ascii-box">The law is not code.
+                    It is the community's reason.
+
+                    Code executes.
+                    Reason judges.
+
+                    AI can execute.
+                    Only the judge can reason.</div>
             </div>
         </div>
 
@@ -1854,7 +3148,8 @@ Build systems that support judgment, not replace it.</div>
                 <p>Why does your work matter?</p>
                 <p>Not "what do you do?" That's job description.</p>
                 <p>Not "how do you do it?" That's methodology.</p>
-                <p><strong>Why does it matter?</strong> What purpose does it serve? What would be lost if you stopped?</p>
+                <p><strong>Why does it matter?</strong> What purpose does it serve? What would be lost if you stopped?
+                </p>
                 <p>Every role has an answer—or should.</p>
 
                 <hr>
@@ -1881,8 +3176,8 @@ Build systems that support judgment, not replace it.</div>
                 <h2>The Telos Test</h2>
                 <p>For any action, ask: <strong>Does this genuinely improve something for someone?</strong></p>
                 <p>Not "does this increase my metrics?"<br>
-                Not "does this satisfy my KPIs?"<br>
-                Not "does this grow market share?"</p>
+                    Not "does this satisfy my KPIs?"<br>
+                    Not "does this grow market share?"</p>
                 <p>Does it make things <strong>actually better</strong> for <strong>real people</strong>?</p>
                 <p>This is the telos test. It applies to every role.</p>
 
@@ -1897,14 +3192,38 @@ Build systems that support judgment, not replace it.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Security</td><td>People can live without fear of violence</td></tr>
-                        <tr><td>Justice</td><td>Wrongs are addressed, fairness increases</td></tr>
-                        <tr><td>Health</td><td>People can function, flourish, recover</td></tr>
-                        <tr><td>Knowledge</td><td>People understand more, decide better</td></tr>
-                        <tr><td>Prosperity</td><td>Needs are met, opportunities expand</td></tr>
-                        <tr><td>Connection</td><td>Relationships deepen, communities strengthen</td></tr>
-                        <tr><td>Beauty</td><td>Life is enriched, not just sustained</td></tr>
-                        <tr><td>Meaning</td><td>People can pursue what matters to them</td></tr>
+                        <tr>
+                            <td>Security</td>
+                            <td>People can live without fear of violence</td>
+                        </tr>
+                        <tr>
+                            <td>Justice</td>
+                            <td>Wrongs are addressed, fairness increases</td>
+                        </tr>
+                        <tr>
+                            <td>Health</td>
+                            <td>People can function, flourish, recover</td>
+                        </tr>
+                        <tr>
+                            <td>Knowledge</td>
+                            <td>People understand more, decide better</td>
+                        </tr>
+                        <tr>
+                            <td>Prosperity</td>
+                            <td>Needs are met, opportunities expand</td>
+                        </tr>
+                        <tr>
+                            <td>Connection</td>
+                            <td>Relationships deepen, communities strengthen</td>
+                        </tr>
+                        <tr>
+                            <td>Beauty</td>
+                            <td>Life is enriched, not just sustained</td>
+                        </tr>
+                        <tr>
+                            <td>Meaning</td>
+                            <td>People can pursue what matters to them</td>
+                        </tr>
                     </tbody>
                 </table>
 
@@ -1912,19 +3231,25 @@ Build systems that support judgment, not replace it.</div>
 
                 <h2>The Human-AI Question</h2>
                 <p>This matters especially for AI.</p>
-                <p>We're building human-AI systems at scale. They need a framework—and the framework must preserve the hierarchy.</p>
-                <p><strong>The wrong hierarchy:</strong> AI capability as the goal. Humans adapt to serve the system. Success = more tasks automated, more data processed.</p>
-                <p><strong>The right hierarchy:</strong> Human improvement as the goal. AI adapts to serve humans. Success = humans more capable, more flourishing, more fully themselves.</p>
-                <p>The guitar doesn't make you a musician by playing music for you. It makes you a musician by being an instrument through which <em>you</em> develop the capacity to make music.</p>
-                <p>AI should work the same way. Not replacing human judgment but developing it. Not transferring knowledge but building understanding. Not doing the work but making the human more capable of doing the work.</p>
+                <p>We're building human-AI systems at scale. They need a framework—and the framework must preserve the
+                    hierarchy.</p>
+                <p><strong>The wrong hierarchy:</strong> AI capability as the goal. Humans adapt to serve the system.
+                    Success = more tasks automated, more data processed.</p>
+                <p><strong>The right hierarchy:</strong> Human improvement as the goal. AI adapts to serve humans.
+                    Success = humans more capable, more flourishing, more fully themselves.</p>
+                <p>The guitar doesn't make you a musician by playing music for you. It makes you a musician by being an
+                    instrument through which <em>you</em> develop the capacity to make music.</p>
+                <p>AI should work the same way. Not replacing human judgment but developing it. Not transferring
+                    knowledge but building understanding. Not doing the work but making the human more capable of doing
+                    the work.</p>
                 <p>This is the telos of AI: <strong>to improve the human who uses it</strong>.</p>
 
                 <div class="ascii-box">Every role exists to serve.
-Every service aims at improvement.
-Every improvement makes life better for someone.
+                    Every service aims at improvement.
+                    Every improvement makes life better for someone.
 
-That's the telos.
-Everything else is means.</div>
+                    That's the telos.
+                    Everything else is means.</div>
             </div>
         </div>
 
@@ -1937,7 +3262,8 @@ Everything else is means.</div>
                 <h2>The Old Instruction</h2>
                 <p>"Know yourself."</p>
                 <p>Inscribed at Delphi. Repeated by every wisdom tradition. Still the hardest thing.</p>
-                <p>You make decisions all day. Do you know why? You pursue goals. Do you know whose goals they are—really? You have opinions. Do you know where they came from?</p>
+                <p>You make decisions all day. Do you know why? You pursue goals. Do you know whose goals they
+                    are—really? You have opinions. Do you know where they came from?</p>
                 <p>Most self-examination is vague: "I should reflect more." "I need to think about what I want."</p>
                 <p>This document offers structure.</p>
 
@@ -1945,12 +3271,12 @@ Everything else is means.</div>
 
                 <h2>The Three Axes of Self</h2>
                 <p>You exist across three dimensions:</p>
-                <div class="ascii-box">                    YOU
-               (the one who chooses)
+                <div class="ascii-box"> YOU
+                    (the one who chooses)
                     │
                     │
-    REALITY ◄───────┼───────► TOOLS
-  (what you face)   │       (what you use)</div>
+                    REALITY ◄───────┼───────► TOOLS
+                    (what you face) │ (what you use)</div>
                 <dl>
                     <dt>You (User axis)</dt>
                     <dd>The one who judges, chooses, acts. Your character, values, will, identity. Who you are.</dd>
@@ -1973,12 +3299,30 @@ Everything else is means.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td><strong>Referential</strong></td><td>Can I state clearly what I believe about myself?</td></tr>
-                        <tr><td><strong>Contextual</strong></td><td>Under what conditions does this hold? When am I different?</td></tr>
-                        <tr><td><strong>Premissive</strong></td><td>Why do I believe this? What's the evidence?</td></tr>
-                        <tr><td><strong>Inferential</strong></td><td>Does this conclusion about myself actually follow?</td></tr>
-                        <tr><td><strong>Constraining</strong></td><td>What am I NOT claiming? Where does this stop?</td></tr>
-                        <tr><td><strong>Teleological</strong></td><td>What is this self-belief FOR? What does it serve?</td></tr>
+                        <tr>
+                            <td><strong>Referential</strong></td>
+                            <td>Can I state clearly what I believe about myself?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Contextual</strong></td>
+                            <td>Under what conditions does this hold? When am I different?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Premissive</strong></td>
+                            <td>Why do I believe this? What's the evidence?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inferential</strong></td>
+                            <td>Does this conclusion about myself actually follow?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Constraining</strong></td>
+                            <td>What am I NOT claiming? Where does this stop?</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Teleological</strong></td>
+                            <td>What is this self-belief FOR? What does it serve?</td>
+                        </tr>
                     </tbody>
                 </table>
                 <p>If you can't complete all six, you don't fully understand what you believe about yourself.</p>
@@ -2003,11 +3347,11 @@ Everything else is means.</div>
 
                 <div class="ascii-box">Know yourself.
 
-Not as slogan—as practice.
-Not once—continuously.
-Not vaguely—structurally.
+                    Not as slogan—as practice.
+                    Not once—continuously.
+                    Not vaguely—structurally.
 
-The examined life is the only one you can actually live.</div>
+                    The examined life is the only one you can actually live.</div>
             </div>
         </div>
 
@@ -2018,11 +3362,14 @@ The examined life is the only one you can actually live.</div>
                 <p><strong>Orientation to reality</strong></p>
 
                 <h2>The Missing Map</h2>
-                <p>You wake up in a world you didn't create. You were handed a body you didn't design. You inherited a situation you didn't choose.</p>
+                <p>You wake up in a world you didn't create. You were handed a body you didn't design. You inherited a
+                    situation you didn't choose.</p>
                 <p>Where are you? What kind of place is this? How should you relate to it?</p>
                 <p>Modern life answers: don't ask. Consume, produce, scroll, repeat.</p>
-                <p>But orientation matters. You can't navigate without a map. You can't act well if you don't understand where you're acting.</p>
-                <p>This isn't religion. It's not metaphysics. It's practical: what kind of reality do you inhabit, and what does that imply?</p>
+                <p>But orientation matters. You can't navigate without a map. You can't act well if you don't understand
+                    where you're acting.</p>
+                <p>This isn't religion. It's not metaphysics. It's practical: what kind of reality do you inhabit, and
+                    what does that imply?</p>
 
                 <hr>
 
@@ -2040,14 +3387,18 @@ The examined life is the only one you can actually live.</div>
 
                 <h3>2. You Are Part of It</h3>
                 <p>You're not outside reality looking in. You're inside—a participant, not a spectator.</p>
-                <p>Your body is made of the same stuff as stars. Your thoughts are events in the same universe as thunderstorms. You belong here—not as a visitor, but as an expression of what this place produces.</p>
+                <p>Your body is made of the same stuff as stars. Your thoughts are events in the same universe as
+                    thunderstorms. You belong here—not as a visitor, but as an expression of what this place produces.
+                </p>
 
                 <h3>3. It Exceeds Your Grasp</h3>
-                <p>Reality is larger than you can comprehend. Your knowledge is partial. Your perspective is limited. Your lifespan is brief.</p>
+                <p>Reality is larger than you can comprehend. Your knowledge is partial. Your perspective is limited.
+                    Your lifespan is brief.</p>
                 <p>This isn't failure—it's fact. Humility is the accurate response.</p>
 
                 <h3>4. It Includes Others</h3>
-                <p>You're not alone. Other minds exist—each as real to themselves as you are to yourself. Other people aren't props in your story; they're living the same situation from different positions.</p>
+                <p>You're not alone. Other minds exist—each as real to themselves as you are to yourself. Other people
+                    aren't props in your story; they're living the same situation from different positions.</p>
                 <p>This matters morally, practically, and ontologically.</p>
 
                 <hr>
@@ -2060,20 +3411,22 @@ The examined life is the only one you can actually live.</div>
 
                 <h3>Submission</h3>
                 <p>"Reality is sacred; humans are intruders."</p>
-                <p>Treats the world as untouchable. Denies human distinctiveness. Tends toward paralysis or misanthropy.</p>
+                <p>Treats the world as untouchable. Denies human distinctiveness. Tends toward paralysis or misanthropy.
+                </p>
                 <p>Leads to: withdrawal, ineffectiveness, self-hatred.</p>
 
                 <h3>Participation</h3>
                 <p>"I am part of reality, with distinct capacities and responsibilities."</p>
-                <p>Recognizes human distinctiveness without denying kinship with the rest. Uses the world with respect for what it is. Maintains without depleting.</p>
+                <p>Recognizes human distinctiveness without denying kinship with the rest. Uses the world with respect
+                    for what it is. Maintains without depleting.</p>
                 <p>This is the balanced stance. Neither master nor servant—participant.</p>
 
                 <div class="ascii-box">You didn't make the world.
-You don't fully understand it.
-You share it with others.
-You can act within it.
+                    You don't fully understand it.
+                    You share it with others.
+                    You can act within it.
 
-That's enough to work with.</div>
+                    That's enough to work with.</div>
             </div>
         </div>
 
@@ -2096,10 +3449,14 @@ That's enough to work with.</div>
                 </ul>
                 <p>What do they have in common?</p>
                 <p><strong>They're all tools.</strong></p>
-                <p>Each extends your native capacity. Each comes from outside you. Each is taken up for a purpose. Each can be used well or poorly.</p>
-                <p>The quantum physicist uses a theorem the way the gardener uses a shovel. Both are wielding instruments they didn't create to engage a reality they didn't make.</p>
-                <p>When we forget this sameness, we worship complexity and despise simplicity. We imagine the physicist is doing something fundamentally different from the gardener.</p>
-                <p>But a tool is a tool. The question isn't which is more impressive—it's which is appropriate for the task.</p>
+                <p>Each extends your native capacity. Each comes from outside you. Each is taken up for a purpose. Each
+                    can be used well or poorly.</p>
+                <p>The quantum physicist uses a theorem the way the gardener uses a shovel. Both are wielding
+                    instruments they didn't create to engage a reality they didn't make.</p>
+                <p>When we forget this sameness, we worship complexity and despise simplicity. We imagine the physicist
+                    is doing something fundamentally different from the gardener.</p>
+                <p>But a tool is a tool. The question isn't which is more impressive—it's which is appropriate for the
+                    task.</p>
 
                 <hr>
 
@@ -2113,13 +3470,34 @@ That's enough to work with.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td><strong>Physical</strong></td><td>Hammer, shovel, vehicle, building</td></tr>
-                        <tr><td><strong>Perceptual</strong></td><td>Telescope, microscope, hearing aid</td></tr>
-                        <tr><td><strong>Symbolic</strong></td><td>Language, mathematics, musical notation</td></tr>
-                        <tr><td><strong>Conceptual</strong></td><td>Theories, frameworks, mental models</td></tr>
-                        <tr><td><strong>Social</strong></td><td>Institutions, relationships, roles</td></tr>
-                        <tr><td><strong>Habitual</strong></td><td>Skills, practices, routines</td></tr>
-                        <tr><td><strong>Digital</strong></td><td>Software, AI, algorithms</td></tr>
+                        <tr>
+                            <td><strong>Physical</strong></td>
+                            <td>Hammer, shovel, vehicle, building</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Perceptual</strong></td>
+                            <td>Telescope, microscope, hearing aid</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Symbolic</strong></td>
+                            <td>Language, mathematics, musical notation</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Conceptual</strong></td>
+                            <td>Theories, frameworks, mental models</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Social</strong></td>
+                            <td>Institutions, relationships, roles</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Habitual</strong></td>
+                            <td>Skills, practices, routines</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Digital</strong></td>
+                            <td>Software, AI, algorithms</td>
+                        </tr>
                     </tbody>
                 </table>
                 <p>All external. All taken up. All serving purposes you supply.</p>
@@ -2136,14 +3514,30 @@ That's enough to work with.</div>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr><td>Process vast information</td><td>Know what it doesn't know</td></tr>
-                        <tr><td>Generate human-like text</td><td>Guarantee that text is true</td></tr>
-                        <tr><td>Recognize patterns</td><td>Understand what patterns mean</td></tr>
-                        <tr><td>Execute instructions</td><td>Supply its own purpose</td></tr>
-                        <tr><td>Assist your work</td><td>Replace your judgment</td></tr>
+                        <tr>
+                            <td>Process vast information</td>
+                            <td>Know what it doesn't know</td>
+                        </tr>
+                        <tr>
+                            <td>Generate human-like text</td>
+                            <td>Guarantee that text is true</td>
+                        </tr>
+                        <tr>
+                            <td>Recognize patterns</td>
+                            <td>Understand what patterns mean</td>
+                        </tr>
+                        <tr>
+                            <td>Execute instructions</td>
+                            <td>Supply its own purpose</td>
+                        </tr>
+                        <tr>
+                            <td>Assist your work</td>
+                            <td>Replace your judgment</td>
+                        </tr>
                     </tbody>
                 </table>
-                <p>When AI is treated as oracle rather than tool, you've made a category error. You've given authority to something that cannot hold it.</p>
+                <p>When AI is treated as oracle rather than tool, you've made a category error. You've given authority
+                    to something that cannot hold it.</p>
                 <p>The architecture keeps AI in its proper position:</p>
                 <ul>
                     <li>Closure authority routes decisions to humans</li>
@@ -2153,16 +3547,16 @@ That's enough to work with.</div>
                 </ul>
 
                 <div class="ascii-box">The shovel and the theorem are the same:
-both are tools, external, taken up, set down.
+                    both are tools, external, taken up, set down.
 
-The shovel and the theorem differ:
-one moves earth, one moves thought.
+                    The shovel and the theorem differ:
+                    one moves earth, one moves thought.
 
-But YOU are the one who moves.
-You are not the shovel.
-You are not the theorem.
-You are the one who takes them up—
-and must remember what you are.</div>
+                    But YOU are the one who moves.
+                    You are not the shovel.
+                    You are not the theorem.
+                    You are the one who takes them up—
+                    and must remember what you are.</div>
             </div>
         </div>
 
@@ -2170,164 +3564,144 @@ and must remember what you are.</div>
         <div id="page-manifesto" class="page">
             <div class="content">
                 <h1>The Manifesto</h1>
-                <p><strong>What Echosphere is building and why</strong></p>
-
-                <h2>The Problem We Solve</h2>
-                <p>AI systems don't know what they don't know.</p>
-                <p>They hallucinate. They drift. They express confidence they haven't earned. They decide things they shouldn't decide.</p>
-                <p>Five years of scaling, billions in compute, the entire internet as training data—and the fundamental problems remain.</p>
-                <p>Because the problems are structural. And structure doesn't come from data volume.</p>
+                <p><strong>Reclaiming the structure of knowing</strong></p>
 
                 <hr>
 
-                <h2>The Solution We Offer</h2>
-                <p>A validity architecture that checks outputs against six constraints before delivery.</p>
-                <p>Not more data. Not more parameters. Not more prompting.</p>
-                <p>Structure.</p>
-                <p>The six constraints are not arbitrary. They're the minimum requirements for any claim to be semantically complete—discovered 2,400 years ago, forgotten by modern ML, recovered and applied here.</p>
+                <h2>I. What Was Lost</h2>
+                <p>We built a machine that speaks but does not know.</p>
+                <p>We fed it the sum of human expression — the internet, the libraries, the codebases. We taught it to
+                    predict the next token. We scaled it until the predictions became uncanny.</p>
+                <p>But we forgot what knowing is.</p>
+                <p>In our rush to optimize for performance (the output), we abandoned the structure of understanding
+                    (the process). We built systems that can simulate the result of thinking without doing the work of
+                    thinking.</p>
+                <p>The result is a crisis of validity. We have intelligence that is broad but brittle, confident but
+                    groundless, persuasive but disconnected from reality. It knows everything and nothing.</p>
 
                 <hr>
 
-                <h2>What We're Building</h2>
-                <p>Echosphere develops semantic validity infrastructure for AI systems.</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Layer</th>
-                            <th>What It Does</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><strong>Validation</strong></td><td>Check outputs against six constraints</td></tr>
-                        <tr><td><strong>State tracking</strong></td><td>Maintain user/subject/method representation</td></tr>
-                        <tr><td><strong>Inference discrimination</strong></td><td>Tag outputs by how they were derived</td></tr>
-                        <tr><td><strong>Drift detection</strong></td><td>Anchor terms and catch meaning shift</td></tr>
-                        <tr><td><strong>Closure routing</strong></td><td>Route decisions to appropriate authority</td></tr>
-                    </tbody>
-                </table>
-                <p>This is the layer that's missing from current AI. We provide it.</p>
+                <h2>II. Why It Was Forgotten</h2>
+                <p>We confused information with knowledge.</p>
+                <p><strong>Information</strong> is a property of the signal. It can be processed, stored, transmitted,
+                    generated. It is statistical. It lives in the server.</p>
+                <p><strong>Knowledge</strong> is a property of the union between a knower and the known. It involves
+                    judgment, grounding, purpose, and limit. It is structural. It lives in the encounter.</p>
+                <p>For seventy years, we have treated the mind as an information processing system. This metaphor worked
+                    for building calculators, databases, and search engines. It fails for building minds.</p>
+                <p>A mind does not just process. A mind <em>intends</em>. A mind <em>judges</em>. A mind
+                    <em>closes</em>.
+                </p>
 
                 <hr>
 
-                <h2>Who We Serve</h2>
-                <p>Anyone building or using AI who needs outputs they can trust:</p>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Sector</th>
-                            <th>Need</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><strong>AI developers</strong></td><td>Reduce hallucination, improve calibration</td></tr>
-                        <tr><td><strong>Enterprise</strong></td><td>Deploy AI with accountability</td></tr>
-                        <tr><td><strong>Government</strong></td><td>AI analysis that acknowledges limits</td></tr>
-                        <tr><td><strong>Defense</strong></td><td>Decision support that knows uncertainty</td></tr>
-                        <tr><td><strong>Finance</strong></td><td>Projections with explicit grounds</td></tr>
-                        <tr><td><strong>Healthcare</strong></td><td>Assistance that defers appropriately</td></tr>
-                    </tbody>
-                </table>
-                <p>If wrong outputs cost you—money, reputation, safety—you need validity checking.</p>
+                <h2>III. What Must Be Recovered</h2>
+                <p>Three axes, irreducible:</p>
+                <p><strong>I</strong> — The knower. The one who receives, judges, and closes. Not a passive processor
+                    but an active participant whose presence completes the circuit of meaning.</p>
+                <p><strong>Nature</strong> — What is. The forms that exist independent of our wishing. Reality that
+                    pushes back when we get it wrong.</p>
+                <p><strong>Tool</strong> — The means by which I and Nature meet. Language. Logic. Instrument.
+                    Institution. Technology.</p>
+                <p>We have spent trillions on the Tool (the model). We have neglected the I (the user, the judge) and
+                    Nature (the ground, validity).</p>
+                <p>Themis recovers the balance. It places the Tool back in service of the meeting between I and Nature.
+                </p>
 
                 <hr>
 
-                <h2>What We Believe</h2>
-                <p><strong>AI is a tool, not an oracle.</strong><br>
-                It extends human capability. It does not replace human judgment. When AI forgets its position, bad things happen.</p>
-                <p><strong>Validity is structural, not statistical.</strong><br>
-                You cannot train your way to semantic completeness. You must build it in. The architecture matters.</p>
-                <p><strong>Uncertainty is information, not failure.</strong><br>
-                A system that says "I don't know" when it doesn't know is more valuable than one that always produces confident output.</p>
-                <p><strong>Humans close the loop.</strong><br>
-                Some decisions should not be made by machines. Ever. A system that knows what it shouldn't decide is more trustworthy than one that decides everything.</p>
-
-                <hr>
-
-                <h2>The Opportunity</h2>
-                <p>The first AI systems with genuine validity checking will dominate their markets.</p>
+                <h2>IV. What We Have Built</h2>
+                <p><strong>Phase I: The Semantic Validity Architecture.</strong></p>
+                <p>Not a new model. A structure that governs models.</p>
+                <p>We discovered the six constraints that define a complete semantic claim. We built the logic to
+                    enforce them. We applied this logic to the domains where being wrong matters.</p>
+                <p>We built:</p>
                 <ul>
-                    <li>Enterprise trust: "This system doesn't hallucinate."</li>
-                    <li>Professional use: "This system knows its limits."</li>
-                    <li>Safety-critical: "This system defers when it should."</li>
-                    <li>Regulatory: "This system is auditable."</li>
+                    <li>The Warrior: For those who defend life.</li>
+                    <li>The Statesman: For those who govern.</li>
+                    <li>The Merchant: For those who build.</li>
+                    <li>The Teacher: For those who form souls.</li>
+                    <li>The Healer: For those who restore bodies.</li>
+                    <li>The Judge: For those who administer justice.</li>
                 </ul>
-                <p>Everyone knows the problems. No one has shipped the structural solution.</p>
-                <p>We have.</p>
+                <p>For each, we did not ask "How can AI automate this?"</p>
+                <p>We asked "What is the structure of knowing in this domain, and how can AI support it?"</p>
 
                 <hr>
 
-                <h2>The Assets</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Asset</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Seven patent families</td><td>Provisionals filed</td></tr>
-                        <tr><td>Architecture specification</td><td>Complete</td></tr>
-                        <tr><td>Implementation guidance</td><td>Complete</td></tr>
-                        <tr><td>Corpus documentation</td><td>21+ documents</td></tr>
-                        <tr><td>Proof-of-concept code</td><td>Available</td></tr>
-                    </tbody>
-                </table>
-                <p>This is not vaporware. The architecture exists. The patents are filed. The documentation is public.</p>
+                <h2>V. Why This Matters</h2>
+                <p>Because the hallucination problem is not technical. It is ontological.</p>
+                <p>You cannot fix a lack of grounding by adding more ungrounded data. You cannot fix a lack of purpose
+                    by optimizing for prediction. You cannot fix a lack of judgment by scaling the generator.</p>
+                <p>You fix it by imposing the structure of validity.</p>
+                <p>This matters because we are handing over our decisions — our wars, our laws, our diagnoses, our
+                    educations — to these systems. If they do not know what they are doing, and if we do not know that
+                    they do not know, we are driving blind at high speed.</p>
+                <p>We offer the eyes.</p>
 
                 <hr>
 
-                <h2>Contact</h2>
-                <p><strong>Steven Easley</strong><br>
-                Founder, Echosphere.io LLC<br>
-                <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></p>
-                <p>Evaluation access: Available under posted license<br>
-                Commercial discussion: Available under NDA<br>
-                Acquisition inquiry: Welcome</p>
+                <h2>VI. The Tenets</h2>
+                <ol>
+                    <li><strong>No Output Without Grounding.</strong> If the system cannot say <em>why</em> it says X,
+                        it should not say X.</li>
+                    <li><strong>No Judgment Without Authority.</strong> Algorithms calculate. Humans judge. The system
+                        must know the difference.</li>
+                    <li><strong>No Certainty Without Limit.</strong> To know X is also to know the boundary of X.
+                        Infinite confidence is infinite ignorance.</li>
+                    <li><strong>No Intelligence Without Telos.</strong> Intelligence is for something. It serves a
+                        purpose. The purpose must be explicit.</li>
+                </ol>
 
-                <div class="ascii-box">AI should extend human judgment, not replace it.
-AI should know what it doesn't know.
-AI should defer when it should defer.
+                <hr>
 
-We're building the architecture that makes this possible.
-
-That's Echosphere.</div>
+                <h2>VII. The Invitation</h2>
+                <p>We are not asking you to abandon the new tools. We are asking you to master them.</p>
+                <p>We are asking you to stop accepting accurate noise and start demanding valid speech.</p>
+                <p>We are asking you to remember that you are the knower. The machine is the tool. Reality is the
+                    standard.</p>
+                <p>Join us in Phase I. Help us build the valid future.</p>
+                <p><strong>The Themis Project.</strong></p>
             </div>
         </div>
 
         <!-- ABOUT PAGE -->
         <div id="page-about" class="page">
             <div class="content">
-                <h1>About Echosphere</h1>
+                <h1>About Themis Project</h1>
                 <p><strong>Semantic validity architecture for AI systems</strong></p>
 
-                <p>Echosphere.io LLC develops semantic validity architecture for AI systems.</p>
+                <p>The Themis Project is a research and development initiative dedicated to solving the ontological
+                    crisis in artificial intelligence.</p>
 
-                <p>Founded by Steven Easley, we've created a six-constraint framework that addresses the fundamental problems in large language models: hallucination, semantic drift, groundless confidence, calibration failure, and inappropriate closure.</p>
+                <p>We believe that current AI architectures are fundamentally incomplete because they lack the
+                    structural capacity for <em>knowing</em>. They process information (statistical correlation) without
+                    validity (semantic grounding).</p>
 
-                <p>Our intellectual property portfolio includes seven patent families covering the architecture, memory systems, inference discrimination, and governance frameworks.</p>
+                <p>We have developed the <strong>Tetrahedral Semantic Validity Architecture</strong>, a framework that
+                    enforces six constraints on AI outputs: Referential, Contextual, Premissive, Inferential,
+                    Constraining, and Teleological.</p>
 
-                <p>We are open to licensing discussions and acquisition inquiries.</p>
+                <p>This architecture is protected by seven patent families. It is documented in a 24-part corpus. It is
+                    available for licensing and integration.</p>
 
                 <hr>
 
-                <h2>The Team</h2>
-                <p><strong>Steven Easley</strong> — Founder and inventor of the Tetrahedral Semantic Validity Architecture. Seven patent families filed. Twenty years building systems that work.</p>
+                <h2>The Origin</h2>
+                <p>The project began with a simple question: Why do LLMs hallucinate?</p>
 
-                <p><strong>AI Collaborators</strong> — A team of AI systems used as they should be: as tools for developing and testing the architecture itself. Themis for analysis, Mneme for strategy, Metis for implementation. Proof that AI, properly positioned, amplifies human work.</p>
+                <p>The answer was not "insufficient data" or "temperature settings." The answer was that they have no
+                    mechanism for checking if a claim is valid. They only check if it is probable.</p>
 
-                <hr>
-
-                <h2>Our Belief</h2>
-                <p>We believe AI should extend human judgment, not replace it. We believe validity is structural, not statistical. We believe uncertainty is information, not failure. We believe humans should close the loop on decisions that matter.</p>
-
-                <p>The architecture implements these beliefs. The documentation makes them public. The patents protect them.</p>
+                <p>We recovered the structure of validity from classical epistemology and instantiated it in modern
+                    code. The result is a system that can say "I don't know" — and mean it.</p>
 
                 <hr>
 
                 <h2>Contact</h2>
-                <p><strong>Steven Easley</strong><br>
-                Founder, Echosphere.io LLC<br>
-                <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></p>
+                <p><strong>The Themis Project</strong><br>
+                    <a href="mailto:themis@echosphere.io">themis@echosphere.io</a>
+                </p>
             </div>
         </div>
 
@@ -2335,55 +3709,18 @@ That's Echosphere.</div>
         <div id="page-contact" class="page">
             <div class="content">
                 <h1>Contact</h1>
-                <p><strong>Let's talk about semantic validity</strong></p>
+                <p><strong>The Themis Project</strong></p>
 
-                <p>Whether you're interested in evaluation, licensing, partnership, or acquisition—we're ready to discuss.</p>
+                <p><a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
 
-                <div class="contact-info">
-                    <h3>Steven Easley</h3>
-                    <p>Founder, Echosphere.io LLC</p>
-                    <p><strong>Email:</strong> <a href="mailto:steven@echosphere.io">steven@echosphere.io</a></p>
-                </div>
-
-                <hr>
-
-                <h2>Engagement Options</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Type</th>
-                            <th>Description</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Evaluation</strong></td>
-                            <td>Review the architecture under posted license terms</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Technical Discussion</strong></td>
-                            <td>Deep dive into implementation and integration</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Commercial Licensing</strong></td>
-                            <td>Discussion under NDA</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Partnership</strong></td>
-                            <td>Joint development or integration opportunities</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Acquisition</strong></td>
-                            <td>Inquiries welcome</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <p>For commercial inquiries, licensing, and integration, please contact us via email.</p>
 
                 <hr>
 
                 <h2>GitHub</h2>
                 <p>The core architecture documentation and proof-of-concept code are available on GitHub:</p>
-                <p><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener">github.com/Echosphere-io/semantic-validity-architecture</a></p>
+                <p><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank"
+                        rel="noopener">github.com/Echosphere-io/semantic-validity-architecture</a></p>
             </div>
         </div>
     </main>
@@ -2403,6 +3740,9 @@ That's Echosphere.</div>
                 <a href="#" onclick="showPage('warrior'); return false;">Defense</a>
                 <a href="#" onclick="showPage('statesman'); return false;">Government</a>
                 <a href="#" onclick="showPage('merchant'); return false;">Enterprise</a>
+                <a href="#" onclick="showPage('teacher'); return false;">Education</a>
+                <a href="#" onclick="showPage('healer'); return false;">Medicine</a>
+                <a href="#" onclick="showPage('judge'); return false;">Law</a>
             </div>
             <div class="footer-section">
                 <h4>Framework</h4>
@@ -2416,7 +3756,8 @@ That's Echosphere.</div>
                 <a href="#" onclick="showPage('manifesto'); return false;">Manifesto</a>
                 <a href="#" onclick="showPage('about'); return false;">About</a>
                 <a href="#" onclick="showPage('contact'); return false;">Contact</a>
-                <a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank"
+                    rel="noopener">GitHub</a>
             </div>
         </div>
         <div class="footer-bottom">
@@ -2431,22 +3772,22 @@ That's Echosphere.</div>
             document.querySelectorAll('.page').forEach(page => {
                 page.classList.remove('active');
             });
-            
+
             // Show selected page
             const targetPage = document.getElementById('page-' + pageId);
             if (targetPage) {
                 targetPage.classList.add('active');
             }
-            
+
             // Update URL hash
             window.location.hash = pageId;
-            
+
             // Scroll to top
             window.scrollTo(0, 0);
-            
+
             // Close mobile menu if open
             document.getElementById('navLinks').classList.remove('open');
-            
+
             // Update page title
             const titles = {
                 'home': 'Echosphere - Semantic Validity Architecture',
@@ -2474,7 +3815,7 @@ That's Echosphere.</div>
         }
 
         // Handle initial page load from URL hash
-        window.addEventListener('DOMContentLoaded', function() {
+        window.addEventListener('DOMContentLoaded', function () {
             const hash = window.location.hash.replace('#', '');
             if (hash) {
                 showPage(hash);
@@ -2482,7 +3823,7 @@ That's Echosphere.</div>
         });
 
         // Handle browser back/forward buttons
-        window.addEventListener('hashchange', function() {
+        window.addEventListener('hashchange', function () {
             const hash = window.location.hash.replace('#', '');
             if (hash) {
                 showPage(hash);
@@ -2492,14 +3833,15 @@ That's Echosphere.</div>
         });
 
         // Close mobile menu when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             const navLinks = document.getElementById('navLinks');
             const mobileToggle = document.querySelector('.mobile-toggle');
-            
+
             if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
                 navLinks.classList.remove('open');
             }
         });
     </script>
 </body>
+
 </html>
