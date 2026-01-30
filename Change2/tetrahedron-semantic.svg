@@ -1,0 +1,115 @@
+<svg viewBox="0 0 400 380" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Subtle gradient for depth -->
+    <linearGradient id="edgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a252f;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Glow effect for vertices -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="400" height="380" fill="#f8f9fa"/>
+  
+  <!-- 
+    Tetrahedron vertices:
+    - Apex (Purpose): top center
+    - Base triangle: Subject (bottom), Grounds (left), Limits (right)
+    - Center point for internal edges
+  -->
+  
+  <!-- Coordinates -->
+  <!-- Apex: 200, 45 -->
+  <!-- Grounds (left): 70, 280 -->
+  <!-- Limits (right): 330, 280 -->
+  <!-- Subject (bottom front): 200, 330 -->
+  <!-- Center (internal): 200, 200 -->
+  
+  <!-- Back edges (dashed - behind the front face) -->
+  <line x1="200" y1="45" x2="200" y2="200" 
+        stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>
+  <line x1="70" y1="280" x2="200" y2="200" 
+        stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>
+  <line x1="330" y1="280" x2="200" y2="200" 
+        stroke="#94a3b8" stroke-width="2" stroke-dasharray="6,4" opacity="0.7"/>
+  
+  <!-- Front edges (solid) -->
+  <!-- Apex to Grounds -->
+  <line x1="200" y1="45" x2="70" y2="280" 
+        stroke="#1e3a5f" stroke-width="2.5"/>
+  <!-- Apex to Limits -->
+  <line x1="200" y1="45" x2="330" y2="280" 
+        stroke="#1e3a5f" stroke-width="2.5"/>
+  <!-- Grounds to Limits (base back) -->
+  <line x1="70" y1="280" x2="330" y2="280" 
+        stroke="#1e3a5f" stroke-width="2.5"/>
+  <!-- Grounds to Subject -->
+  <line x1="70" y1="280" x2="200" y2="330" 
+        stroke="#1e3a5f" stroke-width="2.5"/>
+  <!-- Limits to Subject -->
+  <line x1="330" y1="280" x2="200" y2="330" 
+        stroke="#1e3a5f" stroke-width="2.5"/>
+  <!-- Apex to Subject (front edge) -->
+  <line x1="200" y1="45" x2="200" y2="330" 
+        stroke="#1e3a5f" stroke-width="2.5"/>
+  
+  <!-- Vertices (nodes) -->
+  <!-- Apex - Purpose -->
+  <circle cx="200" cy="45" r="8" fill="#8b0000" filter="url(#glow)"/>
+  <!-- Grounds -->
+  <circle cx="70" cy="280" r="8" fill="#8b0000" filter="url(#glow)"/>
+  <!-- Limits -->
+  <circle cx="330" cy="280" r="8" fill="#8b0000" filter="url(#glow)"/>
+  <!-- Subject -->
+  <circle cx="200" cy="330" r="8" fill="#8b0000" filter="url(#glow)"/>
+  
+  <!-- Center point (smaller) -->
+  <circle cx="200" cy="200" r="5" fill="#4a5568" opacity="0.6"/>
+  
+  <!-- Labels -->
+  <style>
+    .vertex-label { 
+      font-family: 'Georgia', 'Times New Roman', serif; 
+      font-size: 14px; 
+      font-weight: 600;
+      fill: #1a1a1a;
+    }
+    .sub-label {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 11px;
+      fill: #4a5568;
+      font-style: italic;
+    }
+  </style>
+  
+  <!-- Purpose (Apex) -->
+  <text x="200" y="25" text-anchor="middle" class="vertex-label">PURPOSE</text>
+  <text x="200" y="38" text-anchor="middle" class="sub-label">Teleological</text>
+  
+  <!-- Grounds (Left) -->
+  <text x="35" y="265" text-anchor="middle" class="vertex-label">GROUNDS</text>
+  <text x="35" y="278" text-anchor="middle" class="sub-label">Premissive</text>
+  
+  <!-- Limits (Right) -->
+  <text x="365" y="265" text-anchor="middle" class="vertex-label">LIMITS</text>
+  <text x="365" y="278" text-anchor="middle" class="sub-label">Constraining</text>
+  
+  <!-- Subject (Bottom) -->
+  <text x="200" y="358" text-anchor="middle" class="vertex-label">SUBJECT</text>
+  <text x="200" y="371" text-anchor="middle" class="sub-label">Referential</text>
+  
+  <!-- Edge count annotation -->
+  <text x="200" y="205" text-anchor="middle" 
+        font-family="Georgia, serif" font-size="10px" fill="#64748b">
+    6 edges
+  </text>
+  
+</svg>

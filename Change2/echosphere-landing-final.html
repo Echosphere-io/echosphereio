@@ -8,11 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         :root {
             --charcoal: #0d0d0d;
@@ -28,9 +24,7 @@
             --text-dim: #5a5855;
         }
 
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
 
         body {
             font-family: 'IBM Plex Sans', sans-serif;
@@ -44,9 +38,7 @@
         /* Navigation */
         nav {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
+            top: 0; left: 0; right: 0;
             z-index: 1000;
             padding: 1.5rem 4rem;
             display: flex;
@@ -63,31 +55,22 @@
             text-decoration: none;
             letter-spacing: 0.05em;
         }
-
-        .logo span {
-            color: var(--gold);
-        }
+        .logo span { color: var(--gold); }
 
         .nav-links {
             display: flex;
             gap: 2.5rem;
             list-style: none;
         }
-
         .nav-links a {
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.9rem;
-            font-weight: 400;
-            letter-spacing: 0.03em;
             transition: color 0.3s ease;
         }
+        .nav-links a:hover { color: var(--gold); }
 
-        .nav-links a:hover {
-            color: var(--gold);
-        }
-
-        /* Hero Section */
+        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
@@ -96,14 +79,9 @@
             align-items: center;
             text-align: center;
             padding: 6rem 2rem 4rem;
-            position: relative;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 1;
-            max-width: 800px;
-        }
+        .hero-content { max-width: 800px; }
 
         .hero-eyebrow {
             font-size: 0.85rem;
@@ -121,47 +99,34 @@
             color: var(--cream);
             margin-bottom: 1rem;
             line-height: 1.15;
-            letter-spacing: -0.01em;
         }
 
         .hero-subtitle {
             font-family: 'Cormorant Garamond', serif;
             font-size: 1.4rem;
-            font-weight: 400;
             font-style: italic;
             color: var(--text-secondary);
-            margin-bottom: 3rem;
         }
 
-        /* Tetrahedron Journey Section */
-        .journey-section {
-            padding: 4rem 2rem 6rem;
-            position: relative;
-        }
+        /* Journey Section */
+        .journey-section { padding: 4rem 2rem 6rem; }
 
         .journey-container {
             max-width: 1100px;
             margin: 0 auto;
             display: flex;
             align-items: center;
-            justify-content: center;
             gap: 4rem;
         }
 
         .tetrahedron-visual {
             flex: 0 0 400px;
             height: 450px;
-            position: relative;
         }
 
-        .tetrahedron-svg {
-            width: 100%;
-            height: 100%;
-        }
+        .tetrahedron-svg { width: 100%; height: 100%; }
 
-        /* Phase styling */
-        .foundation-point { fill: var(--gold); }
-        .phase1-point { fill: var(--gold); }
+        .foundation-point, .phase1-point { fill: var(--gold); }
         .phase1-edge { stroke: var(--gold); stroke-width: 2; }
         .phase2-point { fill: var(--gold-dim); }
         .phase2-edge { stroke: var(--gold-dim); stroke-width: 1.5; stroke-dasharray: 4, 4; }
@@ -175,7 +140,6 @@
             opacity: 0.3;
             animation: pulse 3s ease-in-out infinite;
         }
-
         @keyframes pulse {
             0%, 100% { opacity: 0.2; }
             50% { opacity: 0.5; }
@@ -199,25 +163,15 @@
         }
         .phase-name.active { fill: var(--cream); font-size: 16px; }
 
-        /* Journey Text */
-        .journey-text {
-            flex: 1;
-            max-width: 500px;
-        }
+        .journey-text { flex: 1; max-width: 500px; }
 
         .journey-phase {
             margin-bottom: 2rem;
             padding-left: 1.5rem;
             border-left: 2px solid var(--charcoal-mid);
         }
-
-        .journey-phase.active {
-            border-left-color: var(--gold);
-        }
-
-        .journey-phase.dim {
-            opacity: 0.4;
-        }
+        .journey-phase.active { border-left-color: var(--gold); }
+        .journey-phase.dim { opacity: 0.4; }
 
         .phase-marker {
             font-size: 0.7rem;
@@ -226,10 +180,7 @@
             color: var(--text-dim);
             margin-bottom: 0.25rem;
         }
-
-        .journey-phase.active .phase-marker {
-            color: var(--gold);
-        }
+        .journey-phase.active .phase-marker { color: var(--gold); }
 
         .phase-title {
             font-family: 'Cormorant Garamond', serif;
@@ -238,20 +189,14 @@
             color: var(--text-secondary);
             margin-bottom: 0.5rem;
         }
-
-        .journey-phase.active .phase-title {
-            color: var(--cream);
-        }
+        .journey-phase.active .phase-title { color: var(--cream); }
 
         .phase-desc {
             font-size: 0.9rem;
             color: var(--text-dim);
             line-height: 1.6;
         }
-
-        .journey-phase.active .phase-desc {
-            color: var(--text-secondary);
-        }
+        .journey-phase.active .phase-desc { color: var(--text-secondary); }
 
         .phase-link {
             display: inline-block;
@@ -263,10 +208,7 @@
             text-transform: uppercase;
             font-weight: 500;
         }
-
-        .phase-link:hover {
-            color: var(--gold-bright);
-        }
+        .phase-link:hover { color: var(--gold-bright); }
 
         /* Telos Section */
         .telos-section {
@@ -293,19 +235,15 @@
         .telos-statement {
             font-family: 'Cormorant Garamond', serif;
             font-size: 2.2rem;
-            font-weight: 400;
             font-style: italic;
             color: var(--cream);
             max-width: 700px;
             margin: 0 auto 1rem;
-            line-height: 1.4;
         }
 
         .telos-sub {
             font-size: 1rem;
             color: var(--text-dim);
-            max-width: 500px;
-            margin: 0 auto;
         }
 
         /* Section Headers */
@@ -348,17 +286,11 @@
             background: var(--charcoal);
             padding: 1.75rem;
             text-decoration: none;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
+        .app-card:hover { background: var(--charcoal-mid); }
 
-        .app-card:hover {
-            background: var(--charcoal-mid);
-        }
-
-        .app-icon {
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
+        .app-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
 
         .app-name {
             font-family: 'Cormorant Garamond', serif;
@@ -388,12 +320,9 @@
             padding: 1.25rem;
             text-decoration: none;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: background 0.3s ease;
         }
-
-        .foundation-card:hover {
-            background: var(--charcoal-mid);
-        }
+        .foundation-card:hover { background: var(--charcoal-mid); }
 
         .foundation-name {
             font-family: 'Cormorant Garamond', serif;
@@ -419,12 +348,9 @@
             background: var(--charcoal-light);
             border: 1px solid var(--charcoal-mid);
             padding: 1.75rem;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease;
         }
-
-        .tool-card:hover {
-            border-color: var(--gold-dim);
-        }
+        .tool-card:hover { border-color: var(--gold-dim); }
 
         .tool-card--featured {
             border-color: var(--gold);
@@ -434,24 +360,13 @@
             align-items: center;
             gap: 1.5rem;
         }
-
         .tool-card--featured .tool-icon {
             font-size: 2rem;
             color: var(--gold);
             margin-bottom: 0;
         }
-
-        .tool-card--featured .tool-content {
-            flex: 1;
-        }
-
-        .tool-card--featured .tool-name {
-            margin-bottom: 0.25rem;
-        }
-
-        .tool-card--featured .tool-desc {
-            margin-bottom: 0;
-        }
+        .tool-card--featured .tool-name { margin-bottom: 0.25rem; }
+        .tool-card--featured .tool-desc { margin-bottom: 0; }
 
         .tool-icon {
             font-size: 1.25rem;
@@ -505,10 +420,7 @@
             letter-spacing: 0.15em;
             text-transform: uppercase;
         }
-
-        .manifesto-link:hover {
-            color: var(--gold-bright);
-        }
+        .manifesto-link:hover { color: var(--gold-bright); }
 
         /* Footer */
         footer {
@@ -521,11 +433,7 @@
             gap: 1.5rem;
         }
 
-        .footer-left {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
+        .footer-left { display: flex; flex-direction: column; gap: 0.25rem; }
 
         .footer-logo {
             font-family: 'Cormorant Garamond', serif;
@@ -533,30 +441,17 @@
             font-weight: 600;
             color: var(--cream);
         }
+        .footer-logo span { color: var(--gold); }
 
-        .footer-logo span {
-            color: var(--gold);
-        }
+        .footer-copy { font-size: 0.7rem; color: var(--text-dim); }
 
-        .footer-copy {
-            font-size: 0.7rem;
-            color: var(--text-dim);
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-        }
-
+        .footer-links { display: flex; gap: 2rem; }
         .footer-links a {
             font-size: 0.8rem;
             color: var(--text-secondary);
             text-decoration: none;
         }
-
-        .footer-links a:hover {
-            color: var(--gold);
-        }
+        .footer-links a:hover { color: var(--gold); }
 
         .footer-contact a {
             font-size: 0.85rem;
@@ -564,7 +459,7 @@
             text-decoration: none;
         }
 
-        /* Ask Themis Floating Button */
+        /* Ask Themis */
         .ask-themis {
             position: fixed;
             bottom: 2rem;
@@ -587,15 +482,12 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
         }
-
         .ask-themis__button:hover {
             background: var(--gold-bright);
             transform: translateY(-2px);
         }
 
-        .ask-themis__icon {
-            font-size: 1rem;
-        }
+        .ask-themis__icon { font-size: 1rem; }
 
         .ask-themis__panel {
             display: none;
@@ -608,10 +500,7 @@
             margin-bottom: 1rem;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
         }
-
-        .ask-themis__panel.active {
-            display: block;
-        }
+        .ask-themis__panel.active { display: block; }
 
         .ask-themis__header {
             display: flex;
@@ -635,10 +524,7 @@
             font-size: 1.25rem;
             cursor: pointer;
         }
-
-        .ask-themis__close:hover {
-            color: var(--gold);
-        }
+        .ask-themis__close:hover { color: var(--gold); }
 
         .ask-themis__context {
             padding: 0.75rem 1.25rem;
@@ -648,10 +534,7 @@
             border-bottom: 1px solid var(--charcoal-mid);
         }
 
-        .ask-themis__body {
-            padding: 1.25rem;
-        }
-
+        .ask-themis__body { padding: 1.25rem; }
         .ask-themis__body p {
             color: var(--text-secondary);
             font-size: 0.85rem;
@@ -673,15 +556,11 @@
             font-size: 0.85rem;
             resize: none;
         }
-
         .ask-themis__input:focus {
             outline: none;
             border-color: var(--gold-dim);
         }
-
-        .ask-themis__input::placeholder {
-            color: var(--text-dim);
-        }
+        .ask-themis__input::placeholder { color: var(--text-dim); }
 
         .ask-themis__submit {
             width: 100%;
@@ -695,68 +574,25 @@
             font-weight: 500;
             cursor: pointer;
         }
-
-        .ask-themis__submit:hover {
-            background: var(--gold-bright);
-        }
+        .ask-themis__submit:hover { background: var(--gold-bright); }
 
         /* Responsive */
         @media (max-width: 900px) {
-            .journey-container {
-                flex-direction: column;
-            }
-            
-            .tetrahedron-visual {
-                flex: none;
-                width: 100%;
-                max-width: 320px;
-                height: 360px;
-            }
-
-            .applications-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .foundations-row {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .tools-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .tool-card--featured {
-                grid-column: span 1;
-                display: block;
-            }
-
-            .tool-card--featured .tool-icon {
-                margin-bottom: 0.75rem;
-            }
+            .journey-container { flex-direction: column; }
+            .tetrahedron-visual { flex: none; width: 100%; max-width: 320px; height: 360px; }
+            .applications-grid { grid-template-columns: repeat(2, 1fr); }
+            .foundations-row { grid-template-columns: repeat(2, 1fr); }
+            .tools-grid { grid-template-columns: 1fr; }
+            .tool-card--featured { grid-column: span 1; display: block; }
+            .tool-card--featured .tool-icon { margin-bottom: 0.75rem; }
         }
 
         @media (max-width: 600px) {
-            nav {
-                padding: 1rem 1.5rem;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .hero-title {
-                font-size: 2.4rem;
-            }
-
-            .applications-grid,
-            .foundations-row {
-                grid-template-columns: 1fr;
-            }
-
-            footer {
-                flex-direction: column;
-                text-align: center;
-            }
+            nav { padding: 1rem 1.5rem; }
+            .nav-links { display: none; }
+            .hero-title { font-size: 2.4rem; }
+            .applications-grid, .foundations-row { grid-template-columns: 1fr; }
+            footer { flex-direction: column; text-align: center; }
         }
     </style>
 </head>
@@ -768,11 +604,10 @@
             <li><a href="#applications">Applications</a></li>
             <li><a href="#tools">AI Tools</a></li>
             <li><a href="#manifesto">Manifesto</a></li>
-            <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture">GitHub ↗</a></li>
+            <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture">GitHub</a></li>
         </ul>
     </nav>
 
-    <!-- Hero -->
     <section class="hero">
         <div class="hero-content">
             <p class="hero-eyebrow">Echosphere.io</p>
@@ -781,73 +616,51 @@
         </div>
     </section>
 
-    <!-- The Unfolding Tetrahedron Journey -->
     <section class="journey-section" id="journey">
         <div class="journey-container">
-            
-            <!-- The Visual -->
             <div class="tetrahedron-visual">
                 <svg class="tetrahedron-svg" viewBox="0 0 400 450">
-                    <!-- Telos glow -->
-                    <polygon class="telos-glow" points="200,120 70,290 330,290" style="transform-origin: 200px 240px;"/>
-                    
-                    <!-- Phase III edges (ghosted) -->
+                    <polygon class="telos-glow" points="200,120 70,290 330,290"/>
                     <line class="phase3-edge" x1="200" y1="150" x2="100" y2="280"/>
                     <line class="phase3-edge" x1="200" y1="150" x2="300" y2="280"/>
                     <line class="phase3-edge" x1="200" y1="150" x2="200" y2="380"/>
-                    
-                    <!-- Phase II edges (dimmed) -->
                     <line class="phase2-edge" x1="200" y1="180" x2="120" y2="270"/>
                     <line class="phase2-edge" x1="200" y1="180" x2="280" y2="270"/>
                     <line class="phase2-edge" x1="200" y1="180" x2="200" y2="350"/>
-                    
-                    <!-- Phase I edges (solid) -->
                     <line class="phase1-edge" x1="200" y1="380" x2="100" y2="280"/>
                     <line class="phase1-edge" x1="200" y1="380" x2="300" y2="280"/>
                     <line class="phase1-edge" x1="100" y1="280" x2="300" y2="280"/>
-                    
-                    <!-- Points -->
                     <circle class="foundation-point" cx="200" cy="380" r="6"/>
                     <circle class="phase1-point" cx="100" cy="280" r="6"/>
                     <circle class="phase1-point" cx="300" cy="280" r="6"/>
                     <circle class="phase2-point" cx="200" cy="180" r="5"/>
                     <circle class="phase3-point" cx="200" cy="150" r="4"/>
-                    
-                    <!-- Labels -->
                     <text x="200" y="410" text-anchor="middle" class="phase-label active">Foundation</text>
                     <text x="200" y="425" text-anchor="middle" class="phase-name">Research Complete</text>
-                    
                     <text x="200" y="310" text-anchor="middle" class="phase-label active">Phase I</text>
                     <text x="200" y="328" text-anchor="middle" class="phase-name active">The Themis Project</text>
-                    
                     <text x="200" y="210" text-anchor="middle" class="phase-label dim">Phase II</text>
                     <text x="200" y="135" text-anchor="middle" class="phase-label dim">Phase III</text>
-                    
-                    <text x="200" y="100" text-anchor="middle" style="font-family: 'Cormorant Garamond', serif; font-size: 12px; font-style: italic; fill: #5a5855;">τέλος</text>
+                    <text x="200" y="100" text-anchor="middle" style="font-family: 'Cormorant Garamond', serif; font-size: 12px; font-style: italic; fill: #5a5855;">telos</text>
                 </svg>
             </div>
-            
-            <!-- The Text -->
             <div class="journey-text">
                 <div class="journey-phase">
                     <p class="phase-marker">Foundation</p>
                     <h3 class="phase-title">The Research</h3>
                     <p class="phase-desc">Fifteen years recovering the structure of knowing from First Philosophy. Homer to Aristotle. The six constraints identified.</p>
                 </div>
-                
                 <div class="journey-phase active">
                     <p class="phase-marker">Phase I — Current</p>
                     <h3 class="phase-title">The Themis Project</h3>
                     <p class="phase-desc">Semantic Validity Architecture. The six constraints applied to AI systems. Seven patent families filed. The structure that allows machines to know what they know — and what they don't.</p>
-                    <a href="/themis" class="phase-link">Enter Phase I →</a>
+                    <a href="/themis" class="phase-link">Enter Phase I</a>
                 </div>
-                
                 <div class="journey-phase dim">
                     <p class="phase-marker">Phase II</p>
                     <h3 class="phase-title">The Platform</h3>
                     <p class="phase-desc">Infrastructure for genuine ownership in the digital age.</p>
                 </div>
-                
                 <div class="journey-phase dim">
                     <p class="phase-marker">Phase III</p>
                     <h3 class="phase-title">The Commons</h3>
@@ -857,54 +670,50 @@
         </div>
     </section>
 
-    <!-- Telos Statement -->
     <section class="telos-section">
         <div class="telos-line"></div>
-        <p class="telos-label">τέλος</p>
+        <p class="telos-label">telos</p>
         <p class="telos-statement">"Restoring the Aristotelian Soul"</p>
         <p class="telos-sub">The structure of genuine knowing — recovered, applied, engineered.</p>
     </section>
 
-    <!-- Applications -->
     <section class="applications-section" id="applications">
         <div class="section-header">
             <p class="section-eyebrow">Phase I</p>
             <h2 class="section-title">The Six Constraints Applied</h2>
         </div>
-        
         <div class="applications-grid">
             <a href="/warrior" class="app-card">
-                <div class="app-icon">⚔</div>
+                <div class="app-icon">&#9876;</div>
                 <h3 class="app-name">The Warrior</h3>
                 <p class="app-role">Defense</p>
             </a>
             <a href="/statesman" class="app-card">
-                <div class="app-icon">⚖</div>
+                <div class="app-icon">&#9878;</div>
                 <h3 class="app-name">The Statesman</h3>
                 <p class="app-role">Government</p>
             </a>
             <a href="/merchant" class="app-card">
-                <div class="app-icon">◈</div>
+                <div class="app-icon">&#9672;</div>
                 <h3 class="app-name">The Merchant</h3>
                 <p class="app-role">Enterprise</p>
             </a>
             <a href="/teacher" class="app-card">
-                <div class="app-icon">◉</div>
+                <div class="app-icon">&#9673;</div>
                 <h3 class="app-name">The Teacher</h3>
                 <p class="app-role">Education</p>
             </a>
             <a href="/healer" class="app-card">
-                <div class="app-icon">✚</div>
+                <div class="app-icon">&#10010;</div>
                 <h3 class="app-name">The Healer</h3>
                 <p class="app-role">Medicine</p>
             </a>
             <a href="/judge" class="app-card">
-                <div class="app-icon">⚏</div>
+                <div class="app-icon">&#9871;</div>
                 <h3 class="app-name">The Judge</h3>
                 <p class="app-role">Law</p>
             </a>
         </div>
-        
         <div class="foundations-row">
             <a href="/examined-life" class="foundation-card">
                 <p class="foundation-name">The Examined Life</p>
@@ -921,44 +730,38 @@
         </div>
     </section>
 
-    <!-- Coming Soon: AI Tools -->
     <section class="tools-section" id="tools">
         <div class="section-header">
             <p class="section-eyebrow">Coming Soon</p>
             <h2 class="section-title">AI Tools — The Six Constraints Applied</h2>
         </div>
-        
         <div class="tools-grid">
             <div class="tool-card">
-                <div class="tool-icon">◇</div>
+                <div class="tool-icon">&#9671;</div>
                 <h3 class="tool-name">Test Any Claim</h3>
                 <p class="tool-desc">Which of the six constraints does it satisfy? Paste any assertion — see where it holds and where it fails.</p>
                 <span class="tool-status">Coming 2025</span>
             </div>
-            
             <div class="tool-card">
-                <div class="tool-icon">◈</div>
+                <div class="tool-icon">&#9672;</div>
                 <h3 class="tool-name">Map Your Document</h3>
                 <p class="tool-desc">Reveal its structure against the six constraints. Upload any text — expose the gaps.</p>
                 <span class="tool-status">Coming 2025</span>
             </div>
-            
             <div class="tool-card">
-                <div class="tool-icon">◉</div>
+                <div class="tool-icon">&#9673;</div>
                 <h3 class="tool-name">Find Your Path</h3>
                 <p class="tool-desc">The six constraints applied to your field. Select your domain — get tailored guidance.</p>
                 <span class="tool-status">Coming 2025</span>
             </div>
-            
             <div class="tool-card">
-                <div class="tool-icon">⬡</div>
+                <div class="tool-icon">&#11041;</div>
                 <h3 class="tool-name">Build With Themis</h3>
                 <p class="tool-desc">Add six-constraint validation to your systems. API access for developers and enterprises.</p>
                 <span class="tool-status">Coming 2025</span>
             </div>
-            
             <div class="tool-card tool-card--featured">
-                <div class="tool-icon">△</div>
+                <div class="tool-icon">&#9651;</div>
                 <div class="tool-content">
                     <h3 class="tool-name">Six Constraints for Learners</h3>
                     <p class="tool-desc">From exposure to structured understanding. For students, parents, autodidacts — anyone serious about genuine knowing.</p>
@@ -968,17 +771,15 @@
         </div>
     </section>
 
-    <!-- Manifesto Teaser -->
     <section class="manifesto-section" id="manifesto">
         <p class="manifesto-quote">"We built a machine that speaks but does not know. We fed it the sum of human expression. But we forgot what knowing is."</p>
-        <a href="/manifesto" class="manifesto-link">Read the Manifesto →</a>
+        <a href="/manifesto" class="manifesto-link">Read the Manifesto</a>
     </section>
 
-    <!-- Footer -->
     <footer id="contact">
         <div class="footer-left">
             <p class="footer-logo">ECHO<span>SPHERE</span>.io</p>
-            <p class="footer-copy">© 2025 Echosphere.io LLC. All rights reserved.</p>
+            <p class="footer-copy">2025 Echosphere.io LLC. All rights reserved.</p>
         </div>
         <div class="footer-links">
             <a href="/about">About</a>
@@ -986,32 +787,58 @@
             <a href="https://github.com/Echosphere-io/semantic-validity-architecture">GitHub</a>
         </div>
         <div class="footer-contact">
-            <a href="/cdn-cgi/l/email-protection#57233f323a3e241732343f3824273f322532793e38"><span class="__cf_email__" data-cfemail="681c000d05011b280d0b00071b18000d1a0d460107">[email&#160;protected]</span></a>
+            <a href="mailto:themis@echosphere.io">themis@echosphere.io</a>
         </div>
     </footer>
 
-    <!-- Ask Themis Floating Button -->
     <div class="ask-themis">
         <div class="ask-themis__panel" id="askThemisPanel">
             <div class="ask-themis__header">
                 <span class="ask-themis__title">Ask Themis</span>
-                <button class="ask-themis__close" onclick="toggleAskThemis()">×</button>
+                <button class="ask-themis__close" onclick="toggleAskThemis()">&times;</button>
             </div>
-            <div class="ask-themis__context" id="askThemisContext">
-                You're viewing: The Landing Page
-            </div>
+            <div class="ask-themis__context" id="askThemisContext">You are viewing: The Landing Page</div>
             <div class="ask-themis__body">
                 <p>Ask about the six constraints, the architecture, applications, or how Themis applies to your domain.</p>
             </div>
             <div class="ask-themis__input-wrap">
                 <textarea class="ask-themis__input" rows="3" placeholder="What would you like to know?"></textarea>
-                <button class="ask-themis__submit">Send to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="314559545c5842715452595e4241595443541f585e">[email&#160;protected]</a></button>
+                <button class="ask-themis__submit">Send to themis@echosphere.io</button>
             </div>
         </div>
         <button class="ask-themis__button" onclick="toggleAskThemis()">
-            <span class="ask-themis__icon">◆</span>
+            <span class="ask-themis__icon">&#9670;</span>
             <span>Ask Themis</span>
         </button>
     </div>
+
+    <script>
+        function toggleAskThemis() {
+            document.getElementById('askThemisPanel').classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            var context = document.getElementById('askThemisContext');
+            var sections = document.querySelectorAll('section[id]');
+            var names = {
+                'journey': 'The Journey — Phases of Echosphere',
+                'applications': 'Phase I Applications — The Six Constraints Applied',
+                'tools': 'Coming Soon — AI Tools',
+                'manifesto': 'The Manifesto'
+            };
+            
+            var observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        context.textContent = 'You are viewing: ' + (names[entry.target.id] || 'The Landing Page');
+                    }
+                });
+            }, { threshold: 0.5 });
+
+            sections.forEach(function(section) {
+                observer.observe(section);
+            });
+        });
+    </script>
 </body>
 </html>
