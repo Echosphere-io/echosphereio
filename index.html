@@ -3058,7 +3058,33 @@
             showPage('home');
         }
     });
+
+    function toggleAskThemis() {
+        document.getElementById('askThemisPanel').classList.toggle('active');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var context = document.getElementById('askThemisContext');
+        var sections = document.querySelectorAll('section[id]');
+        var names = {
+            'journey': 'The Journey — Phases of Echosphere',
+            'applications': 'Phase I Applications — The Six Constraints Applied',
+            'tools': 'Coming Soon — AI Tools',
+            'manifesto': 'The Manifesto'
+        };
+            
+        var observer = new IntersectionObserver(function(entries) {
+            entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                    context.textContent = 'You are viewing: ' + (names[entry.target.id] || 'The Landing Page');
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sections.forEach(function(section) {
+            observer.observe(section);
+        });
+    });
 </script>
 </body>
-
 </html>
