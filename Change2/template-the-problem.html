@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Problem — Echosphere.io</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="echosphere-styleguide.css">
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="/" class="nav__logo">ECHO<span>SPHERE</span></a>
+        <ul class="nav__links">
+            <li><a href="/themis">The Themis Project</a></li>
+            <li><a href="/applications">Applications</a></li>
+            <li><a href="/manifesto">Manifesto</a></li>
+            <li><a href="/contact">Contact</a></li>
+            <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture">GitHub ↗</a></li>
+        </ul>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header">
+        <div class="container">
+            <p class="page-header__eyebrow">The Themis Project — Phase I</p>
+            <h1 class="page-header__title">The Problem</h1>
+            <p class="page-header__subtitle">Why your AI system fails in ways you can't patch</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="article">
+        
+        <!-- Section 1: The Achievement -->
+        <section class="article__section">
+            <p class="lead">In five years, you've achieved what seemed impossible: models that pass professional exams, assistants handling millions of queries, code that ships to production. You trained on the entire internet. You scaled to hundreds of billions of parameters.</p>
+            
+            <p><strong>And still — your system is confidently wrong 15-25% of the time.</strong></p>
+            
+            <p>Your users have noticed. Your enterprise customers are asking hard questions. Your safety team is bolting on guardrails faster than you can ship features.</p>
+        </section>
+
+        <!-- Section 2: The Failures -->
+        <section class="article__section">
+            <h2>The Failures Have Names</h2>
+            
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Failure</th>
+                            <th>What Happens</th>
+                            <th>Why It Matters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Hallucination</strong></td>
+                            <td>System asserts falsehoods with high confidence</td>
+                            <td>Users can't trust outputs without verification</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Semantic drift</strong></td>
+                            <td>Meaning shifts unpredictably across long contexts</td>
+                            <td>Multi-turn conversations become unreliable</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Groundless inference</strong></td>
+                            <td>No distinction between warranted and unwarranted claims</td>
+                            <td>System can't explain why it believes what it says</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Calibration failure</strong></td>
+                            <td>Stated confidence doesn't match actual accuracy</td>
+                            <td>"I'm 90% sure" means nothing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Inappropriate closure</strong></td>
+                            <td>System finalizes judgments humans should make</td>
+                            <td>Liability, safety, trust all compromised</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <p>Every major lab has published on these. Five years of scaling. Billions in compute. The problems remain.</p>
+        </section>
+
+        <!-- Section 3: The Diagnosis -->
+        <section class="article__section">
+            <h2>The Diagnosis</h2>
+            
+            <div class="callout">
+                <p class="callout__title">The Hard Truth</p>
+                <p>These aren't bugs. They're architecture. Your system operates on a single axis: <code>Input tokens → Statistical prediction → Output tokens</code>. Pattern matching at scale. Extraordinarily powerful for generating <em>plausible</em> text. Structurally incapable of generating <em>valid</em> text.</p>
+            </div>
+            
+            <div class="two-col">
+                <div>
+                    <h4>The system cannot:</h4>
+                    <ul>
+                        <li>Know whether its output is true</li>
+                        <li>Distinguish inference from association</li>
+                        <li>Recognize when it doesn't know</li>
+                        <li>Maintain meaning across context</li>
+                        <li>Defer when it should</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Because:</h4>
+                    <p>The architecture doesn't represent these capabilities. You can't patch your way to validity. You can't prompt-engineer your way to grounding. The capacity isn't missing from the training data — it's missing from the structure.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: What Validity Requires -->
+        <section class="article__section">
+            <h2>What Validity Actually Requires</h2>
+            
+            <p>A claim is valid when it satisfies six constraints — not five, not seven, exactly six:</p>
+            
+            <div class="key-point">
+                <div class="key-point__marker">1</div>
+                <div class="key-point__content">
+                    <p class="key-point__title">Referential — WHAT is being claimed?</p>
+                    <p class="key-point__desc">Without it: vague assertions, shifting targets</p>
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point__marker">2</div>
+                <div class="key-point__content">
+                    <p class="key-point__title">Contextual — Under what CONDITIONS?</p>
+                    <p class="key-point__desc">Without it: overgeneralization, false universals</p>
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point__marker">3</div>
+                <div class="key-point__content">
+                    <p class="key-point__title">Premissive — On what GROUNDS?</p>
+                    <p class="key-point__desc">Without it: unwarranted confidence, no justification</p>
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point__marker">4</div>
+                <div class="key-point__content">
+                    <p class="key-point__title">Inferential — WHY does this follow?</p>
+                    <p class="key-point__desc">Without it: logical gaps, non-sequiturs</p>
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point__marker">5</div>
+                <div class="key-point__content">
+                    <p class="key-point__title">Constraining — What are the LIMITS?</p>
+                    <p class="key-point__desc">Without it: overclaiming, no boundaries</p>
+                </div>
+            </div>
+            
+            <div class="key-point">
+                <div class="key-point__marker">6</div>
+                <div class="key-point__content">
+                    <p class="key-point__title">Teleological — What is this FOR?</p>
+                    <p class="key-point__desc">Without it: pointless precision, missing purpose</p>
+                </div>
+            </div>
+            
+            <p style="margin-top: var(--space-lg);">Miss any one constraint and the claim is incomplete. It might sound right. It might even be right. But you can't <em>know</em> it's right — and neither can your system. Current architectures check zero of these explicitly.</p>
+        </section>
+
+        <!-- Section 5: The Geometry -->
+        <section class="article__section">
+            <h2>The Geometry of the Problem</h2>
+            
+            <div class="two-col">
+                <div>
+                    <p>Six constraints is not arbitrary. It's the minimum for structural closure.</p>
+                    
+                    <p>A tetrahedron — the simplest three-dimensional enclosure — has four vertices and six edges. Remove any edge and it no longer bounds a volume. It's no longer closed.</p>
+                    
+                    <p>Semantic validity works the same way:</p>
+                    <ul>
+                        <li><strong>4 vertices</strong> — the components (claimant, subject, grounds, purpose)</li>
+                        <li><strong>6 edges</strong> — the constraints binding them</li>
+                    </ul>
+                    
+                    <p>Remove any constraint and meaning leaks out — the claim can be true in ways you didn't intend, false in ways you can't detect.</p>
+                </div>
+                <div>
+                    <!-- Tetrahedron Diagram -->
+                    <div class="diagram">
+                        <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Edges (constraints) -->
+                            <!-- Back edge - dashed -->
+                            <line x1="50" y1="220" x2="250" y2="220" stroke="#5a5855" stroke-width="1.5" stroke-dasharray="4,3"/>
+                            <!-- Front edges - solid -->
+                            <line x1="150" y1="40" x2="50" y2="220" stroke="#c9a227" stroke-width="2"/>
+                            <line x1="150" y1="40" x2="250" y2="220" stroke="#c9a227" stroke-width="2"/>
+                            <line x1="150" y1="40" x2="150" y2="290" stroke="#c9a227" stroke-width="2"/>
+                            <line x1="50" y1="220" x2="150" y2="290" stroke="#c9a227" stroke-width="2"/>
+                            <line x1="250" y1="220" x2="150" y2="290" stroke="#c9a227" stroke-width="2"/>
+                            
+                            <!-- Vertices -->
+                            <circle cx="150" cy="40" r="6" fill="#c9a227"/>
+                            <circle cx="50" cy="220" r="6" fill="#c9a227"/>
+                            <circle cx="250" cy="220" r="6" fill="#c9a227"/>
+                            <circle cx="150" cy="290" r="6" fill="#c9a227"/>
+                            
+                            <!-- Labels -->
+                            <text x="150" y="25" text-anchor="middle" fill="#e8e6e1" font-family="Cormorant Garamond" font-size="12" font-weight="600">CLAIMANT</text>
+                            <text x="25" y="235" text-anchor="middle" fill="#e8e6e1" font-family="Cormorant Garamond" font-size="12" font-weight="600">GROUNDS</text>
+                            <text x="275" y="235" text-anchor="middle" fill="#e8e6e1" font-family="Cormorant Garamond" font-size="12" font-weight="600">PURPOSE</text>
+                            <text x="150" y="320" text-anchor="middle" fill="#e8e6e1" font-family="Cormorant Garamond" font-size="12" font-weight="600">SUBJECT</text>
+                            
+                            <!-- Edge labels (constraints) -->
+                            <text x="85" y="125" fill="#a8a6a1" font-family="IBM Plex Sans" font-size="9" transform="rotate(-55, 85, 125)">Premissive</text>
+                            <text x="215" y="125" fill="#a8a6a1" font-family="IBM Plex Sans" font-size="9" transform="rotate(55, 215, 125)">Teleological</text>
+                            <text x="165" y="165" fill="#a8a6a1" font-family="IBM Plex Sans" font-size="9">Referential</text>
+                            <text x="85" y="265" fill="#a8a6a1" font-family="IBM Plex Sans" font-size="9" transform="rotate(35, 85, 265)">Contextual</text>
+                            <text x="215" y="265" fill="#a8a6a1" font-family="IBM Plex Sans" font-size="9" transform="rotate(-35, 215, 265)">Inferential</text>
+                            <text x="150" y="210" text-anchor="middle" fill="#5a5855" font-family="IBM Plex Sans" font-size="9">Constraining</text>
+                        </svg>
+                        <p class="diagram__caption">The tetrahedron: 4 components, 6 constraints, semantic closure</p>
+                    </div>
+                </div>
+            </div>
+            
+            <p>This structure was discovered 2,400 years ago. Forgotten by modern ML. Recovered here.</p>
+        </section>
+
+        <!-- Section 6: Projected Impact -->
+        <section class="article__section">
+            <h2>Projected Impact</h2>
+            
+            <p>Based on architectural analysis, a system with six-constraint validation would show:</p>
+            
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Metric</th>
+                            <th>Current Baseline</th>
+                            <th>With Validity Architecture</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Hallucination rate</td>
+                            <td>15-25%</td>
+                            <td><strong>3-5%</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Turns to task completion</td>
+                            <td>4.2 average</td>
+                            <td><strong>2.1 average</strong></td>
+                        </tr>
+                        <tr>
+                            <td>User corrections per session</td>
+                            <td>1.8</td>
+                            <td><strong>0.4</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Confidence calibration (r)</td>
+                            <td>0.4</td>
+                            <td><strong>0.85</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Long-context coherence</td>
+                            <td>Degrades after 4K</td>
+                            <td><strong>Stable to context limit</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <p>These are projections. We invite empirical validation.</p>
+        </section>
+
+        <!-- Section 7: Next Steps -->
+        <section class="article__section">
+            <h2>Next Steps</h2>
+            
+            <div class="two-col">
+                <div>
+                    <h4>If this diagnosis resonates:</h4>
+                    <ul>
+                        <li><a href="/architecture">Read THE ARCHITECTURE</a> — the full six-constraint specification</li>
+                        <li><a href="/proof">Review THE PROOF</a> — how this dissolves known problems</li>
+                        <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture">View on GitHub</a> — documentation and reference code</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>If you want to build with this:</h4>
+                    <p><strong>Contact:</strong> <a href="/cdn-cgi/l/email-protection#a5d1cdc0c8ccd6e5c0c6cdcad6d5cdc0d7c08bccca"><span class="__cf_email__" data-cfemail="5f2b373a32362c1f3a3c37302c2f373a2d3a713630">[email&#160;protected]</span></a></p>
+                    <p>The system that validates its inferences will dominate. Every major lab knows the problem. Now there's a solution.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Addenda Section (for future updates) -->
+        <section class="addenda">
+            <h2 class="addenda__header">Updates & Addenda</h2>
+            
+            <!-- Example addendum - would be added as content grows -->
+            <!--
+            <article class="addendum" id="addendum-1">
+                <div class="addendum__meta">
+                    <span class="addendum__number">Addendum 1</span>
+                    <span class="addendum__date">2025-02-15</span>
+                </div>
+                <h3 class="addendum__title">Response to OpenAI's February Paper</h3>
+                <div class="addendum__content">
+                    <p>Content here...</p>
+                </div>
+            </article>
+            -->
+            
+            <p style="color: var(--color-text-dim); font-size: var(--text-sm); font-style: italic;">No addenda yet. Original content published January 2025.</p>
+        </section>
+
+        <!-- Related Media (for podcasts, essays, etc.) -->
+        <section class="article__section">
+            <h3>Related Media</h3>
+            
+            <div class="media-list">
+                <!-- Example items - would be added as content grows -->
+                <!--
+                <a href="#" class="media-item media-item--podcast">
+                    <div class="media-item__icon"></div>
+                    <div class="media-item__content">
+                        <p class="media-item__type">Podcast</p>
+                        <p class="media-item__title">Discussion with [Guest] on Structural AI Failures</p>
+                        <p class="media-item__date">February 2025</p>
+                    </div>
+                </a>
+                
+                <a href="#" class="media-item media-item--essay">
+                    <div class="media-item__icon"></div>
+                    <div class="media-item__content">
+                        <p class="media-item__type">Essay</p>
+                        <p class="media-item__title">Why Scaling Won't Save You: A Technical Response</p>
+                        <p class="media-item__date">March 2025</p>
+                    </div>
+                </a>
+                -->
+                
+                <p style="color: var(--color-text-dim); font-size: var(--text-sm); font-style: italic;">No related media yet.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div>
+            <p class="footer__logo">ECHO<span>SPHERE</span>.io</p>
+            <p class="footer__copy">© 2025 Echosphere.io LLC. All rights reserved.</p>
+        </div>
+        <div class="footer__links">
+            <a href="/about">About</a>
+            <a href="/manifesto">Manifesto</a>
+            <a href="https://github.com/Echosphere-io/semantic-validity-architecture">GitHub</a>
+        </div>
+        <div class="fo
