@@ -1281,20 +1281,119 @@
                 <h2>The Geometry of the Problem</h2>
                 <p>This isn't arbitrary. Six constraints is the minimum for structural closure.</p>
                 <p>Think of a tetrahedron—the simplest three-dimensional shape:</p>
-                <div class="ascii-box"> ◆
-                    /|\
-                    / | \
-                    / | \
-                    / | \
-                    ◆----+----◆
-                    \ | /
-                    \ | /
-                    \ | /
-                    \|/
-                    ◆
+                <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 620"
+                        font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+                        <defs>
+                            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                <path d="M0,0 L8,3 L0,6" fill="none" stroke="#333" stroke-width="1" />
+                            </marker>
+                            <linearGradient id="vertexGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f8f6f0" />
+                                <stop offset="100%" style="stop-color:#ede8d8" />
+                            </linearGradient>
+                            <filter id="shadow1" x="-5%" y="-5%" width="115%" height="115%">
+                                <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.15" />
+                            </filter>
+                        </defs>
 
-                    Four vertices. Six edges.
-                    Fewer edges = no enclosure.
+                        <!-- Title -->
+                        <text x="350" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#e8e6e1">The
+                            Geometry of Semantic Completeness</text>
+                        <text x="350" y="55" text-anchor="middle" font-size="12" fill="#8a8885" font-style="italic">Four
+                            components. Six constraints. The minimum structure for closure.</text>
+
+                        <!-- Tetrahedron edges (the SIX CONSTRAINTS) -->
+                        <!-- Edge: Claimant-Subject (Referential) -->
+                        <line x1="350" y1="105" x2="150" y2="390" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="185" y="225" width="95" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="232" y="237" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">REFERENTIAL</text>
+                        <text x="232" y="250" text-anchor="middle" font-size="8" fill="#c9a227">What is claimed?</text>
+
+                        <!-- Edge: Claimant-Grounds (Contextual) -->
+                        <line x1="350" y1="105" x2="550" y2="390" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="420" y="225" width="90" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="465" y="237" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">CONTEXTUAL</text>
+                        <text x="465" y="250" text-anchor="middle" font-size="8" fill="#c9a227">Conditions?</text>
+
+                        <!-- Edge: Claimant-Purpose (Premissive) -->
+                        <line x1="350" y1="105" x2="350" y2="510" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="355" y="285" width="85" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="397" y="297" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">PREMISSIVE</text>
+                        <text x="397" y="310" text-anchor="middle" font-size="8" fill="#c9a227">On what grounds?</text>
+
+                        <!-- Edge: Subject-Grounds (Inferential) -->
+                        <line x1="150" y1="390" x2="550" y2="390" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="302" y="395" width="95" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="349" y="407" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">INFERENTIAL</text>
+                        <text x="349" y="420" text-anchor="middle" font-size="8" fill="#c9a227">Why does it
+                            follow?</text>
+
+                        <!-- Edge: Subject-Purpose (Constraining) -->
+                        <line x1="150" y1="390" x2="350" y2="510" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="190" y="445" width="100" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="240" y="457" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">CONSTRAINING</text>
+                        <text x="240" y="470" text-anchor="middle" font-size="8" fill="#c9a227">What are the
+                            limits?</text>
+
+                        <!-- Edge: Grounds-Purpose (Teleological) -->
+                        <line x1="550" y1="390" x2="350" y2="510" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="420" y="445" width="100" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="470" y="457" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">TELEOLOGICAL</text>
+                        <text x="470" y="470" text-anchor="middle" font-size="8" fill="#c9a227">What is it for?</text>
+
+                        <!-- Vertices (the FOUR COMPONENTS) -->
+                        <!-- Top: Claimant -->
+                        <circle cx="350" cy="105" r="38" fill="url(#vertexGrad1)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow1)" />
+                        <text x="350" y="101" text-anchor="middle" font-size="11" font-weight="bold"
+                            fill="#0d0d0d">CLAIMANT</text>
+                        <text x="350" y="115" text-anchor="middle" font-size="9" fill="#2a2a2a">(Who asserts)</text>
+
+                        <!-- Bottom-left: Subject -->
+                        <circle cx="150" cy="390" r="38" fill="url(#vertexGrad1)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow1)" />
+                        <text x="150" y="386" text-anchor="middle" font-size="11" font-weight="bold"
+                            fill="#0d0d0d">SUBJECT</text>
+                        <text x="150" y="400" text-anchor="middle" font-size="9" fill="#2a2a2a">(What is
+                            discussed)</text>
+
+                        <!-- Bottom-right: Grounds -->
+                        <circle cx="550" cy="390" r="38" fill="url(#vertexGrad1)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow1)" />
+                        <text x="550" y="386" text-anchor="middle" font-size="11" font-weight="bold"
+                            fill="#0d0d0d">GROUNDS</text>
+                        <text x="550" y="400" text-anchor="middle" font-size="9" fill="#2a2a2a">(What supports
+                            it)</text>
+
+                        <!-- Bottom-center: Purpose -->
+                        <circle cx="350" cy="510" r="38" fill="url(#vertexGrad1)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow1)" />
+                        <text x="350" y="506" text-anchor="middle" font-size="11" font-weight="bold"
+                            fill="#0d0d0d">PURPOSE</text>
+                        <text x="350" y="520" text-anchor="middle" font-size="9" fill="#2a2a2a">(What it is for)</text>
+
+                        <!-- Bottom annotation -->
+                        <text x="350" y="575" text-anchor="middle" font-size="11" fill="#e8e6e1" font-weight="bold">4
+                            vertices = components. 6 edges = constraints.</text>
+                        <text x="350" y="593" text-anchor="middle" font-size="11" fill="#8a8885">Remove any edge and the
+                            structure collapses. Meaning leaks out.</text>
+                        <text x="350" y="611" text-anchor="middle" font-size="10" fill="#5a5855" font-style="italic">The
+                            simplest closed three-dimensional structure. Discovered 2,400 years ago. Recovered
+                            here.</text>
+                    </svg>
                     <p><i>Figure 1</i></p>
                 </div>
                 <p>The four vertices represent the components of any claim:</p>
