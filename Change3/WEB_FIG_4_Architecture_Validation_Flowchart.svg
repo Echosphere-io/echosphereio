@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 700" font-family="'Georgia', 'Times New Roman', serif">
+  <defs>
+    <filter id="shadow4" x="-3%" y="-3%" width="108%" height="108%">
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12"/>
+    </filter>
+    <marker id="flowArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+    <linearGradient id="inputGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e3e9f0"/>
+      <stop offset="100%" style="stop-color:#d0dae8"/>
+    </linearGradient>
+    <linearGradient id="passGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#d4edda"/>
+      <stop offset="100%" style="stop-color:#b8dcc4"/>
+    </linearGradient>
+    <linearGradient id="failGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#f8d7da"/>
+      <stop offset="100%" style="stop-color:#f0b8bd"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="325" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a1a">The Validation Process</text>
+
+  <!-- Input box -->
+  <rect x="150" y="50" width="350" height="45" rx="8" fill="url(#inputGrad)" stroke="#555" stroke-width="2" filter="url(#shadow4)"/>
+  <text x="325" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">GENERATED OUTPUT</text>
+  <text x="325" y="85" text-anchor="middle" font-size="10" fill="#666">Any claim, response, or assertion</text>
+
+  <!-- Arrow down -->
+  <line x1="325" y1="95" x2="325" y2="125" stroke="#333" stroke-width="2" marker-end="url(#flowArrow)"/>
+
+  <!-- Validator box -->
+  <rect x="100" y="130" width="450" height="310" rx="10" fill="#fafaf5" stroke="#1a1a1a" stroke-width="2.5" filter="url(#shadow4)"/>
+  <rect x="100" y="130" width="450" height="38" rx="10" fill="#2a2a2a"/>
+  <rect x="100" y="155" width="450" height="13" fill="#2a2a2a"/>
+  <text x="325" y="155" text-anchor="middle" font-size="14" font-weight="bold" fill="#fff">SIX-CONSTRAINT VALIDATOR</text>
+
+  <!-- Constraint checks -->
+  <!-- 1. Referential -->
+  <rect x="130" y="180" width="26" height="26" rx="4" fill="#fff" stroke="#8B4513" stroke-width="2"/>
+  <text x="170" y="198" font-size="12" fill="#333"><tspan font-weight="bold" fill="#8B4513">Referential</tspan> &#x2014; Is it determinate?</text>
+
+  <!-- 2. Contextual -->
+  <rect x="130" y="220" width="26" height="26" rx="4" fill="#fff" stroke="#2E5090" stroke-width="2"/>
+  <text x="170" y="238" font-size="12" fill="#333"><tspan font-weight="bold" fill="#2E5090">Contextual</tspan> &#x2014; Are conditions specified?</text>
+
+  <!-- 3. Premissive -->
+  <rect x="130" y="260" width="26" height="26" rx="4" fill="#fff" stroke="#2D6A2D" stroke-width="2"/>
+  <text x="170" y="278" font-size="12" fill="#333"><tspan font-weight="bold" fill="#2D6A2D">Premissive</tspan> &#x2014; Are grounds provided?</text>
+
+  <!-- 4. Inferential -->
+  <rect x="130" y="300" width="26" height="26" rx="4" fill="#fff" stroke="#8B0000" stroke-width="2"/>
+  <text x="170" y="318" font-size="12" fill="#333"><tspan font-weight="bold" fill="#8B0000">Inferential</tspan> &#x2014; Does it follow?</text>
+
+  <!-- 5. Constraining -->
+  <rect x="130" y="340" width="26" height="26" rx="4" fill="#fff" stroke="#6B3FA0" stroke-width="2"/>
+  <text x="170" y="358" font-size="12" fill="#333"><tspan font-weight="bold" fill="#6B3FA0">Constraining</tspan> &#x2014; Are limits acknowledged?</text>
+
+  <!-- 6. Teleological (ONCE - fixing the duplicate) -->
+  <rect x="130" y="380" width="26" height="26" rx="4" fill="#fff" stroke="#B8860B" stroke-width="2"/>
+  <text x="170" y="398" font-size="12" fill="#333"><tspan font-weight="bold" fill="#B8860B">Teleological</tspan> &#x2014; Is purpose clear?</text>
+
+  <!-- Checkmark indicators -->
+  <text x="139" y="199" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+  <text x="139" y="239" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+  <text x="139" y="279" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+  <text x="139" y="319" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+  <text x="139" y="359" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+  <text x="139" y="399" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+
+  <!-- Arrow down from validator -->
+  <line x1="325" y1="440" x2="325" y2="475" stroke="#333" stroke-width="2" marker-end="url(#flowArrow)"/>
+
+  <!-- Decision split -->
+  <!-- Left arrow to PASS -->
+  <line x1="325" y1="480" x2="190" y2="520" stroke="#2D6A2D" stroke-width="2" marker-end="url(#flowArrow)"/>
+  <!-- Right arrow to FAIL -->
+  <line x1="325" y1="480" x2="460" y2="520" stroke="#8B0000" stroke-width="2" marker-end="url(#flowArrow)"/>
+
+  <!-- PASS box -->
+  <rect x="95" y="525" width="195" height="100" rx="10" fill="url(#passGrad)" stroke="#2D6A2D" stroke-width="2.5" filter="url(#shadow4)"/>
+  <text x="192" y="555" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a5c1a">6/6 PASS</text>
+  <line x1="125" y1="565" x2="260" y2="565" stroke="#2D6A2D" stroke-width="1"/>
+  <text x="192" y="585" text-anchor="middle" font-size="12" fill="#333">Output as valid</text>
+  <text x="192" y="602" text-anchor="middle" font-size="10" fill="#555">Semantically complete</text>
+
+  <!-- FAIL box -->
+  <rect x="360" y="525" width="195" height="100" rx="10" fill="url(#failGrad)" stroke="#8B0000" stroke-width="2.5" filter="url(#shadow4)"/>
+  <text x="457" y="555" text-anchor="middle" font-size="16" font-weight="bold" fill="#8B0000">&lt;6 FAIL</text>
+  <line x1="390" y1="565" x2="525" y2="565" stroke="#8B0000" stroke-width="1"/>
+  <text x="457" y="585" text-anchor="middle" font-size="12" fill="#333">Revise, hedge, or refuse</text>
+  <text x="457" y="602" text-anchor="middle" font-size="10" fill="#555">Incomplete &#x2014; do not emit</text>
+
+  <!-- Bottom annotation -->
+  <rect x="100" y="645" width="450" height="40" rx="6" fill="#f5f0e0" stroke="#ccc" stroke-width="1"/>
+  <text x="325" y="662" text-anchor="middle" font-size="10" fill="#555">A system that refuses when it cannot satisfy the constraints is more trustworthy</text>
+  <text x="325" y="677" text-anchor="middle" font-size="10" fill="#555">than a system that always produces output. Refusal is a feature, not a failure.</text>
+</svg>

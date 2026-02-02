@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480" font-family="'Georgia', 'Times New Roman', serif">
+  <defs>
+    <marker id="axisArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+    </marker>
+    <marker id="axisArrowRev" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="10 0, 0 3.5, 10 7" fill="#333"/>
+    </marker>
+    <filter id="shadow3" x="-5%" y="-5%" width="115%" height="115%">
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12"/>
+    </filter>
+    <linearGradient id="userGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e8f0fe"/>
+      <stop offset="100%" style="stop-color:#c5d9f7"/>
+    </linearGradient>
+    <linearGradient id="subjectGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#fce8e8"/>
+      <stop offset="100%" style="stop-color:#f5c4c4"/>
+    </linearGradient>
+    <linearGradient id="methodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#e8f5e8"/>
+      <stop offset="100%" style="stop-color:#c4e8c4"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="300" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1a1a1a">The Three Axes of Semantic Space</text>
+  <text x="300" y="50" text-anchor="middle" font-size="12" fill="#666" font-style="italic">Every claim exists in three-dimensional space. Current systems flatten this to one.</text>
+
+  <!-- Central point -->
+  <circle cx="300" cy="240" r="6" fill="#333"/>
+
+  <!-- Vertical axis: USER (up) -->
+  <line x1="300" y1="235" x2="300" y2="90" stroke="#2E5090" stroke-width="2.5" marker-end="url(#axisArrow)"/>
+  <!-- USER box -->
+  <rect x="230" y="65" width="140" height="50" rx="8" fill="url(#userGrad)" stroke="#2E5090" stroke-width="2" filter="url(#shadow3)"/>
+  <text x="300" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#2E5090">USER</text>
+  <text x="300" y="101" text-anchor="middle" font-size="9" fill="#3a5a8a">(who is asking)</text>
+
+  <!-- USER details -->
+  <text x="395" y="82" font-size="9" fill="#555">Expertise level</text>
+  <text x="395" y="96" font-size="9" fill="#555">Intent</text>
+  <text x="395" y="110" font-size="9" fill="#555">Context of use</text>
+
+  <!-- Left axis: SUBJECT -->
+  <line x1="295" y1="243" x2="108" y2="358" stroke="#8B0000" stroke-width="2.5" marker-end="url(#axisArrow)"/>
+  <!-- SUBJECT box -->
+  <rect x="18" y="345" width="140" height="50" rx="8" fill="url(#subjectGrad)" stroke="#8B0000" stroke-width="2" filter="url(#shadow3)"/>
+  <text x="88" y="365" text-anchor="middle" font-size="14" font-weight="bold" fill="#8B0000">SUBJECT</text>
+  <text x="88" y="381" text-anchor="middle" font-size="9" fill="#6a2020">(what is claimed)</text>
+
+  <!-- SUBJECT details -->
+  <text x="28" y="410" font-size="9" fill="#555">Domain</text>
+  <text x="28" y="424" font-size="9" fill="#555">Certainty level</text>
+  <text x="28" y="438" font-size="9" fill="#555">Settled vs. disputed</text>
+
+  <!-- Right axis: METHOD -->
+  <line x1="305" y1="243" x2="492" y2="358" stroke="#2D6A2D" stroke-width="2.5" marker-end="url(#axisArrow)"/>
+  <!-- METHOD box -->
+  <rect x="442" y="345" width="140" height="50" rx="8" fill="url(#methodGrad)" stroke="#2D6A2D" stroke-width="2" filter="url(#shadow3)"/>
+  <text x="512" y="365" text-anchor="middle" font-size="14" font-weight="bold" fill="#2D6A2D">METHOD</text>
+  <text x="512" y="381" text-anchor="middle" font-size="9" fill="#2a5a2a">(how it is derived)</text>
+
+  <!-- METHOD details -->
+  <text x="452" y="410" font-size="9" fill="#555">Inference type</text>
+  <text x="452" y="424" font-size="9" fill="#555">Confidence warranted</text>
+  <text x="452" y="438" font-size="9" fill="#555">Deduction &#x2260; speculation</text>
+
+  <!-- Comparison annotation -->
+  <rect x="100" y="455" width="400" height="22" rx="4" fill="#f5f0e0" stroke="#999" stroke-width="1"/>
+  <text x="300" y="470" text-anchor="middle" font-size="10" fill="#555">Current systems: Input &#x2192; Output (one axis).  Valid systems: track all three throughout.</text>
+</svg>
