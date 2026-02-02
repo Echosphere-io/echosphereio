@@ -925,7 +925,9 @@
     <nav>
         <a href="#" onclick="showPage('home'); return false;" class="logo">ECHO<span>SPHERE</span></a>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#" onclick="showPage('home'); return false;">The Journey</a></li>
+            <li><a href="#"
+                    onclick="showPage('home'); document.getElementById('journey-text').scrollIntoView({behavior: 'smooth'}); return false;">The
+                    Journey</a></li>
             <li><a href="#" onclick="showPage('problem'); return false;">The Problem</a></li>
             <li><a href="#" onclick="showPage('architecture'); return false;">Architecture</a></li>
             <li><a href="#" onclick="showPage('manifesto'); return false;">Manifesto</a></li>
@@ -987,7 +989,7 @@
                     </div>
 
                     <!-- The Text -->
-                    <div class="journey-text">
+                    <div class="journey-text" id="journey-text">
                         <div class="journey-phase">
                             <p class="phase-marker">Foundation</p>
                             <h3 class="phase-title">The Research</h3>
