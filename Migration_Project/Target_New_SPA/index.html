@@ -1,0 +1,4069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Echosphere.io — Reconciling Human and Digital Ontologies</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Source+Sans+3:ital,wght@0,300;0,400;0,500;0,600;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  /* =============================================
+     ECHOSPHERE.IO — MERGED SPA
+     Light Theme from Site 2 + SPA Architecture from Site 1
+     Content from Both Sites
+     ============================================= */
+
+  :root {
+    /* --- BACKGROUNDS --- */
+    --bg-primary: #FAFAF8;
+    --bg-secondary: #F4F2EE;
+    --bg-tertiary: #EDEAE4;
+    --bg-accent: #E5E1DA;
+    --bg-hero: #F7F5F1;
+    --bg-nav: rgba(250,250,248,0.95);
+    --bg-footer: #2A2722;
+
+    /* --- TEXT --- */
+    --text-primary: #1C1A17;
+    --text-secondary: #4D473F;
+    --text-tertiary: #807A70;
+    --text-light: #ADA69B;
+    --text-inverse: #FAFAF8;
+
+    /* --- ACCENT --- */
+    --accent-primary: #7A5C3E;
+    --accent-hover: #5C4028;
+    --accent-sage: #6B7F5E;
+    --accent-rule: #D6CFCA;
+    --accent-gold: #9E8555;
+
+    /* --- BORDERS --- */
+    --border-light: #E5E1DA;
+    --border-medium: #D6CFCA;
+    --border-heavy: #B5AFA6;
+
+    /* --- TYPOGRAPHY --- */
+    --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+    --font-body: 'Source Sans 3', 'Segoe UI', 'Helvetica Neue', sans-serif;
+    --font-mono: 'IBM Plex Mono', 'Consolas', monospace;
+
+    /* --- SPACING --- */
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 1.5rem;
+    --space-xl: 2.5rem;
+    --space-2xl: 4rem;
+    --space-3xl: 6rem;
+
+    /* --- LAYOUT --- */
+    --max-width: 1100px;
+    --max-reading: 700px;
+  }
+
+  /* --- RESET --- */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    font-size: 16px;
+    scroll-behavior: auto;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-body);
+    font-weight: 400;
+    line-height: 1.65;
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    overflow-x: hidden;
+  }
+
+  /* --- TYPOGRAPHY --- */
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text-primary);
+  }
+
+  h1 { font-size: 2.8rem; letter-spacing: -0.01em; }
+  h2 { font-size: 2rem; }
+  h3 { font-size: 1.35rem; font-weight: 500; }
+  h4 { font-size: 1.1rem; font-weight: 600; font-family: var(--font-body); }
+
+  p {
+    margin-bottom: var(--space-md);
+    font-size: 1.05rem;
+    max-width: var(--max-reading);
+  }
+
+  a {
+    color: var(--accent-primary);
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  a:hover {
+    color: var(--accent-hover);
+    border-bottom-color: var(--accent-hover);
+  }
+
+  ul, ol {
+    margin-bottom: var(--space-md);
+    padding-left: 1.5rem;
+  }
+  li {
+    margin-bottom: var(--space-xs);
+    font-size: 1.05rem;
+  }
+
+  strong { color: var(--text-primary); }
+  em { font-style: italic; }
+
+  dl { margin-bottom: var(--space-lg); }
+  dt {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-top: var(--space-md);
+  }
+  dd {
+    color: var(--text-secondary);
+    margin-left: var(--space-lg);
+    margin-bottom: var(--space-sm);
+    font-size: 1rem;
+  }
+
+  /* --- NAVIGATION --- */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    background: var(--bg-nav);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .nav-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0.9rem var(--space-xl);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: 0.02em;
+    border-bottom: none;
+    cursor: pointer;
+  }
+  .nav-logo:hover { color: var(--text-primary); border-bottom: none; }
+  .nav-links {
+    display: flex;
+    gap: var(--space-lg);
+    list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    border-bottom: none;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+  }
+  .nav-links a:hover { color: var(--text-primary); }
+
+  .mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 0.25rem;
+  }
+
+  /* --- SPA PAGE SYSTEM --- */
+  .page {
+    display: none;
+    opacity: 1;
+  }
+  .page.active {
+    display: block;
+    animation: fadeIn 0.4s ease;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* --- SECTIONS --- */
+  .section {
+    padding: var(--space-3xl) 0;
+  }
+  .section--alt {
+    background: var(--bg-secondary);
+  }
+  .section-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+  }
+  .section-header {
+    margin-bottom: var(--space-2xl);
+  }
+  .section-header h2 {
+    margin-bottom: var(--space-sm);
+  }
+  .section-rule {
+    border: none;
+    height: 2px;
+    width: 50px;
+    background: var(--accent-primary);
+    margin: var(--space-sm) 0 var(--space-md);
+  }
+  .section-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    max-width: 560px;
+  }
+
+  /* --- HERO --- */
+  .hero {
+    padding: 10rem 0 5rem;
+    background: var(--bg-hero);
+    border-bottom: 1px solid var(--border-light);
+  }
+  .hero-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+  }
+  .hero-eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-md);
+  }
+  .hero h1 {
+    margin-bottom: var(--space-lg);
+    max-width: 700px;
+  }
+  .hero-subtitle {
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: var(--text-secondary);
+    max-width: 520px;
+    line-height: 1.55;
+  }
+
+  /* --- PHASES / JOURNEY --- */
+  .phases {
+    max-width: 680px;
+  }
+  .phase-item {
+    display: flex;
+    gap: var(--space-lg);
+    position: relative;
+  }
+  .phase-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .phase-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border-medium);
+    border: 2px solid var(--border-medium);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .phase-dot--complete {
+    background: var(--accent-sage);
+    border-color: var(--accent-sage);
+  }
+  .phase-dot--active {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 4px rgba(122,92,62,0.15);
+  }
+  .phase-line {
+    width: 1px;
+    flex: 1;
+    background: var(--border-light);
+    margin: var(--space-xs) 0;
+  }
+  .phase-content {
+    padding-bottom: var(--space-2xl);
+  }
+  .phase-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: var(--space-xs);
+  }
+  .phase-label--active {
+    color: var(--accent-primary);
+    font-weight: 500;
+  }
+  .phase-content h3 {
+    margin-bottom: var(--space-sm);
+  }
+  .phase-content p {
+    font-size: 0.98rem;
+    color: var(--text-secondary);
+  }
+  .phase-link {
+    display: inline-block;
+    margin-top: var(--space-sm);
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+  /* --- INFO BOX --- */
+  .info-box {
+    max-width: 560px;
+    border: 1px solid var(--border-medium);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 2px;
+    padding: var(--space-md) var(--space-lg);
+    margin: var(--space-lg) 0;
+    background: var(--bg-primary);
+  }
+  .info-box-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: var(--space-xs);
+  }
+  .info-box p {
+    font-size: 0.93rem;
+    color: var(--text-secondary);
+    margin-bottom: 0;
+    line-height: 1.55;
+  }
+  .info-box strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* --- SIX CONSTRAINTS / APPLICATION CARDS --- */
+  .constraints-intro {
+    max-width: 600px;
+    margin-bottom: var(--space-xl);
+  }
+  .applications-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+  .app-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: var(--space-lg) var(--space-lg) var(--space-md);
+    display: block;
+    text-decoration: none !important;
+    border-bottom: 1px solid var(--border-light) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+  }
+  .app-card:hover {
+    border-color: var(--border-medium) !important;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .app-card-icon {
+    font-size: 1.3rem;
+    margin-bottom: var(--space-sm);
+    color: var(--accent-primary);
+  }
+  .app-card h4 {
+    margin-bottom: 2px;
+    color: var(--text-primary);
+  }
+  .app-domain {
+    font-size: 0.82rem;
+    font-family: var(--font-mono);
+    color: var(--text-light);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-bottom: var(--space-sm) !important;
+  }
+  .app-card p {
+    font-size: 0.95rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+  }
+  .app-link {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--accent-primary);
+  }
+
+  /* --- FOUNDATIONS --- */
+  .foundations-label {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-tertiary);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-md);
+  }
+  .foundations-row {
+    display: flex;
+    gap: var(--space-sm);
+    flex-wrap: wrap;
+  }
+  .foundation-chip {
+    font-size: 0.88rem;
+    font-weight: 500;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--border-medium);
+    border-radius: 3px;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    transition: border-color 0.2s ease;
+    cursor: pointer;
+  }
+  .foundation-chip:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    border-bottom: 1px solid var(--accent-primary);
+  }
+
+  /* --- AI TOOLS --- */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+  }
+  .tool-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-light);
+    border-radius: 4px;
+    padding: var(--space-lg);
+    display: flex;
+    gap: var(--space-md);
+    align-items: flex-start;
+  }
+  .tool-card-marker {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--accent-primary);
+  }
+  .tool-card h4 { margin-bottom: var(--space-xs); }
+  .tool-card p {
+    font-size: 0.93rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-xs);
+  }
+  .tool-status {
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-mono);
+    color: var(--text-light);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tool-card--featured {
+    grid-column: span 2;
+  }
+
+  /* --- WHITE PAPERS SECTION --- */
+  .papers-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-lg);
+    margin-top: var(--space-lg);
+  }
+  .paper-card {
+    background: #FFFFFF;
+    border: 1px solid var(--border-light);
+    border-radius: 3px;
+    padding: var(--space-lg);
+    display: block;
+    text-decoration: none !important;
+    border-bottom: 1px solid var(--border-light) !important;
+    transition: box-shadow 0.2s ease;
+  }
+  .paper-card:hover {
+    box-shadow: 0 3px 16px rgba(0,0,0,0.06);
+  }
+  .paper-type {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: var(--space-sm);
+  }
+  .paper-card h4 {
+    margin-bottom: var(--space-xs);
+    color: var(--text-primary);
+  }
+  .paper-card p {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--space-sm);
+  }
+  .paper-meta {
+    font-size: 0.8rem;
+    color: var(--text-light);
+    font-family: var(--font-mono);
+  }
+
+  /* --- WHITE PAPER PAGE STYLES --- */
+  .wp-page {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 4rem;
+  }
+  .wp-page .title-block {
+    text-align: center;
+    padding-bottom: 2rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .wp-page .title-block h1 {
+    font-family: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+  .wp-page .title-block .authors {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 0.25rem;
+  }
+  .wp-page .title-block .affiliation {
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--text-tertiary);
+    margin-bottom: 0.5rem;
+  }
+  .wp-page .title-block .date {
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--text-light);
+  }
+  .wp-page .abstract {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .wp-page .abstract-label,
+  .wp-page .toc-label {
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 0.5rem;
+  }
+  .wp-page .abstract p {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 0.97rem;
+    line-height: 1.65;
+    color: var(--text-secondary);
+  }
+  .wp-page .toc {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border-light);
+  }
+  .wp-page .toc ol {
+    list-style: none;
+    counter-reset: toc;
+  }
+  .wp-page .toc li {
+    counter-increment: toc;
+    font-family: var(--font-body);
+    font-size: 0.92rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+  }
+  .wp-page .toc li::before {
+    content: counter(toc) ". ";
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-right: 0.2em;
+  }
+  .wp-page .toc a {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+  .wp-page .toc a:hover {
+    color: var(--text-primary);
+  }
+  .wp-page h2 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-top: 2.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+  .wp-page h3 {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+  }
+  .wp-page h4 {
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-top: 1.25rem;
+    margin-bottom: 0.4rem;
+    color: var(--text-primary);
+  }
+  .wp-page .section-number {
+    font-weight: 700;
+    margin-right: 0.3em;
+  }
+  .wp-page p {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    line-height: 1.72;
+    color: var(--text-primary);
+    margin-bottom: 0.9rem;
+  }
+  .wp-page .wp-info-box {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-light);
+    border-radius: 0;
+    padding: 1rem 1.25rem;
+    margin: 1.25rem 0;
+  }
+  .wp-page .wp-info-box-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    margin-bottom: 0.35rem;
+  }
+  .wp-page .wp-info-box p {
+    font-size: 0.93rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+    color: var(--text-secondary);
+  }
+  .wp-page .wp-info-box strong {
+    color: var(--text-primary);
+  }
+  .wp-page table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.25rem 0;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+  }
+  .wp-page thead {
+    border-bottom: 2px solid var(--text-primary);
+  }
+  .wp-page th {
+    text-align: left;
+    padding: 0.5rem 0.75rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+  }
+  .wp-page td {
+    padding: 0.45rem 0.75rem;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-primary);
+    vertical-align: top;
+    font-family: var(--font-body);
+  }
+  .wp-page .table-caption {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--text-tertiary);
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .wp-page .figure {
+    margin: 1.75rem 0;
+    text-align: center;
+  }
+  .wp-page .figure svg {
+    max-width: 100%;
+    height: auto;
+  }
+  .wp-page .figure-caption {
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: var(--text-tertiary);
+    margin-top: 0.5rem;
+    text-align: center;
+  }
+  .wp-page .figure-caption strong {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  .wp-page code {
+    font-family: var(--font-mono);
+    font-size: 0.88em;
+    background: var(--bg-secondary);
+    padding: 0.15em 0.35em;
+    border-radius: 2px;
+  }
+  .wp-page .references {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-light);
+  }
+  .wp-page .references h2 {
+    margin-top: 0;
+  }
+  .wp-page .ref-item {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    margin-bottom: 0.6rem;
+    padding-left: 2em;
+    text-indent: -2em;
+    color: var(--text-secondary);
+  }
+  .wp-page .ref-num {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .wp-page .wp-back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--accent-primary);
+    text-decoration: none;
+    cursor: pointer;
+  }
+  .wp-page .wp-back-link:hover {
+    color: var(--accent-hover);
+  }
+
+  /* --- FLOWCHART EXHIBIT PAGE STYLES --- */
+  .fc-page {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: var(--space-xl) var(--space-xl) var(--space-3xl);
+  }
+  .fc-page .fc-back-link {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    margin-bottom: var(--space-lg);
+    cursor: pointer;
+  }
+  .fc-page .fc-back-link:hover { color: var(--accent-hover); }
+  .fc-page .fc-header {
+    text-align: center;
+    padding-bottom: 30px;
+    border-bottom: 2px solid var(--text-primary);
+    margin-bottom: 40px;
+  }
+  .fc-page .fc-header h1 {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+    color: var(--text-primary);
+  }
+  .fc-page .fc-header .subtitle {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--text-secondary);
+  }
+  .fc-page .fc-header .byline {
+    font-size: 0.9rem;
+    color: #999;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .fc-page .claim-section {
+    background: #fff;
+    border: 2px solid var(--text-primary);
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .fc-page .claim-section::before {
+    content: attr(data-label);
+    position: absolute;
+    top: -11px;
+    left: 24px;
+    background: var(--bg-primary);
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+  }
+  .fc-page .claim-section p {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: var(--text-primary);
+  }
+  .fc-page .claim-section p + p { margin-top: 12px; }
+  .fc-page .claim-section strong { font-weight: 700; }
+  .fc-page .claim-section em { font-style: italic; color: #555; }
+  /* Comparison table */
+  .fc-page .comparison { margin-bottom: 50px; }
+  .fc-page .comparison h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-primary);
+  }
+  .fc-page .comp-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 0;
+    border: 2px solid var(--text-primary);
+    font-size: 0.95rem;
+    font-family: var(--font-display);
+  }
+  .fc-page .comp-grid .header-cell {
+    background: var(--text-primary);
+    color: #fff;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .fc-page .comp-grid .row-label {
+    background: var(--bg-secondary);
+    padding: 12px 14px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+  }
+  .fc-page .comp-grid .cell {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border-light);
+    border-right: 1px solid var(--border-light);
+    line-height: 1.5;
+  }
+  .fc-page .comp-grid .cell:last-child { border-right: none; }
+  .fc-page .comp-grid .cell.traditional { background: #fff8f0; }
+  .fc-page .comp-grid .cell.hexis { background: #f0f8f0; }
+  .fc-page .comp-grid .fail { color: #8B0000; font-weight: 600; }
+  .fc-page .comp-grid .pass { color: #2D6A2D; font-weight: 600; }
+  /* Flowchart */
+  .fc-page .flowchart-section { margin-bottom: 50px; }
+  .fc-page .flowchart-section h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-primary);
+  }
+  .fc-page .flow-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+  .fc-page .flow-node {
+    position: relative;
+    width: 85%;
+    max-width: 750px;
+    padding: 20px 24px;
+    border-radius: 6px;
+    text-align: left;
+  }
+  .fc-page .flow-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 0;
+    color: var(--text-secondary);
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+  .fc-page .flow-arrow .arrow-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: #999;
+    margin-bottom: 2px;
+  }
+  .fc-page .node-input {
+    background: var(--bg-secondary);
+    border: 2px solid #999;
+    text-align: center;
+  }
+  .fc-page .node-input .node-title { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 700; }
+  .fc-page .node-input .node-desc { font-family: var(--font-body); font-size: 0.85rem; color: var(--text-secondary); margin-top: 4px; }
+  .fc-page .node-stage {
+    background: #fff;
+    border: 2px solid var(--text-primary);
+    position: relative;
+  }
+  .fc-page .node-stage .stage-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+    flex-wrap: wrap;
+  }
+  .fc-page .node-stage .stage-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--text-primary);
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .fc-page .node-stage .stage-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .fc-page .node-stage .patent-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: auto;
+    letter-spacing: 0.05em;
+  }
+  .fc-page .patent-a { background: #8B4513; }
+  .fc-page .patent-b { background: #2E5090; }
+  .fc-page .patent-c { background: #2D6A2D; }
+  .fc-page .patent-d { background: #8B0000; }
+  .fc-page .patent-e { background: #6B3FA0; }
+  .fc-page .patent-f { background: #B8860B; }
+  .fc-page .patent-g { background: #555; }
+  .fc-page .patent-h { background: #2a6a6a; }
+  .fc-page .node-stage .stage-body {
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #444;
+  }
+  .fc-page .node-stage .stage-body strong { color: var(--text-primary); }
+  .fc-page .node-stage .constraint-checks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 20px;
+    margin-top: 10px;
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+  }
+  .fc-page .constraint-checks .check-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .fc-page .check-item .check-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .fc-page .dot-ref { background: #8B4513; }
+  .fc-page .dot-ctx { background: #2E5090; }
+  .fc-page .dot-pre { background: #2D6A2D; }
+  .fc-page .dot-inf { background: #8B0000; }
+  .fc-page .dot-con { background: #6B3FA0; }
+  .fc-page .dot-tel { background: #B8860B; }
+  .fc-page .node-decision {
+    background: var(--bg-secondary);
+    border: 3px solid var(--text-primary);
+    text-align: center;
+    width: 65%;
+    max-width: 500px;
+    padding: 18px;
+  }
+  .fc-page .node-decision .node-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .fc-page .node-decision .node-desc {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 4px;
+  }
+  .fc-page .split-row {
+    display: flex;
+    gap: 30px;
+    width: 85%;
+    max-width: 750px;
+  }
+  .fc-page .split-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    padding: 6px 0;
+    font-size: 1.2rem;
+    color: var(--text-secondary);
+  }
+  .fc-page .split-arrow .arrow-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+  .fc-page .split-arrow.pass-arrow .arrow-label { color: #2D6A2D; }
+  .fc-page .split-arrow.fail-arrow .arrow-label { color: #8B0000; }
+  .fc-page .node-pass {
+    flex: 1;
+    background: #d4edda;
+    border: 2px solid #2D6A2D;
+    border-radius: 6px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .fc-page .node-pass .node-title { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 700; color: #2D6A2D; }
+  .fc-page .node-pass .node-desc { font-family: var(--font-display); font-size: 0.85rem; color: #2a5a2a; margin-top: 6px; }
+  .fc-page .node-fail {
+    flex: 1;
+    background: #f8d7da;
+    border: 2px solid #8B0000;
+    border-radius: 6px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .fc-page .node-fail .node-title { font-family: 'JetBrains Mono', monospace; font-size: 1rem; font-weight: 700; color: #8B0000; }
+  .fc-page .node-fail .node-desc { font-family: var(--font-display); font-size: 0.85rem; color: #5a1a1a; margin-top: 6px; }
+  .fc-page .fail-options {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+  }
+  .fc-page .fail-opt {
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: #f0b8bd;
+    color: #8B0000;
+    font-weight: 600;
+  }
+  /* Patent Map */
+  .fc-page .patent-map { margin-bottom: 50px; }
+  .fc-page .patent-map h2 {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-light);
+    color: var(--text-primary);
+  }
+  .fc-page .patent-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .fc-page .patent-card {
+    background: #fff;
+    border: 1px solid var(--border-light);
+    border-left: 4px solid;
+    padding: 16px 18px;
+    border-radius: 0 4px 4px 0;
+  }
+  .fc-page .patent-card .card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .fc-page .patent-card .card-letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .fc-page .patent-card .card-title {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .fc-page .patent-card .card-role {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  .fc-page .patent-card .card-engine {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #888;
+    letter-spacing: 0.03em;
+    margin-top: 6px;
+  }
+  .fc-page .card-a { border-left-color: #8B4513; }
+  .fc-page .card-b { border-left-color: #2E5090; }
+  .fc-page .card-c { border-left-color: #2D6A2D; }
+  .fc-page .card-d { border-left-color: #8B0000; }
+  .fc-page .card-e { border-left-color: #6B3FA0; }
+  .fc-page .card-f { border-left-color: #B8860B; }
+  .fc-page .card-g { border-left-color: #555; }
+  .fc-page .card-h { border-left-color: #2a6a6a; }
+  /* Distinction box */
+  .fc-page .distinction {
+    background: #fff;
+    border: 2px solid var(--text-primary);
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .fc-page .distinction::before {
+    content: 'THE DISTINCTION';
+    position: absolute;
+    top: -11px;
+    left: 24px;
+    background: var(--bg-primary);
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--text-secondary);
+  }
+  .fc-page .distinction h3 {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+    color: var(--text-primary);
+  }
+  .fc-page .dist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .fc-page .dist-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .fc-page .dist-col ul {
+    list-style: none;
+    padding: 0;
+  }
+  .fc-page .dist-col ul li {
+    padding: 4px 0;
+    font-family: var(--font-display);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--text-primary);
+  }
+  .fc-page .dist-col ul li::before {
+    content: '\2022';
+    margin-right: 8px;
+    color: var(--accent);
+  }
+  .fc-page .dist-col.not-claim li::before { content: '\2717'; color: #8B0000; }
+  .fc-page .dist-col.do-claim li::before { content: '\2713'; color: #2D6A2D; }
+  .fc-page .fc-footer {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 2px solid var(--text-primary);
+    margin-top: 40px;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+  .fc-page .fc-footer .footer-brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  /* Responsive for flowchart */
+  @media (max-width: 768px) {
+    .fc-page .comp-grid { grid-template-columns: 1fr; }
+    .fc-page .comp-grid .header-cell:first-child { display: none; }
+    .fc-page .comp-grid .row-label { border-right: none; font-size: 0.8rem; }
+    .fc-page .patent-grid { grid-template-columns: 1fr; }
+    .fc-page .dist-grid { grid-template-columns: 1fr; }
+    .fc-page .flow-node { width: 95%; }
+    .fc-page .node-decision { width: 85%; }
+    .fc-page .split-row { width: 95%; gap: 10px; }
+    .fc-page .node-stage .constraint-checks { grid-template-columns: 1fr; }
+  }
+
+  /* --- MANIFESTO SECTION (HOME) --- */
+  .manifesto-section {
+    text-align: center;
+    padding: var(--space-3xl) 0;
+    border-top: 1px solid var(--border-light);
+    border-bottom: 1px solid var(--border-light);
+    background: var(--bg-secondary);
+  }
+  .manifesto-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+  }
+  .manifesto-quote {
+    font-family: var(--font-display);
+    font-size: 1.45rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xl);
+    max-width: none;
+  }
+  .manifesto-link {
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  /* --- TELOS SECTION (HOME) --- */
+  .telos-section {
+    text-align: center;
+    padding: var(--space-2xl) 0;
+  }
+  .telos-inner {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+  }
+  .telos-greek {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-style: italic;
+    color: var(--text-tertiary);
+    margin-bottom: var(--space-xs);
+  }
+  .telos-statement {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.3;
+    margin-bottom: var(--space-sm);
+    max-width: none;
+  }
+  .telos-sub {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: none;
+  }
+
+  /* --- CONTENT PAGES (SPA inner pages) --- */
+  .content {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 120px var(--space-xl) var(--space-3xl);
+  }
+
+  .content h1 {
+    font-family: var(--font-display);
+    font-size: 2.8rem;
+    color: var(--text-primary);
+    margin-bottom: var(--space-xl);
+    text-align: center;
+    font-weight: 600;
+  }
+
+  .content h2 {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    color: var(--accent-primary);
+    margin-top: var(--space-2xl);
+    margin-bottom: var(--space-lg);
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: var(--space-sm);
+  }
+
+  .content h3 {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: var(--text-primary);
+    margin-top: var(--space-xl);
+    margin-bottom: var(--space-md);
+  }
+
+  .content a {
+    color: var(--accent-primary);
+    border-bottom: 1px dotted var(--accent-rule);
+  }
+  .content a:hover {
+    color: var(--accent-hover);
+    border-bottom-style: solid;
+  }
+
+  /* --- TABLES (Content Pages) --- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-xl) 0;
+    font-size: 0.95rem;
+  }
+  th, td {
+    border: 1px solid var(--border-light);
+    padding: var(--space-md);
+    text-align: left;
+    vertical-align: top;
+  }
+  th {
+    background: var(--bg-accent);
+    color: var(--accent-primary);
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  td {
+    background: var(--bg-primary);
+  }
+
+  /* --- ASCII BOX (Content Pages) --- */
+  .ascii-box {
+    font-family: var(--font-mono);
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    padding: var(--space-xl);
+    border-left: 3px solid var(--accent-primary);
+    margin: var(--space-2xl) 0;
+    white-space: pre-wrap;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    border-radius: 2px;
+  }
+
+  /* --- HR (Content Pages) --- */
+  .content hr {
+    border: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border-medium), transparent);
+    margin: var(--space-2xl) 0;
+  }
+
+  /* --- FIGURE CONTAINERS --- */
+  .figure-container {
+    text-align: center;
+    margin: var(--space-2xl) 0;
+  }
+  .figure-container p {
+    color: var(--text-tertiary);
+    font-style: italic;
+    font-size: 0.9rem;
+    margin-top: var(--space-sm);
+    max-width: none;
+    text-align: center;
+  }
+
+  /* --- FOOTER --- */
+  .footer {
+    background: var(--bg-footer);
+    color: var(--text-inverse);
+    padding: var(--space-2xl) 0 var(--space-lg);
+  }
+  .footer-inner {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--space-xl);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-xl);
+    margin-bottom: var(--space-2xl);
+  }
+  .footer-col h4 {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(250,250,248,0.45);
+    margin-bottom: var(--space-md);
+  }
+  .footer-col a {
+    display: block;
+    font-size: 0.9rem;
+    color: rgba(250,250,248,0.7);
+    margin-bottom: var(--space-sm);
+    border-bottom: none;
+    cursor: pointer;
+  }
+  .footer-col a:hover { color: var(--text-inverse); }
+  .footer-bottom {
+    border-top: 1px solid rgba(250,250,248,0.08);
+    padding-top: var(--space-md);
+    font-size: 0.82rem;
+    color: rgba(250,250,248,0.35);
+  }
+
+  /* --- RESPONSIVE --- */
+  @media (max-width: 900px) {
+    .applications-grid { grid-template-columns: repeat(2, 1fr); }
+    .tools-grid { grid-template-columns: 1fr; }
+    .tool-card--featured { grid-column: span 1; }
+    .papers-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    h1 { font-size: 2rem; }
+    h2 { font-size: 1.6rem; }
+    .hero { padding: 7rem 0 3rem; }
+    .applications-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    .nav-links { gap: var(--space-md); }
+    .section { padding: var(--space-2xl) 0; }
+    .content { padding: 90px var(--space-lg) var(--space-2xl); }
+    .content h1 { font-size: 2rem; }
+
+    .mobile-menu-btn { display: block; }
+    .nav-links {
+      display: none;
+      flex-direction: column;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--bg-primary);
+      padding: var(--space-xl);
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    .nav-links.open {
+      display: flex;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .foundations-row { flex-direction: column; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAVIGATION ===== -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a onclick="showPage('home'); return false;" class="nav-logo">Echosphere</a>
+    <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Toggle menu">&#9776;</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a onclick="showPage('home'); setTimeout(function(){ var el = document.getElementById('journey'); if(el) el.scrollIntoView({behavior:'smooth'}); }, 100); return false;">The Journey</a></li>
+      <li><a onclick="showPage('problem'); return false;">The Problem</a></li>
+      <li><a onclick="showPage('architecture'); return false;">Architecture</a></li>
+      <li><a onclick="scrollToSection('papers'); return false;">White Papers</a></li>
+      <li><a onclick="showPage('manifesto'); return false;">Manifesto</a></li>
+      <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener">GitHub &#x2197;</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main>
+
+<!-- ========== HOME PAGE ========== -->
+<div id="page-home" class="page active">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-inner">
+      <p class="hero-eyebrow">Echosphere.io</p>
+      <h1>Reconciling Human and Digital Ontologies</h1>
+      <p class="hero-subtitle">Structure for knowing in the age of artificial intelligence — recovered from First Philosophy, engineered for machines.</p>
+
+      <div class="info-box" style="margin-top: var(--space-xl);">
+        <p class="info-box-label">What This Means</p>
+        <p>Current AI systems generate language without understanding what they know or don't know. Echosphere applies a 2,400-year-old structure of <strong>six necessary constraints</strong> — derived from Aristotle — to give AI systems the ability to validate their own outputs before they speak.</p>
+      </div>
+    </div>
+  </header>
+
+  <!-- The Journey -->
+  <section id="journey" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>The Journey</h2>
+        <hr class="section-rule">
+      </div>
+
+      <div class="phases">
+        <!-- Foundation -->
+        <div class="phase-item">
+          <div class="phase-marker">
+            <div class="phase-dot phase-dot--complete"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <p class="phase-label">Foundation — Complete</p>
+            <h3>The Research</h3>
+            <p>Fifteen years recovering the structure of knowing from First Philosophy. Homer to Aristotle. The six constraints identified.</p>
+          </div>
+        </div>
+
+        <!-- Phase I -->
+        <div class="phase-item">
+          <div class="phase-marker">
+            <div class="phase-dot phase-dot--active"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <p class="phase-label phase-label--active">Phase I — Current</p>
+            <h3>The Themis Project</h3>
+            <p>Semantic Validity Architecture. The six constraints applied to AI systems. Eight patent families filed. The structure that allows machines to know what they know — and what they don't.</p>
+
+            <div class="info-box">
+              <p class="info-box-label">Key Concept</p>
+              <p><strong>Semantic validity</strong> is not statistical accuracy. It is structural completeness — every claim must satisfy six relational constraints (Referential, Contextual, Premissive, Inferential, Constraining, Teleological) before it can be emitted. A claim missing any constraint is incomplete, regardless of how confident the model is.</p>
+            </div>
+
+            <a onclick="showPage('problem'); return false;" class="phase-link" style="cursor:pointer;">Enter Phase I →</a>
+          </div>
+        </div>
+
+        <!-- Phase II -->
+        <div class="phase-item">
+          <div class="phase-marker">
+            <div class="phase-dot"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <p class="phase-label">Phase II</p>
+            <h3>The Platform</h3>
+            <p>Infrastructure for genuine ownership in the digital age.</p>
+          </div>
+        </div>
+
+        <!-- Phase III -->
+        <div class="phase-item">
+          <div class="phase-marker">
+            <div class="phase-dot"></div>
+            <div class="phase-line"></div>
+          </div>
+          <div class="phase-content">
+            <p class="phase-label">Phase III</p>
+            <h3>The Commons</h3>
+            <p>A new institutional form for human-digital civilization.</p>
+          </div>
+        </div>
+
+        <!-- Telos -->
+        <div class="phase-item">
+          <div class="phase-marker">
+            <div class="phase-dot"></div>
+          </div>
+          <div class="phase-content">
+            <p class="phase-label">τέλος</p>
+            <h3>Restoring the Aristotelian Soul</h3>
+            <p>The structure of genuine knowing — recovered, applied, engineered.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Six Constraints Applied -->
+  <section id="architecture-home" class="section section--alt">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>The Six Constraints Applied</h2>
+        <hr class="section-rule">
+        <p class="section-subtitle">Phase I — Domain applications of the semantic validity architecture.</p>
+      </div>
+
+      <div class="info-box" style="margin-bottom: var(--space-xl);">
+        <p class="info-box-label">Why Six?</p>
+        <p>A tetrahedron has exactly four vertices and six edges. The four vertices are the components of any claim: the <strong>Claimant</strong>, the <strong>Subject</strong>, the <strong>Grounds</strong>, and the <strong>Purpose</strong>. The six edges connecting them are the constraints that must all be satisfied for the claim to be semantically valid. This is not a design choice — it is a geometric necessity.</p>
+      </div>
+
+      <div class="applications-grid">
+        <a onclick="showPage('warrior'); return false;" class="app-card">
+          <div class="app-card-icon">⚔</div>
+          <h4>The Warrior</h4>
+          <p class="app-domain">Defense</p>
+          <p>Decision architecture for those who cannot afford to be wrong.</p>
+          <span class="app-link">Read more →</span>
+        </a>
+
+        <a onclick="showPage('statesman'); return false;" class="app-card">
+          <div class="app-card-icon">⚖</div>
+          <h4>The Statesman</h4>
+          <p class="app-domain">Government</p>
+          <p>Decision architecture for those who govern.</p>
+          <span class="app-link">Read more →</span>
+        </a>
+
+        <a onclick="showPage('merchant'); return false;" class="app-card">
+          <div class="app-card-icon">◈</div>
+          <h4>The Merchant</h4>
+          <p class="app-domain">Enterprise</p>
+          <p>Decision architecture for those who build and trade.</p>
+          <span class="app-link">Read more →</span>
+        </a>
+
+        <a onclick="showPage('teacher'); return false;" class="app-card">
+          <div class="app-card-icon">◉</div>
+          <h4>The Teacher</h4>
+          <p class="app-domain">Education</p>
+          <p>Decision architecture for those who form minds.</p>
+          <span class="app-link">Read more →</span>
+        </a>
+
+        <a onclick="showPage('healer'); return false;" class="app-card">
+          <div class="app-card-icon">✚</div>
+          <h4>The Healer</h4>
+          <p class="app-domain">Medicine</p>
+          <p>Decision architecture for those who restore life.</p>
+          <span class="app-link">Read more →</span>
+        </a>
+
+        <a onclick="showPage('judge'); return false;" class="app-card">
+          <div class="app-card-icon">⚏</div>
+          <h4>The Judge</h4>
+          <p class="app-domain">Law</p>
+          <p>Decision architecture for those who administer justice.</p>
+          <span class="app-link">Read more →</span>
+        </a>
+      </div>
+
+      <p class="foundations-label">Foundations</p>
+      <div class="foundations-row">
+        <a onclick="showPage('examined'); return false;" class="foundation-chip">The Examined Life</a>
+        <a onclick="showPage('cosmos'); return false;" class="foundation-chip">The Cosmos</a>
+        <a onclick="showPage('telos'); return false;" class="foundation-chip">The Telos of Service</a>
+        <a onclick="showPage('tool'); return false;" class="foundation-chip">The Tool</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- References and Exhibits -->
+  <section id="exhibits" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>References &amp; Exhibits</h2>
+        <hr class="section-rule">
+        <p class="section-subtitle">Visual references, diagrams, and architectural exhibits supporting the semantic validity framework.</p>
+      </div>
+
+      <div class="papers-grid">
+        <a onclick="showPage('exhibit-flowchart'); return false;" class="paper-card" style="cursor:pointer;">
+          <p class="paper-type">Exhibit</p>
+          <h4>The Semantic Validity Engine &mdash; Flowchart</h4>
+          <p>End-to-end process flow of the six-constraint validation engine. From claim intake through constraint evaluation to output disposition.</p>
+          <span class="paper-meta">Architecture Diagram</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- White Papers -->
+  <section id="papers" class="section">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>White Papers</h2>
+        <hr class="section-rule">
+        <p class="section-subtitle">Technical documentation of the semantic validity architecture. Detailed, referenced, peer-ready.</p>
+      </div>
+
+      <div class="papers-grid">
+        <a onclick="showPage('wp-six-constraint'); return false;" class="paper-card" style="cursor:pointer;">
+          <p class="paper-type">Technical White Paper</p>
+          <h4>Six-Constraint Semantic Validity Architecture</h4>
+          <p>The core system: how six relational constraints govern AI output validity. Architecture, implementation, empirical results.</p>
+          <span class="paper-meta">42 pages · February 2026</span>
+        </a>
+
+        <a href="#" class="paper-card">
+          <p class="paper-type">Technical White Paper</p>
+          <h4>Semantic Condensation and the Hexis Model</h4>
+          <p>Lossless compression of meaning using six-fold extraction. 50× memory density with reconstitution fidelity.</p>
+          <span class="paper-meta">38 pages · February 2026</span>
+        </a>
+
+        <a href="#" class="paper-card">
+          <p class="paper-type">Domain Application</p>
+          <h4>Semantic Validity in Defense Decision Systems</h4>
+          <p>Applying the six constraints to intelligence analysis, threat assessment, and command decisions.</p>
+          <span class="paper-meta">28 pages · Coming Soon</span>
+        </a>
+
+        <a href="#" class="paper-card">
+          <p class="paper-type">Foundation</p>
+          <h4>The Problem of Knowing in AI</h4>
+          <p>Why current language models produce fluent nonsense, and why the solution was discovered 2,400 years ago.</p>
+          <span class="paper-meta">22 pages · Coming Soon</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI Tools -->
+  <section id="tools" class="section section--alt">
+    <div class="section-inner">
+      <div class="section-header">
+        <h2>AI Tools — Coming Soon</h2>
+        <hr class="section-rule">
+        <p class="section-subtitle">The six constraints made operational. Interactive tools for testing, mapping, and building with semantic validity.</p>
+      </div>
+
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-card-marker">◇</div>
+          <div>
+            <h4>Test Any Claim</h4>
+            <p>Paste any assertion — see which of the six constraints it satisfies and where it fails.</p>
+            <span class="tool-status">Coming 2026</span>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-card-marker">◈</div>
+          <div>
+            <h4>Map Your Document</h4>
+            <p>Upload any text — reveal its structure against the six constraints. Expose the gaps.</p>
+            <span class="tool-status">Coming 2026</span>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-card-marker">◉</div>
+          <div>
+            <h4>Find Your Path</h4>
+            <p>Select your domain — get tailored guidance on applying the six constraints to your field.</p>
+            <span class="tool-status">Coming 2026</span>
+          </div>
+        </div>
+
+        <div class="tool-card">
+          <div class="tool-card-marker">⬡</div>
+          <div>
+            <h4>Build With Themis</h4>
+            <p>API access for developers and enterprises. Add six-constraint validation to your systems.</p>
+            <span class="tool-status">Coming 2026</span>
+          </div>
+        </div>
+
+        <div class="tool-card tool-card--featured">
+          <div class="tool-card-marker">△</div>
+          <div>
+            <h4>Six Constraints for Learners</h4>
+            <p>From exposure to structured understanding. For students, parents, autodidacts — anyone serious about genuine knowing.</p>
+            <span class="tool-status">Coming 2026</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Manifesto Teaser -->
+  <section id="manifesto-home" class="manifesto-section">
+    <div class="manifesto-inner">
+      <p class="manifesto-quote">"We built a machine that speaks but does not know. We fed it the sum of human expression. But we forgot what knowing is."</p>
+      <a onclick="showPage('manifesto'); return false;" class="manifesto-link" style="cursor:pointer;">Read the Manifesto →</a>
+    </div>
+  </section>
+
+  <!-- Telos -->
+  <section class="telos-section">
+    <div class="telos-inner">
+      <p class="telos-greek">τέλος</p>
+      <p class="telos-statement">Restoring the Aristotelian Soul</p>
+      <p class="telos-sub">The structure of genuine knowing — recovered, applied, engineered.</p>
+    </div>
+  </section>
+
+</div>
+
+<!-- ========== THE PROBLEM PAGE ========== -->
+<div id="page-problem" class="page">
+  <div class="content">
+    <h1>The Problem</h1>
+    <p><strong>Why your AI system fails in ways you can't patch</strong></p>
+
+    <h2>You Built Something Remarkable</h2>
+    <p>In the last five years, you've achieved what seemed impossible:</p>
+    <ul>
+      <li>Models that pass the bar exam, medical boards, PhD qualifiers</li>
+      <li>Assistants handling millions of queries daily</li>
+      <li>Code generation that ships to production</li>
+      <li>Creative work that wins competitions</li>
+    </ul>
+    <p>You trained on the entire internet. You scaled to hundreds of billions of parameters. You invented attention mechanisms, RLHF, constitutional AI, chain-of-thought prompting.</p>
+    <p>And still.</p>
+    <p><strong>Your system is confidently wrong 15-25% of the time.</strong></p>
+    <p>Your users have noticed. Your enterprise customers are asking hard questions. Your safety team is bolting on guardrails faster than you can ship features.</p>
+
+    <hr>
+
+    <h2>The Failures Have Names</h2>
+    <table>
+      <thead>
+        <tr><th>Failure</th><th>What Happens</th><th>Why It Matters</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Hallucination</strong></td><td>System asserts falsehoods with high confidence</td><td>Users can't trust outputs without verification</td></tr>
+        <tr><td><strong>Semantic drift</strong></td><td>Meaning shifts unpredictably across long contexts</td><td>Multi-turn conversations become unreliable</td></tr>
+        <tr><td><strong>Groundless inference</strong></td><td>No distinction between warranted and unwarranted claims</td><td>System can't explain why it believes what it says</td></tr>
+        <tr><td><strong>Calibration failure</strong></td><td>Stated confidence doesn't match actual accuracy</td><td>"I'm 90% sure" means nothing</td></tr>
+        <tr><td><strong>Inappropriate closure</strong></td><td>System finalizes judgments humans should make</td><td>Liability, safety, trust all compromised</td></tr>
+      </tbody>
+    </table>
+    <p>Every major lab has published on these. Anthropic's model cards, OpenAI's technical reports, DeepMind's safety research—they all document the same failures.</p>
+    <p>Five years of scaling. Billions in compute. The problems remain.</p>
+
+    <hr>
+
+    <h2>The Diagnosis</h2>
+    <p>Here's what no one wants to say plainly:</p>
+    <p><strong>These aren't bugs. They're architecture.</strong></p>
+    <p>Your system operates on a single axis:</p>
+    <pre class="ascii-box">Input tokens → Statistical prediction → Output tokens</pre>
+    <p>That's it. Pattern matching at scale. Extraordinarily powerful for generating <em>plausible</em> text. Structurally incapable of generating <em>valid</em> text.</p>
+    <p>The system cannot:</p>
+    <ul>
+      <li>Know whether its output is true</li>
+      <li>Distinguish inference from association</li>
+      <li>Recognize when it doesn't know</li>
+      <li>Maintain meaning across context</li>
+      <li>Defer when it should</li>
+    </ul>
+    <p><strong>Because the architecture doesn't represent these capabilities.</strong></p>
+    <p>You can't patch your way to validity. You can't prompt-engineer your way to grounding. You can't RLHF your way to knowing what you don't know.</p>
+    <p>The capacity isn't missing from the training data. It's missing from the structure.</p>
+
+    <hr>
+
+    <h2>What Validity Actually Requires</h2>
+    <p>A claim is valid when it satisfies six constraints—not five, not seven, exactly six:</p>
+    <table>
+      <thead>
+        <tr><th>Constraint</th><th>Question It Answers</th><th>What Happens Without It</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Referential</strong></td><td>What is being claimed?</td><td>Vague assertions, shifting targets</td></tr>
+        <tr><td><strong>Contextual</strong></td><td>Under what conditions?</td><td>Overgeneralization, false universals</td></tr>
+        <tr><td><strong>Premissive</strong></td><td>On what grounds?</td><td>Unwarranted confidence, no justification</td></tr>
+        <tr><td><strong>Inferential</strong></td><td>Why does this follow?</td><td>Logical gaps, non-sequiturs</td></tr>
+        <tr><td><strong>Constraining</strong></td><td>What are the limits?</td><td>Overclaiming, no boundaries</td></tr>
+        <tr><td><strong>Teleological</strong></td><td>What is this for?</td><td>Pointless precision, missing purpose</td></tr>
+      </tbody>
+    </table>
+    <p>Miss any one constraint and the claim is incomplete. It might sound right. It might even be right. But you can't <em>know</em> it's right—and neither can your system.</p>
+    <p>Current architectures check zero of these explicitly.</p>
+
+    <hr>
+
+    <h2>The Geometry of the Problem</h2>
+    <p>This isn't arbitrary. Six constraints is the minimum for structural closure.</p>
+    <p>Think of a tetrahedron—the simplest three-dimensional shape:</p>
+    <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 620" font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+        <defs>
+          <linearGradient id="vertexGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FAFAF8" />
+            <stop offset="100%" style="stop-color:#EDEAE4" />
+          </linearGradient>
+          <filter id="shadow1" x="-5%" y="-5%" width="115%" height="115%">
+            <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.15" />
+          </filter>
+        </defs>
+
+        <text x="350" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#1C1A17">The Geometry of Semantic Completeness</text>
+        <text x="350" y="55" text-anchor="middle" font-size="12" fill="#807A70" font-style="italic">Four components. Six constraints. The minimum structure for closure.</text>
+
+        <!-- Edges -->
+        <line x1="350" y1="105" x2="150" y2="390" stroke="#7A5C3E" stroke-width="2.5" />
+        <rect x="185" y="225" width="95" height="32" rx="4" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" filter="url(#shadow1)" />
+        <text x="232" y="237" text-anchor="middle" font-size="9" fill="#7A5C3E" font-weight="bold">REFERENTIAL</text>
+        <text x="232" y="250" text-anchor="middle" font-size="8" fill="#7A5C3E">What is claimed?</text>
+
+        <line x1="350" y1="105" x2="550" y2="390" stroke="#7A5C3E" stroke-width="2.5" />
+        <rect x="420" y="225" width="90" height="32" rx="4" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" filter="url(#shadow1)" />
+        <text x="465" y="237" text-anchor="middle" font-size="9" fill="#7A5C3E" font-weight="bold">CONTEXTUAL</text>
+        <text x="465" y="250" text-anchor="middle" font-size="8" fill="#7A5C3E">Conditions?</text>
+
+        <line x1="350" y1="105" x2="350" y2="510" stroke="#7A5C3E" stroke-width="2.5" />
+        <rect x="355" y="285" width="85" height="32" rx="4" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" filter="url(#shadow1)" />
+        <text x="397" y="297" text-anchor="middle" font-size="9" fill="#7A5C3E" font-weight="bold">PREMISSIVE</text>
+        <text x="397" y="310" text-anchor="middle" font-size="8" fill="#7A5C3E">On what grounds?</text>
+
+        <line x1="150" y1="390" x2="550" y2="390" stroke="#7A5C3E" stroke-width="2.5" />
+        <rect x="302" y="395" width="95" height="32" rx="4" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" filter="url(#shadow1)" />
+        <text x="349" y="407" text-anchor="middle" font-size="9" fill="#7A5C3E" font-weight="bold">INFERENTIAL</text>
+        <text x="349" y="420" text-anchor="middle" font-size="8" fill="#7A5C3E">Why does it follow?</text>
+
+        <line x1="150" y1="390" x2="350" y2="510" stroke="#7A5C3E" stroke-width="2.5" />
+        <rect x="190" y="445" width="100" height="32" rx="4" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" filter="url(#shadow1)" />
+        <text x="240" y="457" text-anchor="middle" font-size="9" fill="#7A5C3E" font-weight="bold">CONSTRAINING</text>
+        <text x="240" y="470" text-anchor="middle" font-size="8" fill="#7A5C3E">What are the limits?</text>
+
+        <line x1="550" y1="390" x2="350" y2="510" stroke="#7A5C3E" stroke-width="2.5" />
+        <rect x="420" y="445" width="100" height="32" rx="4" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" filter="url(#shadow1)" />
+        <text x="470" y="457" text-anchor="middle" font-size="9" fill="#7A5C3E" font-weight="bold">TELEOLOGICAL</text>
+        <text x="470" y="470" text-anchor="middle" font-size="8" fill="#7A5C3E">What is it for?</text>
+
+        <!-- Vertices -->
+        <circle cx="350" cy="105" r="38" fill="url(#vertexGrad1)" stroke="#7A5C3E" stroke-width="2.5" filter="url(#shadow1)" />
+        <text x="350" y="101" text-anchor="middle" font-size="11" font-weight="bold" fill="#1C1A17">CLAIMANT</text>
+        <text x="350" y="115" text-anchor="middle" font-size="9" fill="#4D473F">(Who asserts)</text>
+
+        <circle cx="150" cy="390" r="38" fill="url(#vertexGrad1)" stroke="#7A5C3E" stroke-width="2.5" filter="url(#shadow1)" />
+        <text x="150" y="386" text-anchor="middle" font-size="11" font-weight="bold" fill="#1C1A17">SUBJECT</text>
+        <text x="150" y="400" text-anchor="middle" font-size="9" fill="#4D473F">(What is discussed)</text>
+
+        <circle cx="550" cy="390" r="38" fill="url(#vertexGrad1)" stroke="#7A5C3E" stroke-width="2.5" filter="url(#shadow1)" />
+        <text x="550" y="386" text-anchor="middle" font-size="11" font-weight="bold" fill="#1C1A17">GROUNDS</text>
+        <text x="550" y="400" text-anchor="middle" font-size="9" fill="#4D473F">(What supports it)</text>
+
+        <circle cx="350" cy="510" r="38" fill="url(#vertexGrad1)" stroke="#7A5C3E" stroke-width="2.5" filter="url(#shadow1)" />
+        <text x="350" y="506" text-anchor="middle" font-size="11" font-weight="bold" fill="#1C1A17">PURPOSE</text>
+        <text x="350" y="520" text-anchor="middle" font-size="9" fill="#4D473F">(What it is for)</text>
+
+        <text x="350" y="575" text-anchor="middle" font-size="11" fill="#1C1A17" font-weight="bold">4 vertices = components. 6 edges = constraints.</text>
+        <text x="350" y="593" text-anchor="middle" font-size="11" fill="#807A70">Remove any edge and the structure collapses. Meaning leaks out.</text>
+        <text x="350" y="611" text-anchor="middle" font-size="10" fill="#ADA69B" font-style="italic">The simplest closed three-dimensional structure. Discovered 2,400 years ago. Recovered here.</text>
+      </svg>
+      <p><i>Figure 1</i></p>
+    </div>
+    <p>The four vertices represent the components of any claim:</p>
+    <ul>
+      <li>The claimant (who's asserting)</li>
+      <li>The subject (what's being discussed)</li>
+      <li>The grounds (what supports it)</li>
+      <li>The purpose (what it's for)</li>
+    </ul>
+    <p>The six edges are the relations between them—the constraints that must all be present for the claim to "close" into valid meaning.</p>
+    <p>This isn't metaphor. It's the minimum structure for semantic completeness. Discovered by logicians 2,400 years ago. Forgotten by modern ML. Recovered here.</p>
+
+    <hr>
+
+    <h2>Projected Impact</h2>
+    <p>Based on architectural analysis, a system with six-constraint validation would show:</p>
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Current Baseline</th><th>With Validity Architecture</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Hallucination rate</td><td>15-25%</td><td>3-5%</td></tr>
+        <tr><td>Turns to task completion</td><td>4.2 average</td><td>2.1 average</td></tr>
+        <tr><td>User corrections per session</td><td>1.8</td><td>0.4</td></tr>
+        <tr><td>Confidence calibration (r)</td><td>0.4</td><td>0.85</td></tr>
+        <tr><td>Long-context coherence</td><td>Degrades after 4K</td><td>Stable to context limit</td></tr>
+      </tbody>
+    </table>
+    <p>These are projections. We invite empirical validation.</p>
+
+    <hr>
+
+    <h2>Next Steps</h2>
+    <p>If this diagnosis resonates:</p>
+    <ol>
+      <li><a href="#" onclick="showPage('architecture'); return false;"><strong>Read THE ARCHITECTURE</strong></a> — The full six-constraint specification</li>
+      <li><a href="#" onclick="showPage('proof'); return false;"><strong>Review THE PROOF</strong></a> — How this dissolves known problems</li>
+      <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener"><strong>View on GitHub</strong></a> — Minimal proof-of-concept code included</li>
+    </ol>
+    <p>If you want to build with this:</p>
+    <p><strong>Contact:</strong> <a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
+
+    <div class="ascii-box">The system that validates its inferences will dominate.
+
+Every major lab knows the problem.
+
+Now there's a solution.</div>
+  </div>
+</div>
+
+<!-- ========== THE ARCHITECTURE PAGE ========== -->
+<div id="page-architecture" class="page">
+  <div class="content">
+    <h1>The Architecture</h1>
+    <p><strong>Six constraints. Three axes. One criterion for semantic validity.</strong></p>
+
+    <h2>The Core Claim</h2>
+    <p>Any semantically complete claim must satisfy exactly six constraints. Not approximately. Not usually. Exactly six.</p>
+    <p>Fewer than six and the claim has gaps—places where it can fail without warning.</p>
+    <p>This isn't theory. It's geometry.</p>
+
+    <hr>
+
+    <h2>The Six Constraints</h2>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Constraint</th><th>Question</th><th>Function</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td><strong>Referential</strong></td><td>WHAT is being claimed?</td><td>Establishes determinate content</td></tr>
+        <tr><td>2</td><td><strong>Contextual</strong></td><td>Under what CONDITIONS?</td><td>Specifies scope and applicability</td></tr>
+        <tr><td>3</td><td><strong>Premissive</strong></td><td>On what GROUNDS?</td><td>Provides warrant and support</td></tr>
+        <tr><td>4</td><td><strong>Inferential</strong></td><td>WHY does this follow?</td><td>Shows logical connection</td></tr>
+        <tr><td>5</td><td><strong>Constraining</strong></td><td>What are the LIMITS?</td><td>Defines boundaries and exclusions</td></tr>
+        <tr><td>6</td><td><strong>Teleological</strong></td><td>What is this FOR?</td><td>Establishes purpose and relevance</td></tr>
+      </tbody>
+    </table>
+    <p>Every valid claim answers all six. Every invalid claim is missing at least one.</p>
+
+    <hr>
+
+    <h2>Why Six?</h2>
+    <p>Consider the simplest three-dimensional enclosure: a tetrahedron.</p>
+    <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 650" font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+        <defs>
+          <linearGradient id="vertexGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#FAFAF8" />
+            <stop offset="100%" style="stop-color:#EDEAE4" />
+          </linearGradient>
+          <filter id="shadow2" x="-5%" y="-5%" width="115%" height="115%">
+            <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+          </filter>
+        </defs>
+
+        <text x="350" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#1C1A17">Why Six?</text>
+        <text x="350" y="52" text-anchor="middle" font-size="12" fill="#807A70" font-style="italic">The tetrahedron: simplest three-dimensional enclosure</text>
+
+        <!-- Edges -->
+        <line x1="350" y1="120" x2="140" y2="380" stroke="#7A5C3E" stroke-width="3" />
+        <line x1="350" y1="120" x2="560" y2="380" stroke="#7A5C3E" stroke-width="3" />
+        <line x1="350" y1="120" x2="350" y2="500" stroke="#7A5C3E" stroke-width="3" />
+        <line x1="140" y1="380" x2="560" y2="380" stroke="#7A5C3E" stroke-width="3" />
+        <line x1="140" y1="380" x2="350" y2="500" stroke="#7A5C3E" stroke-width="3" />
+        <line x1="560" y1="380" x2="350" y2="500" stroke="#7A5C3E" stroke-width="3" />
+
+        <!-- Edge labels -->
+        <rect x="178" y="228" width="100" height="22" rx="3" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" opacity="0.95" />
+        <text x="228" y="243" text-anchor="middle" font-size="10" fill="#7A5C3E" font-weight="bold">1. Referential</text>
+
+        <rect x="422" y="228" width="95" height="22" rx="3" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" opacity="0.95" />
+        <text x="469" y="243" text-anchor="middle" font-size="10" fill="#7A5C3E" font-weight="bold">2. Contextual</text>
+
+        <rect x="355" y="295" width="90" height="22" rx="3" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" opacity="0.95" />
+        <text x="400" y="310" text-anchor="middle" font-size="10" fill="#7A5C3E" font-weight="bold">3. Premissive</text>
+
+        <rect x="300" y="385" width="100" height="22" rx="3" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" opacity="0.95" />
+        <text x="350" y="400" text-anchor="middle" font-size="10" fill="#7A5C3E" font-weight="bold">4. Inferential</text>
+
+        <rect x="180" y="438" width="105" height="22" rx="3" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" opacity="0.95" />
+        <text x="232" y="453" text-anchor="middle" font-size="10" fill="#7A5C3E" font-weight="bold">5. Constraining</text>
+
+        <rect x="420" y="438" width="105" height="22" rx="3" fill="#F4F2EE" stroke="#7A5C3E" stroke-width="1" opacity="0.95" />
+        <text x="472" y="453" text-anchor="middle" font-size="10" fill="#7A5C3E" font-weight="bold">6. Teleological</text>
+
+        <!-- Vertices -->
+        <circle cx="350" cy="120" r="40" fill="url(#vertexGrad2)" stroke="#7A5C3E" stroke-width="2.5" filter="url(#shadow2)" />
+        <text x="350" y="116" text-anchor="middle" font-size="12" font-weight="bold" fill="#1C1A17">Claimant</text>
+        <text x="350" y="130" text-anchor="middle" font-size="9" fill="#4D473F">(who asserts)</text>
+
+        <circle cx="140" cy="380" r="40" fill="url(#vertexGrad2)" stroke="#7A5C3E" stroke-width="2.5" filter="url(#shadow2)" />
+        <text x="140" y="376" text-anchor="middle" font-size="12" font-weight="bold" fill="#1C1A17">Subject</text>
+        <text x="140" y="390" text-anchor="middle" font-size="9" fill="#4D473F">(what is discussed)</text>
+
+        <circle cx="560" cy="380" r="40" fill="url(#vertexGrad2)" stroke="#7A5C3E" stroke-width="2.5" filter="url(#shadow2)" />
+        <text x="560" y="376" text-anchor="middle" font-size="12" font-weight="bold" fill="#1C1A17">Grounds</text>
+        <text x="560" y="390" text-anchor="middle" font-size="9" fill="#4D473F">(what supports it)</text>
+
+        <circle cx="350" cy="500" r="40" fill="url(#vertexGrad2)" stroke="#7A5C3E" stroke-width="2.5" filter="url(#shadow2)" />
+        <text x="350" y="496" text-anchor="middle" font-size="12" font-weight="bold" fill="#1C1A17">Purpose</text>
+        <text x="350" y="510" text-anchor="middle" font-size="9" fill="#4D473F">(what it is for)</text>
+
+        <!-- Legend -->
+        <rect x="50" y="560" width="600" height="75" rx="6" fill="#F4F2EE" stroke="#D6CFCA" stroke-width="1" />
+        <circle cx="80" cy="580" r="8" fill="url(#vertexGrad2)" stroke="#7A5C3E" stroke-width="1.5" />
+        <text x="95" y="584" font-size="11" fill="#1C1A17">= Component (vertex)</text>
+        <line x1="65" y1="605" x2="95" y2="605" stroke="#7A5C3E" stroke-width="3" />
+        <text x="105" y="609" font-size="11" fill="#1C1A17">= Constraint (edge) — the relation between components</text>
+        <text x="350" y="630" text-anchor="middle" font-size="11" fill="#807A70" font-weight="bold">Remove any edge → structure collapses → no enclosure → meaning leaks out</text>
+      </svg>
+      <p><i>Figure 2</i></p>
+    </div>
+    <ul>
+      <li><strong>4 vertices</strong> — the components being related</li>
+      <li><strong>6 edges</strong> — the relations between them</li>
+      <li><strong>4 faces</strong> — the surfaces that enclose</li>
+    </ul>
+    <p>Remove any edge and the structure collapses. It no longer bounds a volume. It's no longer closed.</p>
+    <p>Semantic validity works the same way. The six constraints are the six edges. Remove any one and meaning leaks out—the claim can be true in ways you didn't intend, false in ways you can't detect.</p>
+
+    <hr>
+
+    <h2>The Three Axes</h2>
+    <p>Every claim exists in a three-dimensional space:</p>
+    <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480" font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+        <defs>
+          <marker id="axisArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#4D473F" />
+          </marker>
+          <filter id="shadow3" x="-5%" y="-5%" width="115%" height="115%">
+            <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+          </filter>
+        </defs>
+
+        <text x="300" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1C1A17">The Three Axes of Semantic Space</text>
+        <text x="300" y="50" text-anchor="middle" font-size="12" fill="#807A70" font-style="italic">Every claim exists in three-dimensional space. Current systems flatten this to one.</text>
+
+        <circle cx="300" cy="240" r="6" fill="#4D473F" />
+
+        <!-- USER axis -->
+        <line x1="300" y1="235" x2="300" y2="90" stroke="#7A5C3E" stroke-width="2.5" marker-end="url(#axisArrow)" />
+        <rect x="230" y="65" width="140" height="50" rx="8" fill="#F4F2EE" stroke="#2E5090" stroke-width="2" filter="url(#shadow3)" />
+        <text x="300" y="85" text-anchor="middle" font-size="14" font-weight="bold" fill="#2E5090">USER</text>
+        <text x="300" y="101" text-anchor="middle" font-size="9" fill="#807A70">(who is asking)</text>
+        <text x="395" y="82" font-size="9" fill="#807A70">Expertise level</text>
+        <text x="395" y="96" font-size="9" fill="#807A70">Intent</text>
+        <text x="395" y="110" font-size="9" fill="#807A70">Context of use</text>
+
+        <!-- SUBJECT axis -->
+        <line x1="295" y1="243" x2="108" y2="358" stroke="#7A5C3E" stroke-width="2.5" marker-end="url(#axisArrow)" />
+        <rect x="18" y="345" width="140" height="50" rx="8" fill="#F4F2EE" stroke="#8B0000" stroke-width="2" filter="url(#shadow3)" />
+        <text x="88" y="365" text-anchor="middle" font-size="14" font-weight="bold" fill="#8B0000">SUBJECT</text>
+        <text x="88" y="381" text-anchor="middle" font-size="9" fill="#807A70">(what is claimed)</text>
+        <text x="28" y="410" font-size="9" fill="#807A70">Domain</text>
+        <text x="28" y="424" font-size="9" fill="#807A70">Certainty level</text>
+        <text x="28" y="438" font-size="9" fill="#807A70">Settled vs. disputed</text>
+
+        <!-- METHOD axis -->
+        <line x1="305" y1="243" x2="492" y2="358" stroke="#7A5C3E" stroke-width="2.5" marker-end="url(#axisArrow)" />
+        <rect x="442" y="345" width="140" height="50" rx="8" fill="#F4F2EE" stroke="#2D6A2D" stroke-width="2" filter="url(#shadow3)" />
+        <text x="512" y="365" text-anchor="middle" font-size="14" font-weight="bold" fill="#2D6A2D">METHOD</text>
+        <text x="512" y="381" text-anchor="middle" font-size="9" fill="#807A70">(how it is derived)</text>
+        <text x="452" y="410" font-size="9" fill="#807A70">Inference type</text>
+        <text x="452" y="424" font-size="9" fill="#807A70">Confidence warranted</text>
+        <text x="452" y="438" font-size="9" fill="#807A70">Deduction &#x2260; speculation</text>
+
+        <rect x="100" y="455" width="400" height="22" rx="4" fill="#F4F2EE" stroke="#D6CFCA" stroke-width="1" />
+        <text x="300" y="470" text-anchor="middle" font-size="10" fill="#807A70">Current systems: Input (one axis) &#x2192; Output (one axis). Valid systems: track all three throughout.</text>
+      </svg>
+      <p><i>Figure 3</i></p>
+    </div>
+    <table>
+      <thead>
+        <tr><th>Axis</th><th>What It Tracks</th><th>Why It Matters</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>USER</strong></td><td>Who's asking, expertise level, intent</td><td>Same answer isn't right for everyone</td></tr>
+        <tr><td><strong>SUBJECT</strong></td><td>What's being discussed, certainty level</td><td>Different topics require different rigor</td></tr>
+        <tr><td><strong>METHOD</strong></td><td>Inference type, confidence warranted</td><td>Deduction ≠ speculation</td></tr>
+      </tbody>
+    </table>
+    <p>Current systems flatten this to one axis: input → output.</p>
+    <p>Valid systems track all three throughout processing.</p>
+
+    <hr>
+
+    <h2>The Validation Process</h2>
+    <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 700" font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+        <defs>
+          <filter id="shadow4" x="-3%" y="-3%" width="108%" height="108%">
+            <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+          </filter>
+          <marker id="flowArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#4D473F" />
+          </marker>
+          <linearGradient id="inputGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#e3e9f0" />
+            <stop offset="100%" style="stop-color:#d0dae8" />
+          </linearGradient>
+          <linearGradient id="passGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#d4edda" />
+            <stop offset="100%" style="stop-color:#b8dcc4" />
+          </linearGradient>
+          <linearGradient id="failGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#f8d7da" />
+            <stop offset="100%" style="stop-color:#f0b8bd" />
+          </linearGradient>
+        </defs>
+
+        <text x="325" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#1C1A17">The Validation Process</text>
+
+        <!-- Input box -->
+        <rect x="150" y="50" width="350" height="45" rx="8" fill="url(#inputGrad)" stroke="#999" stroke-width="2" filter="url(#shadow4)" />
+        <text x="325" y="70" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">GENERATED OUTPUT</text>
+        <text x="325" y="85" text-anchor="middle" font-size="10" fill="#666">Any claim, response, or assertion</text>
+
+        <line x1="325" y1="95" x2="325" y2="125" stroke="#7A5C3E" stroke-width="2" marker-end="url(#flowArrow)" />
+
+        <!-- Validator box -->
+        <rect x="100" y="130" width="450" height="310" rx="10" fill="#FAFAF8" stroke="#1C1A17" stroke-width="2.5" filter="url(#shadow4)" />
+        <rect x="100" y="130" width="450" height="38" rx="10" fill="#2A2722" />
+        <rect x="100" y="155" width="450" height="13" fill="#2A2722" />
+        <text x="325" y="155" text-anchor="middle" font-size="14" font-weight="bold" fill="#9E8555">SIX-CONSTRAINT VALIDATOR</text>
+
+        <!-- Constraint checks -->
+        <rect x="130" y="180" width="26" height="26" rx="4" fill="#fff" stroke="#8B4513" stroke-width="2" />
+        <text x="170" y="198" font-size="12" fill="#333"><tspan font-weight="bold" fill="#8B4513">Referential</tspan> — Is it determinate?</text>
+        <rect x="130" y="220" width="26" height="26" rx="4" fill="#fff" stroke="#2E5090" stroke-width="2" />
+        <text x="170" y="238" font-size="12" fill="#333"><tspan font-weight="bold" fill="#2E5090">Contextual</tspan> — Are conditions specified?</text>
+        <rect x="130" y="260" width="26" height="26" rx="4" fill="#fff" stroke="#2D6A2D" stroke-width="2" />
+        <text x="170" y="278" font-size="12" fill="#333"><tspan font-weight="bold" fill="#2D6A2D">Premissive</tspan> — Are grounds provided?</text>
+        <rect x="130" y="300" width="26" height="26" rx="4" fill="#fff" stroke="#8B0000" stroke-width="2" />
+        <text x="170" y="318" font-size="12" fill="#333"><tspan font-weight="bold" fill="#8B0000">Inferential</tspan> — Does it follow?</text>
+        <rect x="130" y="340" width="26" height="26" rx="4" fill="#fff" stroke="#6B3FA0" stroke-width="2" />
+        <text x="170" y="358" font-size="12" fill="#333"><tspan font-weight="bold" fill="#6B3FA0">Constraining</tspan> — Are limits acknowledged?</text>
+        <rect x="130" y="380" width="26" height="26" rx="4" fill="#fff" stroke="#B8860B" stroke-width="2" />
+        <text x="170" y="398" font-size="12" fill="#333"><tspan font-weight="bold" fill="#B8860B">Teleological</tspan> — Is purpose clear?</text>
+
+        <!-- Checkmarks -->
+        <text x="139" y="199" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+        <text x="139" y="239" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+        <text x="139" y="279" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+        <text x="139" y="319" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+        <text x="139" y="359" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+        <text x="139" y="399" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+
+        <line x1="325" y1="440" x2="325" y2="475" stroke="#7A5C3E" stroke-width="2" marker-end="url(#flowArrow)" />
+        <line x1="325" y1="480" x2="190" y2="520" stroke="#2D6A2D" stroke-width="2" marker-end="url(#flowArrow)" />
+        <line x1="325" y1="480" x2="460" y2="520" stroke="#8B0000" stroke-width="2" marker-end="url(#flowArrow)" />
+
+        <!-- PASS box -->
+        <rect x="95" y="525" width="195" height="100" rx="10" fill="url(#passGrad)" stroke="#2D6A2D" stroke-width="2.5" filter="url(#shadow4)" />
+        <text x="192" y="555" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a5c1a">6/6 PASS</text>
+        <line x1="125" y1="565" x2="260" y2="565" stroke="#2D6A2D" stroke-width="1" />
+        <text x="192" y="585" text-anchor="middle" font-size="12" fill="#333">Output as valid</text>
+        <text x="192" y="602" text-anchor="middle" font-size="10" fill="#555">Semantically complete</text>
+
+        <!-- FAIL box -->
+        <rect x="360" y="525" width="195" height="100" rx="10" fill="url(#failGrad)" stroke="#8B0000" stroke-width="2.5" filter="url(#shadow4)" />
+        <text x="457" y="555" text-anchor="middle" font-size="16" font-weight="bold" fill="#8B0000">&lt;6 FAIL</text>
+        <line x1="390" y1="565" x2="525" y2="565" stroke="#8B0000" stroke-width="1" />
+        <text x="457" y="585" text-anchor="middle" font-size="12" fill="#333">Revise, hedge, or refuse</text>
+        <text x="457" y="602" text-anchor="middle" font-size="10" fill="#555">Incomplete — do not emit</text>
+
+        <rect x="100" y="645" width="450" height="40" rx="6" fill="#F4F2EE" stroke="#D6CFCA" stroke-width="1" />
+        <text x="325" y="662" text-anchor="middle" font-size="10" fill="#807A70">A system that refuses when it cannot satisfy the constraints is more trustworthy</text>
+        <text x="325" y="677" text-anchor="middle" font-size="10" fill="#807A70">than a system that always produces output. Refusal is a feature, not a failure.</text>
+      </svg>
+      <p><i>Figure 4</i></p>
+    </div>
+
+    <p>Claims that fail any constraint have three options:</p>
+    <ol>
+      <li><strong>Revise</strong> — Fix the missing constraint</li>
+      <li><strong>Hedge</strong> — Acknowledge the incompleteness explicitly</li>
+      <li><strong>Refuse</strong> — Decline to output until constraint can be satisfied</li>
+    </ol>
+    <p>Option 3 is a feature, not a failure. A system that refuses when it shouldn't answer is more trustworthy than one that always produces output.</p>
+
+    <hr>
+
+    <h2>Inference Type Discrimination</h2>
+    <p>Not all inferences are equal. The architecture tracks four types:</p>
+    <table>
+      <thead>
+        <tr><th>Type</th><th>Operation</th><th>Confidence</th><th>Marker</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Deduction</strong></td><td>Necessary conclusion from premises</td><td>Certain (if valid)</td><td>"This follows necessarily..."</td></tr>
+        <tr><td><strong>Induction</strong></td><td>Generalization from instances</td><td>Probable</td><td>"Evidence suggests..."</td></tr>
+        <tr><td><strong>Abduction</strong></td><td>Inference to best explanation</td><td>Plausible</td><td>"The best explanation is..."</td></tr>
+        <tr><td><strong>Interpolation</strong></td><td>Pattern completion from structure</td><td>Recognition-dependent</td><td>"This appears consistent with..."</td></tr>
+      </tbody>
+    </table>
+    <p>Current systems conflate all four. The architecture requires tagging. Users know what kind of inference produced the claim.</p>
+
+    <hr>
+
+    <h2>Closure Authority</h2>
+    <p>Not every output should be finalized by the system. The architecture includes a closure registry:</p>
+    <table>
+      <thead>
+        <tr><th>Output Type</th><th>Closure Authority</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Factual lookup</td><td>System closes</td></tr>
+        <tr><td>Calculation</td><td>System closes</td></tr>
+        <tr><td>Creative generation</td><td>System closes</td></tr>
+        <tr><td>Medical advice</td><td>Human review</td></tr>
+        <tr><td>Legal determination</td><td>Human closes</td></tr>
+        <tr><td>Ethical judgment</td><td>Human closes</td></tr>
+        <tr><td>Safety-critical</td><td>Human closes</td></tr>
+        <tr><td>Uncertainty</td><td>Explicit hedge</td></tr>
+      </tbody>
+    </table>
+    <p>The system routes outputs to appropriate closure. It doesn't decide what humans should decide.</p>
+
+    <hr>
+
+    <h2>Patent Coverage</h2>
+    <p>Seven patent families protect this architecture:</p>
+    <table>
+      <thead>
+        <tr><th>Family</th><th>Coverage</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>A</td><td>Tetrahedral validity structure</td></tr>
+        <tr><td>B</td><td>Form-preserving memory</td></tr>
+        <tr><td>C</td><td>Inference discrimination</td></tr>
+        <tr><td>D</td><td>Semantic state signaling</td></tr>
+        <tr><td>E</td><td>Constraint governance</td></tr>
+        <tr><td>F</td><td>Closure authority</td></tr>
+        <tr><td>G</td><td>Integrated system</td></tr>
+      </tbody>
+    </table>
+    <p>Provisionals filed. Full specifications available under NDA.</p>
+
+    <hr>
+
+    <h2>Next Steps</h2>
+    <ol>
+      <li><a href="#" onclick="showPage('proof'); return false;"><strong>Review THE PROOF</strong></a> — See how this dissolves known problems</li>
+      <li><a href="#" onclick="showPage('vocabulary'); return false;"><strong>Study THE VOCABULARY</strong></a> — Learn the precise terms</li>
+      <li><strong>Contact for integration</strong> — <a href="mailto:themis@echosphere.io">themis@echosphere.io</a></li>
+    </ol>
+
+    <div class="ascii-box">Six constraints.
+Three axes.
+One criterion.
+
+Valid or not. Now you can tell.</div>
+  </div>
+</div>
+
+<!-- ========== THE PROOF PAGE ========== -->
+<div id="page-proof" class="page">
+  <div class="content">
+    <h1>The Proof</h1>
+    <p><strong>Why six constraints solve what scaling cannot</strong></p>
+
+    <h2>The Claim</h2>
+    <p>The six-constraint architecture doesn't just describe validity—it <em>produces</em> it. Problems that have resisted five years of scaling, fine-tuning, and patching dissolve under structural analysis.</p>
+    <p>This document shows the mechanism.</p>
+
+    <hr>
+
+    <h2>Problem 1: Hallucination</h2>
+    <h3>The Failure</h3>
+    <p>System asserts: "The Eiffel Tower was built in 1923."</p>
+    <p>Confident. Fluent. Wrong.</p>
+
+    <h3>Why It Happens</h3>
+    <p>The system has no constraint checking. It produces tokens that are <em>probable given the input</em>, not tokens that are <em>true given reality</em>.</p>
+
+    <h3>How Six Constraints Fix It</h3>
+    <table>
+      <thead>
+        <tr><th>Constraint</th><th>Check</th><th>Result</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Referential</strong></td><td>Is "Eiffel Tower" grounded?</td><td>Yes—identifiable entity</td></tr>
+        <tr><td><strong>Contextual</strong></td><td>What's the scope?</td><td>Historical fact claim</td></tr>
+        <tr><td><strong>Premissive</strong></td><td>What's the source?</td><td>&#x26A0;&#xFE0F; <em>No source cited</em></td></tr>
+        <tr><td><strong>Inferential</strong></td><td>How was date derived?</td><td>&#x26A0;&#xFE0F; <em>Pattern match, not lookup</em></td></tr>
+        <tr><td><strong>Constraining</strong></td><td>Confidence limits?</td><td>&#x26A0;&#xFE0F; <em>Stated as fact, not qualified</em></td></tr>
+        <tr><td><strong>Teleological</strong></td><td>Why does user need this?</td><td>Factual accuracy required</td></tr>
+      </tbody>
+    </table>
+    <p>Three constraints fail. Output is flagged for revision or source verification.</p>
+    <p><strong>Mechanism:</strong> Hallucination occurs when Premissive (no grounds) and Inferential (no valid derivation) constraints are absent. The architecture catches this before output.</p>
+
+    <hr>
+
+    <h2>The Pattern</h2>
+    <p>Every major failure mode maps to missing constraints:</p>
+    <table>
+      <thead>
+        <tr><th>Failure</th><th>Missing Constraints</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Hallucination</td><td>Premissive, Inferential</td></tr>
+        <tr><td>Semantic drift</td><td>Referential (tracking)</td></tr>
+        <tr><td>Groundless confidence</td><td>Premissive, Constraining</td></tr>
+        <tr><td>Calibration failure</td><td>Inferential (discrimination)</td></tr>
+        <tr><td>Inappropriate closure</td><td>Teleological (authority routing)</td></tr>
+        <tr><td>Context degradation</td><td>Referential, Contextual (state)</td></tr>
+      </tbody>
+    </table>
+    <p>The architecture doesn't patch symptoms. It provides the structural elements whose absence causes the symptoms.</p>
+
+    <hr>
+
+    <h2>Why Scaling Doesn't Solve This</h2>
+    <p>"We'll just train a bigger model."</p>
+    <p>Scaling gives you:</p>
+    <ul>
+      <li>More parameters</li>
+      <li>More training data</li>
+      <li>More compute</li>
+    </ul>
+    <p>Scaling does not give you:</p>
+    <ul>
+      <li>Validity criteria</li>
+      <li>Inference discrimination</li>
+      <li>Closure authority</li>
+      <li>Semantic state tracking</li>
+    </ul>
+    <p>You cannot scale your way to structure. A trillion parameters checking zero constraints is still checking zero constraints.</p>
+    <p>The problems persist because they're architectural, not statistical.</p>
+
+    <hr>
+
+    <h2>Empirical Predictions</h2>
+    <p>If the architecture is correct, systems implementing it will show:</p>
+    <table>
+      <thead>
+        <tr><th>Metric</th><th>Prediction</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Hallucination rate</td><td>Drops to rate of source errors, not pattern errors</td></tr>
+        <tr><td>Calibration</td><td>r > 0.8 between stated and actual confidence</td></tr>
+        <tr><td>Drift detection</td><td>>95% of meaning shifts caught before compounding</td></tr>
+        <tr><td>Inappropriate closure</td><td>Near zero (routed to human)</td></tr>
+        <tr><td>Long-context coherence</td><td>Stable to context limit</td></tr>
+      </tbody>
+    </table>
+    <p>These are testable. We invite validation.</p>
+
+    <div class="ascii-box">Every failure maps to a missing constraint.
+Every constraint is checkable.
+Every check is implementable.
+
+The proof is in the structure.</div>
+  </div>
+</div>
+
+<!-- ========== THE VOCABULARY PAGE ========== -->
+<div id="page-vocabulary" class="page">
+  <div class="content">
+    <h1>The Vocabulary</h1>
+    <p><strong>Terms for implementing and discussing semantic validity</strong></p>
+
+    <h2>Why This Matters</h2>
+    <p>Precise vocabulary enables precise implementation. These terms have specific meanings in this architecture. Using them consistently prevents confusion.</p>
+    <p>This isn't jargon for its own sake. Each term names something you need to build or check.</p>
+
+    <hr>
+
+    <h2>Core Architecture Terms</h2>
+
+    <h3>The Three Axes</h3>
+    <p>Every claim exists in three-dimensional semantic space:</p>
+    <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 420" font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+        <defs>
+          <marker id="vocabArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+            <polygon points="0 0, 10 3.5, 0 7" fill="#4D473F" />
+          </marker>
+          <filter id="shadow5" x="-5%" y="-5%" width="115%" height="115%">
+            <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+          </filter>
+        </defs>
+
+        <text x="275" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#1C1A17">The Three Axes</text>
+        <text x="275" y="46" text-anchor="middle" font-size="11" fill="#807A70" font-style="italic">Three-dimensional semantic space</text>
+
+        <circle cx="275" cy="210" r="5" fill="#4D473F" />
+
+        <line x1="275" y1="205" x2="275" y2="80" stroke="#7A5C3E" stroke-width="2.5" marker-end="url(#vocabArrow)" />
+        <rect x="215" y="60" width="120" height="35" rx="6" fill="#F4F2EE" stroke="#2E5090" stroke-width="2" filter="url(#shadow5)" />
+        <text x="275" y="82" text-anchor="middle" font-size="13" font-weight="bold" fill="#2E5090">USER</text>
+
+        <line x1="270" y1="213" x2="110" y2="320" stroke="#7A5C3E" stroke-width="2.5" marker-end="url(#vocabArrow)" />
+        <rect x="25" y="310" width="120" height="35" rx="6" fill="#F4F2EE" stroke="#8B0000" stroke-width="2" filter="url(#shadow5)" />
+        <text x="85" y="332" text-anchor="middle" font-size="13" font-weight="bold" fill="#8B0000">SUBJECT</text>
+
+        <line x1="280" y1="213" x2="440" y2="320" stroke="#7A5C3E" stroke-width="2.5" marker-end="url(#vocabArrow)" />
+        <rect x="400" y="310" width="120" height="35" rx="6" fill="#F4F2EE" stroke="#2D6A2D" stroke-width="2" filter="url(#shadow5)" />
+        <text x="460" y="332" text-anchor="middle" font-size="13" font-weight="bold" fill="#2D6A2D">METHOD</text>
+
+        <text x="400" y="80" font-size="10" fill="#807A70">Who is asking, their expertise</text>
+        <text x="400" y="94" font-size="10" fill="#807A70">level, their intent.</text>
+        <text x="25" y="362" font-size="10" fill="#807A70">What is being discussed, its</text>
+        <text x="25" y="376" font-size="10" fill="#807A70">certainty level, its domain.</text>
+        <text x="400" y="362" font-size="10" fill="#807A70">How the claim was derived,</text>
+        <text x="400" y="376" font-size="10" fill="#807A70">what inference type, what</text>
+        <text x="400" y="390" font-size="10" fill="#807A70">confidence is warranted.</text>
+
+        <text x="275" y="412" text-anchor="middle" font-size="10" fill="#807A70" font-style="italic">Three-axis tracking: maintaining all three throughout processing.</text>
+      </svg>
+      <p><i>Figure 5</i></p>
+    </div>
+
+    <dl>
+      <dt>User</dt>
+      <dd>Who is asking, their expertise level, their intent. The same answer isn't right for everyone.</dd>
+      <dt>Subject</dt>
+      <dd>What is being discussed, its certainty level, its domain. Some things are settled science; some are active debate; some are unknown.</dd>
+      <dt>Method</dt>
+      <dd>How the claim was derived, what inference type was used, what confidence is warranted.</dd>
+      <dt>Three-axis tracking</dt>
+      <dd>Maintaining explicit representation of User, Subject, and Method throughout processing.</dd>
+    </dl>
+
+    <hr>
+
+    <h3>The Six Constraints</h3>
+    <dl>
+      <dt>Referential (WHAT)</dt>
+      <dd>The claim has determinate content. You can point to what it's about.</dd>
+      <dt>Contextual (CONDITIONS)</dt>
+      <dd>Scope and applicability are specified. The claim states when and where it holds.</dd>
+      <dt>Premissive (GROUNDS)</dt>
+      <dd>Support is provided. The claim rests on something—evidence, reasoning, authority.</dd>
+      <dt>Inferential (WHY)</dt>
+      <dd>The conclusion follows from the premises. The logical connection is valid.</dd>
+      <dt>Constraining (LIMITS)</dt>
+      <dd>Boundaries are explicit. The claim says what it does NOT cover.</dd>
+      <dt>Teleological (PURPOSE)</dt>
+      <dd>Purpose is clear. The claim matters for a reason; it connects to user need.</dd>
+    </dl>
+
+    <hr>
+
+    <h2>Quick Reference</h2>
+    <table>
+      <thead>
+        <tr><th>Term</th><th>One-Line Definition</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>User</td><td>Who's asking, expertise, intent</td></tr>
+        <tr><td>Subject</td><td>What's discussed, certainty level</td></tr>
+        <tr><td>Method</td><td>How derived, inference type</td></tr>
+        <tr><td>Referential</td><td>WHAT—determinate content</td></tr>
+        <tr><td>Contextual</td><td>CONDITIONS—scope specified</td></tr>
+        <tr><td>Premissive</td><td>GROUNDS—support provided</td></tr>
+        <tr><td>Inferential</td><td>WHY—conclusion follows</td></tr>
+        <tr><td>Constraining</td><td>LIMITS—boundaries explicit</td></tr>
+        <tr><td>Teleological</td><td>PURPOSE—relevance clear</td></tr>
+        <tr><td>Valid</td><td>All six constraints satisfied</td></tr>
+        <tr><td>Closure</td><td>Semantic completeness</td></tr>
+        <tr><td>Refusal</td><td>Declining when constraints unsatisfiable</td></tr>
+        <tr><td>Hallucination</td><td>Assertion without grounds</td></tr>
+        <tr><td>Drift</td><td>Undetected meaning shift</td></tr>
+      </tbody>
+    </table>
+
+    <div class="ascii-box">Vocabulary is infrastructure.
+
+Use these terms precisely and implementation follows.</div>
+  </div>
+</div>
+
+<!-- ========== THE WARRIOR PAGE ========== -->
+<div id="page-warrior" class="page">
+  <div class="content">
+    <h1>The Warrior</h1>
+    <p><strong>Decision architecture for those who cannot afford to be wrong</strong></p>
+
+    <h2>The Stakes</h2>
+    <p>You operate where errors cost lives.</p>
+    <p>Not reputation. Not revenue. Lives.</p>
+    <p>Your decisions are made under pressure, with incomplete information, against adversaries who want you to fail. You don't get to iterate. You don't get to A/B test. You decide, you act, and you live with the consequences.</p>
+    <p>Current AI systems are not built for this.</p>
+    <p>They hallucinate. They drift. They express confidence they haven't earned. They cannot tell you what they don't know.</p>
+    <p>You need something else.</p>
+
+    <hr>
+
+    <h2>The Problem with Current AI in Military/Strategic Contexts</h2>
+    <table>
+      <thead><tr><th>Failure Mode</th><th>Consequence in Your World</th></tr></thead>
+      <tbody>
+        <tr><td>Hallucination</td><td>False intelligence acted upon</td></tr>
+        <tr><td>Semantic drift</td><td>Mission parameters shift without notice</td></tr>
+        <tr><td>Groundless confidence</td><td>Overcommitment to uncertain assessments</td></tr>
+        <tr><td>Calibration failure</td><td>"High confidence" means nothing</td></tr>
+        <tr><td>Inappropriate closure</td><td>System decides what commanders should decide</td></tr>
+      </tbody>
+    </table>
+    <p>These aren't theoretical. They're operational risks.</p>
+    <p>An AI that says "Target confirmed" when it means "Pattern matched" gets people killed.</p>
+
+    <hr>
+
+    <h2>The Six Constraints Applied to Military Decision-Making</h2>
+    <table>
+      <thead><tr><th>Constraint</th><th>Military Application</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Referential (WHAT)</strong></td><td>Target identification. Is this <em>actually</em> what we think it is?</td></tr>
+        <tr><td><strong>Contextual (CONDITIONS)</strong></td><td>Rules of engagement. Under what circumstances is action authorized?</td></tr>
+        <tr><td><strong>Premissive (GROUNDS)</strong></td><td>Intelligence sourcing. What supports this assessment? How reliable?</td></tr>
+        <tr><td><strong>Inferential (WHY)</strong></td><td>Analysis validity. Does the conclusion follow from the intelligence?</td></tr>
+        <tr><td><strong>Constraining (LIMITS)</strong></td><td>Uncertainty acknowledgment. What don't we know? What could be wrong?</td></tr>
+        <tr><td><strong>Teleological (PURPOSE)</strong></td><td>Mission alignment. Does this action serve the objective?</td></tr>
+      </tbody>
+    </table>
+    <p>A system that checks all six before output is a system you can trust in the field.</p>
+
+    <hr>
+
+    <h2>Closure Authority in Military Context</h2>
+    <p>Not every output should be finalized by the system:</p>
+    <table>
+      <thead><tr><th>Decision Type</th><th>Closure Authority</th></tr></thead>
+      <tbody>
+        <tr><td>Data lookup</td><td>System closes</td></tr>
+        <tr><td>Pattern identification</td><td>System proposes, human confirms</td></tr>
+        <tr><td>Target recommendation</td><td>Human closes</td></tr>
+        <tr><td>Rules of engagement interpretation</td><td>Human closes</td></tr>
+        <tr><td>Escalation decisions</td><td>Human closes—always</td></tr>
+        <tr><td>Strategic assessment</td><td>Human closes</td></tr>
+      </tbody>
+    </table>
+    <p><strong>The system never decides to employ force.</strong></p>
+    <p>It provides validated intelligence. It flags uncertainty. It presents options. The human commander decides.</p>
+
+    <hr>
+
+    <h2>Contact</h2>
+    <p>For military and defense applications:</p>
+    <p><strong>The Themis Project</strong><br><a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
+    <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+    <div class="ascii-box">The warrior who knows what he doesn't know
+will defeat the warrior who thinks he knows everything.
+
+Build systems that know the difference.</div>
+  </div>
+</div>
+
+<!-- ========== THE STATESMAN PAGE ========== -->
+<div id="page-statesman" class="page">
+  <div class="content">
+    <h1>The Statesman</h1>
+    <p><strong>Decision architecture for those who govern</strong></p>
+
+    <h2>The Burden</h2>
+    <p>You hold power in trust.</p>
+    <p>Every decision affects lives you'll never meet. Every policy creates winners and losers. Every action—and inaction—has consequences that ripple beyond your sight.</p>
+    <p>You operate with incomplete information, competing interests, and limited time. You're pressured by factions, media, donors, and constituents—each with their own agenda. You must decide anyway.</p>
+    <p>Current AI systems cannot help you well.</p>
+    <p>They generate plausible-sounding policy analysis without knowing if it's sound. They summarize public opinion without distinguishing signal from noise. They present options without understanding what you're actually deciding.</p>
+    <p>You need something better.</p>
+
+    <hr>
+
+    <h2>The Six Constraints Applied to Governance</h2>
+    <table>
+      <thead><tr><th>Constraint</th><th>Governance Application</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Referential (WHAT)</strong></td><td>Policy specificity. What exactly is proposed? What would implementation look like?</td></tr>
+        <tr><td><strong>Contextual (CONDITIONS)</strong></td><td>Applicability. Under what circumstances? What assumptions must hold?</td></tr>
+        <tr><td><strong>Premissive (GROUNDS)</strong></td><td>Evidence basis. What data supports this? How reliable? What's the source quality?</td></tr>
+        <tr><td><strong>Inferential (WHY)</strong></td><td>Causal logic. Why will this policy produce that outcome? Is the mechanism sound?</td></tr>
+        <tr><td><strong>Constraining (LIMITS)</strong></td><td>Boundary conditions. What won't this solve? What could go wrong? What's excluded?</td></tr>
+        <tr><td><strong>Teleological (PURPOSE)</strong></td><td>Ultimate aim. What good is served? For whom? At what cost to whom else?</td></tr>
+      </tbody>
+    </table>
+    <p>A system that checks all six produces analysis worth trusting.</p>
+
+    <hr>
+
+    <h2>Closure Authority in Governance</h2>
+    <p>AI should not make political decisions. Ever.</p>
+    <table>
+      <thead><tr><th>Analysis Type</th><th>Closure Authority</th></tr></thead>
+      <tbody>
+        <tr><td>Data summary</td><td>System closes</td></tr>
+        <tr><td>Trend identification</td><td>System closes</td></tr>
+        <tr><td>Policy options</td><td>System presents, human chooses</td></tr>
+        <tr><td>Value tradeoffs</td><td>Human closes—always</td></tr>
+        <tr><td>Constitutional questions</td><td>Human closes—always</td></tr>
+        <tr><td>Resource allocation</td><td>Human closes</td></tr>
+        <tr><td>Rights adjudication</td><td>Human closes</td></tr>
+      </tbody>
+    </table>
+    <p><strong>The system never decides what's best for the polity.</strong></p>
+    <p>It provides validated analysis. It clarifies tradeoffs. It presents options with their grounds and limits. The elected official—accountable to the people—decides.</p>
+
+    <hr>
+
+    <h2>Contact</h2>
+    <p>For government and policy applications:</p>
+    <p><strong>The Themis Project</strong><br><a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
+    <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+    <div class="ascii-box">The statesman who knows what he doesn't know
+serves the people better than one who pretends certainty.
+
+Build systems that support wisdom, not replace it.</div>
+  </div>
+</div>
+
+<!-- ========== THE MERCHANT PAGE ========== -->
+<div id="page-merchant" class="page">
+  <div class="content">
+    <h1>The Merchant</h1>
+    <p><strong>Decision architecture for those who build and trade</strong></p>
+
+    <h2>The Reality</h2>
+    <p>You build things. You trade value. You employ people. You take risks.</p>
+    <p>When you're right, you create wealth—for yourself, your employees, your customers, your community. When you're wrong, you bear the loss. That's the deal.</p>
+    <p>Current AI promises to help: analyze markets, optimize operations, predict trends, automate decisions.</p>
+    <p>But it hallucinates market data. It drifts on key terms mid-analysis. It expresses confidence it hasn't earned. It can't tell you what it doesn't know.</p>
+    <p>In business, wrong decisions cost money. Sometimes they cost everything.</p>
+    <p>You need AI that knows its limits.</p>
+
+    <hr>
+
+    <h2>The Six Constraints Applied to Business</h2>
+    <table>
+      <thead><tr><th>Constraint</th><th>Business Application</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Referential (WHAT)</strong></td><td>Specificity. What exactly is proposed? What are the deliverables?</td></tr>
+        <tr><td><strong>Contextual (CONDITIONS)</strong></td><td>Assumptions. What market conditions must hold? What dependencies exist?</td></tr>
+        <tr><td><strong>Premissive (GROUNDS)</strong></td><td>Evidence. What data supports projections? Source quality?</td></tr>
+        <tr><td><strong>Inferential (WHY)</strong></td><td>Logic. Does the business model actually work? Will cause produce effect?</td></tr>
+        <tr><td><strong>Constraining (LIMITS)</strong></td><td>Risks. What could fail? What's the downside? What's not included?</td></tr>
+        <tr><td><strong>Teleological (PURPOSE)</strong></td><td>Value creation. Who benefits? How? Is this worth doing?</td></tr>
+      </tbody>
+    </table>
+    <p>A system that checks all six produces analysis you can bet on.</p>
+
+    <hr>
+
+    <h2>Honest Numbers</h2>
+    <p>Business runs on numbers. Numbers lie when they're not grounded.</p>
+    <table>
+      <thead><tr><th>Data Quality</th><th>System Output</th></tr></thead>
+      <tbody>
+        <tr><td>Audited financials</td><td>"Per audited statements: [X]."</td></tr>
+        <tr><td>Management projections</td><td>"Management projects: [X]. Basis: [stated assumptions]."</td></tr>
+        <tr><td>Market estimates</td><td>"Market estimated at [X]. Source: [analyst/firm]. Methodology: [basis]."</td></tr>
+        <tr><td>Pattern extrapolation</td><td>"If historical patterns continue: [X]. Note: extrapolation, not forecast."</td></tr>
+        <tr><td>Unknown</td><td>"Insufficient data to estimate."</td></tr>
+      </tbody>
+    </table>
+    <p>A projection labeled "estimate based on limited data" is more useful than one presented as fact.</p>
+
+    <hr>
+
+    <h2>Contact</h2>
+    <p>For business and financial applications:</p>
+    <p><strong>The Themis Project</strong><br><a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
+    <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+    <div class="ascii-box">The merchant who knows what he doesn't know
+makes better bets than one who mistakes confidence for certainty.
+
+Build systems that support judgment, not replace it.</div>
+  </div>
+</div>
+
+<!-- ========== THE TEACHER PAGE ========== -->
+<div id="page-teacher" class="page">
+  <div class="content">
+    <h1>The Teacher</h1>
+    <p><strong>Decision architecture for those who form minds</strong></p>
+
+    <h2>The Crisis</h2>
+    <p>You are teaching in the age of the universal cheat code.</p>
+    <p>Your students have access to a system that can generate B+ essays, solve problem sets, and summarize readings in seconds. They are using it. You know they are using it.</p>
+    <p>The problem isn't just academic dishonesty. It's cognitive atrophy.</p>
+    <p>If the machine does the synthesis, the student doesn't. If the machine does the structuring, the student doesn't. Learning requires struggle, and you are competing with a frictionless alternative.</p>
+    <p>You need AI that supports the learning process, not bypasses it.</p>
+
+    <hr>
+
+    <h2>The Six Constraints Applied to Education</h2>
+    <table>
+      <thead><tr><th>Constraint</th><th>Educational Application</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Referential (WHAT)</strong></td><td>Concept clarity. What exactly is being taught? Is the definition precise?</td></tr>
+        <tr><td><strong>Contextual (CONDITIONS)</strong></td><td>Scope. Where does this rule apply? Where does it break?</td></tr>
+        <tr><td><strong>Premissive (GROUNDS)</strong></td><td>Citation. Where does this come from? Primary sources vs. interpretation.</td></tr>
+        <tr><td><strong>Inferential (WHY)</strong></td><td>Argumentation. Show the work. How do we get from A to B?</td></tr>
+        <tr><td><strong>Constraining (LIMITS)</strong></td><td>Nuance. What are the exceptions? The counterarguments?</td></tr>
+        <tr><td><strong>Teleological (PURPOSE)</strong></td><td>Relevance. Why does this matter? How does it connect to the course?</td></tr>
+      </tbody>
+    </table>
+    <p>A system that enforces these constraints forces the student to think, not just generate.</p>
+
+    <hr>
+
+    <h2>The Socratic Validator</h2>
+    <p>Instead of giving answers, the system can validate claims:</p>
+    <p><strong>Student:</strong> "The French Revolution was caused by economic inequality."</p>
+    <p><strong>Standard AI:</strong> "Correct. The French Revolution (1789) had many causes..." (proceeds to write the essay)</p>
+    <p><strong>Themis Architecture:</strong></p>
+    <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 520" font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+        <defs>
+          <filter id="shadow6" x="-3%" y="-3%" width="108%" height="108%">
+            <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+          </filter>
+        </defs>
+
+        <text x="310" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#1C1A17">The Socratic Validator</text>
+        <text x="310" y="46" text-anchor="middle" font-size="11" fill="#807A70" font-style="italic">The system refuses to do the thinking. It demands the student complete the structure.</text>
+
+        <!-- Student claim box -->
+        <rect x="40" y="60" width="540" height="42" rx="6" fill="#F4F2EE" stroke="#999" stroke-width="1.5" filter="url(#shadow6)" />
+        <text x="55" y="76" font-size="10" fill="#888" font-weight="bold">STUDENT CLAIM:</text>
+        <text x="55" y="92" font-size="12" fill="#333" font-style="italic">"The French Revolution was caused by economic inequality."</text>
+
+        <line x1="310" y1="102" x2="310" y2="125" stroke="#7A5C3E" stroke-width="1.5" />
+        <polygon points="305,125 310,135 315,125" fill="#7A5C3E" />
+
+        <!-- Analysis box -->
+        <rect x="40" y="140" width="540" height="260" rx="8" fill="#FAFAF8" stroke="#1C1A17" stroke-width="2" filter="url(#shadow6)" />
+        <rect x="40" y="140" width="540" height="32" rx="8" fill="#2A2722" />
+        <rect x="40" y="162" width="540" height="10" fill="#2A2722" />
+        <text x="310" y="162" text-anchor="middle" font-size="13" font-weight="bold" fill="#9E8555">CLAIM ANALYSIS</text>
+
+        <!-- 1. Referential - PASS -->
+        <circle cx="68" cy="195" r="10" fill="#d4edda" stroke="#2D6A2D" stroke-width="1.5" />
+        <text x="68" y="199" text-anchor="middle" font-size="12" fill="#2D6A2D" font-weight="bold">&#x2713;</text>
+        <text x="88" y="199" font-size="12" fill="#333"><tspan font-weight="bold" fill="#8B4513">Referential:</tspan> "French Revolution", "economic inequality" — identified</text>
+
+        <!-- 2. Contextual - WARNING -->
+        <circle cx="68" cy="228" r="10" fill="#fff3cd" stroke="#B8860B" stroke-width="1.5" />
+        <text x="68" y="232" text-anchor="middle" font-size="12" fill="#B8860B" font-weight="bold">!</text>
+        <text x="88" y="232" font-size="12" fill="#333"><tspan font-weight="bold" fill="#2E5090">Contextual:</tspan> Which period? 1789? The Terror? Thermidor?</text>
+
+        <!-- 3. Premissive - FAIL -->
+        <circle cx="68" cy="261" r="10" fill="#f8d7da" stroke="#8B0000" stroke-width="1.5" />
+        <text x="68" y="265" text-anchor="middle" font-size="12" fill="#8B0000" font-weight="bold">&#x2717;</text>
+        <text x="88" y="265" font-size="12" fill="#333"><tspan font-weight="bold" fill="#2D6A2D">Premissive:</tspan> Missing evidence. What economic data supports this?</text>
+
+        <!-- 4. Inferential - WARNING -->
+        <circle cx="68" cy="294" r="10" fill="#fff3cd" stroke="#B8860B" stroke-width="1.5" />
+        <text x="68" y="298" text-anchor="middle" font-size="12" fill="#B8860B" font-weight="bold">!</text>
+        <text x="88" y="298" font-size="12" fill="#333"><tspan font-weight="bold" fill="#8B0000">Inferential:</tspan> Correlation &#x2260; causation. What is the mechanism?</text>
+
+        <!-- 5. Constraining - FAIL -->
+        <circle cx="68" cy="327" r="10" fill="#f8d7da" stroke="#8B0000" stroke-width="1.5" />
+        <text x="68" y="331" text-anchor="middle" font-size="12" fill="#8B0000" font-weight="bold">&#x2717;</text>
+        <text x="88" y="331" font-size="12" fill="#333"><tspan font-weight="bold" fill="#6B3FA0">Constraining:</tspan> Too broad. Was economic inequality the ONLY cause?</text>
+
+        <!-- 6. Teleological - WARNING -->
+        <circle cx="68" cy="360" r="10" fill="#fff3cd" stroke="#B8860B" stroke-width="1.5" />
+        <text x="68" y="364" text-anchor="middle" font-size="12" fill="#B8860B" font-weight="bold">!</text>
+        <text x="88" y="364" font-size="12" fill="#333"><tspan font-weight="bold" fill="#B8860B">Teleological:</tspan> Thesis unclear. What argument are you making?</text>
+
+        <!-- Result bar -->
+        <rect x="40" y="388" width="540" height="12" rx="0" fill="#8B0000" />
+
+        <!-- Refusal box -->
+        <rect x="60" y="415" width="500" height="40" rx="6" fill="#fff0f0" stroke="#8B0000" stroke-width="1.5" />
+        <text x="310" y="432" text-anchor="middle" font-size="12" font-weight="bold" fill="#8B0000">SYSTEM REFUSAL TO CLOSE</text>
+        <text x="310" y="448" text-anchor="middle" font-size="10" fill="#666">Claim incomplete. 2 failures, 3 warnings. Cannot validate.</text>
+
+        <!-- Prompt box -->
+        <rect x="40" y="468" width="540" height="42" rx="6" fill="#e8f0fe" stroke="#2E5090" stroke-width="1.5" filter="url(#shadow6)" />
+        <text x="55" y="484" font-size="10" fill="#2E5090" font-weight="bold">SYSTEM PROMPT TO STUDENT:</text>
+        <text x="55" y="500" font-size="11" fill="#333">"You've identified a factor, but not a cause. What specific economic conditions?</text>
+        <text x="55" y="514" font-size="11" fill="#333">And were they sufficient on their own?"</text>
+      </svg>
+      <p><i>Figure 6</i></p>
+    </div>
+    <p>The system refuses to do the thinking. It demands the student complete the semantic structure.</p>
+
+    <hr>
+
+    <h2>Contact</h2>
+    <p>For educational applications:</p>
+    <p><strong>The Themis Project</strong><br><a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
+    <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+    <div class="ascii-box">The teacher who knows what the student doesn't know
+can guide them to understanding.
+
+Build systems that demand thought, not replace it.</div>
+  </div>
+</div>
+
+<!-- ========== THE HEALER PAGE ========== -->
+<div id="page-healer" class="page">
+  <div class="content">
+    <h1>The Healer</h1>
+    <p><strong>Decision architecture for those who restore life</strong></p>
+
+    <h2>First, Do No Harm</h2>
+    <p>Medicine is the high-stakes management of uncertainty.</p>
+    <p>You diagnose based on symptoms that could mean three different things. You prescribe treatments with probability curves, not guarantees. You operate on bodies where every intervention has a cost.</p>
+    <p>Current AI is terrifying in this context.</p>
+    <p>It hallucinates citations. It invents protocols. It speaks with the same confidence about a well-established antibiotic as it does about a fringe supplement.</p>
+    <p>You cannot use a system that lies to you about biological reality.</p>
+
+    <hr>
+
+    <h2>The Six Constraints Applied to Medicine</h2>
+    <table>
+      <thead><tr><th>Constraint</th><th>Medical Application</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Referential (WHAT)</strong></td><td>Differential diagnosis. What entities are verified? Symptoms vs. signs.</td></tr>
+        <tr><td><strong>Contextual (CONDITIONS)</strong></td><td>Patient context. History, allergies, interactions, genetics.</td></tr>
+        <tr><td><strong>Premissive (GROUNDS)</strong></td><td>Evidence-based medicine. RCTs? Case studies? Expert consensus? Level of evidence.</td></tr>
+        <tr><td><strong>Inferential (WHY)</strong></td><td>Pathophysiology. Mechanism of action. Why should this treatment work?</td></tr>
+        <tr><td><strong>Constraining (LIMITS)</strong></td><td>Contraindications. Side effects. What are the risks? What do we NOT know?</td></tr>
+        <tr><td><strong>Teleological (PURPOSE)</strong></td><td>Therapeutic goal. Cure? Palliation? Prevention?</td></tr>
+      </tbody>
+    </table>
+    <p>A system that checks all six acts as a true safety check, not a liability.</p>
+
+    <hr>
+
+    <h2>Closure Authority in Medicine</h2>
+    <table>
+      <thead><tr><th>Action</th><th>Closure Authority</th></tr></thead>
+      <tbody>
+        <tr><td>Literature review</td><td>System closes</td></tr>
+        <tr><td>Interaction check</td><td>System closes (flags alerts)</td></tr>
+        <tr><td>Differential list</td><td>System proposes, human selects</td></tr>
+        <tr><td>Diagnosis</td><td>Human closes</td></tr>
+        <tr><td>Treatment plan</td><td>Human closes</td></tr>
+        <tr><td>Surgical intervention</td><td>Human closes—always</td></tr>
+      </tbody>
+    </table>
+    <p><strong>The system never practices medicine.</strong></p>
+    <p>It practices <em>semantic validation of medical information</em>. The license belongs to the human.</p>
+
+    <hr>
+
+    <h2>Contact</h2>
+    <p>For medical and healthcare applications:</p>
+    <p><strong>The Themis Project</strong><br><a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
+    <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+    <div class="ascii-box">The healer who knows the limits of their tools
+saves more lives than one who trusts blindly.
+
+Build systems that protect the patient.</div>
+  </div>
+</div>
+
+<!-- ========== THE JUDGE PAGE ========== -->
+<div id="page-judge" class="page">
+  <div class="content">
+    <h1>The Judge</h1>
+    <p><strong>Decision architecture for those who administer justice</strong></p>
+
+    <h2>The Law is not Code</h2>
+    <p>If law were code, we could automate it. It isn't.</p>
+    <p>Law is the application of general principles to specific, messy, human realities. It involves precedent, intent, equity, and rights.</p>
+    <p>We have already seen lawyers sanctioned for citing hallucinated cases generated by ChatGPT. We have seen judges warn against unverified AI submissions.</p>
+    <p>An AI that invents case law attacks the foundation of the legal system.</p>
+    <p>You need a system that respects the record.</p>
+
+    <hr>
+
+    <h2>The Six Constraints Applied to Law</h2>
+    <table>
+      <thead><tr><th>Constraint</th><th>Legal Application</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Referential (WHAT)</strong></td><td>Fact pattern. What actually happened? Admissible evidence only.</td></tr>
+        <tr><td><strong>Contextual (CONDITIONS)</strong></td><td>Jurisdiction. Which laws apply? Federal? State? Administrative?</td></tr>
+        <tr><td><strong>Premissive (GROUNDS)</strong></td><td>Precedent. Case citations. Statute citations. Must be real.</td></tr>
+        <tr><td><strong>Inferential (WHY)</strong></td><td>Legal reasoning. Application of rule to fact. Stare decisis.</td></tr>
+        <tr><td><strong>Constraining (LIMITS)</strong></td><td>Distinctions. How is this case different? Exceptions?</td></tr>
+        <tr><td><strong>Teleological (PURPOSE)</strong></td><td>Justice/Equity. The intent of the law. Public policy.</td></tr>
+      </tbody>
+    </table>
+    <p>A system that cannot satisfy the Premissive constraint (citing real cases) must remain silent.</p>
+
+    <hr>
+
+    <h2>The Valid Legal Assistant</h2>
+    <p><strong>Standard AI:</strong> "Here is a case that supports your argument: <em>Vargas v. GlobalCorp</em>..." (Case does not exist).</p>
+    <p><strong>Themis Architecture:</strong></p>
+    <div class="ascii-box">VALIDATION FAILURE:
+Premissive Constraint Check:
+- Case "Vargas v. GlobalCorp" not found in verified corpus.
+- Inference blocked.
+
+Output: "I found no direct precedent supporting this specific argument in this jurisdiction. Would you like to search for analogous cases in other circuits?"</div>
+    <p>Silence is better than perjury.</p>
+    <p>The system protects the officer of the court from making false representations.</p>
+
+    <hr>
+
+    <h2>Contact</h2>
+    <p>For legal and judicial applications:</p>
+    <p><strong>The Themis Project</strong><br><a href="mailto:themis@echosphere.io">themis@echosphere.io</a></p>
+    <p>Evaluation under existing license terms. Integration discussions under NDA.</p>
+
+    <div class="ascii-box">The judge who knows the law
+serves justice better than one who invents it.
+
+Build systems that respect the record.</div>
+  </div>
+</div>
+
+<!-- ========== THE TELOS OF SERVICE PAGE ========== -->
+<div id="page-telos" class="page">
+  <div class="content">
+    <h1>The Telos of Service</h1>
+    <p><strong>Applying the constraints to the human-digital relationship</strong></p>
+
+    <h2>The Goal: Restoration</h2>
+    <p>The goal of Themis is not to build better search engines or smarter chatbots. The goal is to restore the structure of knowing to a civilization that is drowning in information.</p>
+    <p>We believe that technology should serve the human person, not replace them.</p>
+    <p>We believe that the proper end of intelligence—artificial or biological—is the good.</p>
+
+    <hr>
+
+    <h2>The Three Relationships</h2>
+    <p>The six constraints govern the three fundamental relationships of the digital age:</p>
+    <div class="ascii-box"> I. The Self to The Self (The Examined Life)
+II. The Self to The Other (The Statesman/Merchant)
+III. The Self to The Whole (The Cosmos)</div>
+
+    <p>In each, the constraints prevent the degradation of meaning.</p>
+
+    <h3>I. The Examined Life</h3>
+    <p>When I use AI to think, do I lose the ability to think?</p>
+    <p>Not if the AI demands validity. A system that asks "On what grounds?" forces me to ground myself. A system that asks "To what end?" forces me to clarify my purpose.</p>
+    <p>The valid tool does not replace the user; it sharpens them.</p>
+
+    <h3>II. The Polis</h3>
+    <p>When we use AI to govern, do we lose our agency?</p>
+    <p>Not if the AI knows its place. A system that cannot close a moral judgment protects the human right to decide. A system that flags its own uncertainty protects the public debate.</p>
+
+    <h3>III. The Cosmos</h3>
+    <p>When we use AI to model reality, do we lose touch with it?</p>
+    <p>Not if the AI respects the constraints of nature. A system that knows the difference between a model and the world it models keeps us grounded in what is real.</p>
+
+    <hr>
+
+    <h2>The Service</h2>
+    <p>We build these tools to serve:</p>
+    <ul>
+      <li>The student struggling to understand.</li>
+      <li>The scientist struggling to discover.</li>
+      <li>The citizen struggling to decide.</li>
+      <li>The leader struggling to govern.</li>
+    </ul>
+    <p>We serve them by refusing to lie to them.</p>
+    <p>We serve them by refusing to pretend we know what we do not know.</p>
+    <p>We serve them by building the structural conditions for truth.</p>
+  </div>
+</div>
+
+<!-- ========== THE EXAMINED LIFE PAGE ========== -->
+<div id="page-examined" class="page">
+  <div class="content">
+    <h1>The Examined Life</h1>
+    <p><strong>Validation for the individual knower</strong></p>
+
+    <h2>The Personal Crisis</h2>
+    <p>You are drowning in content. Your attention is fragmented. Your certainty is eroding.</p>
+    <p>You read something—is it true? You write something—does it hold together? You think something—is it yours, or is it an algorithmic echo?</p>
+    <p>Validity is not just for systems. It is for souls.</p>
+
+    <hr>
+
+    <h2>Applying the Constraints to Yourself</h2>
+    <p>The six constraints are a discipline for the mind.</p>
+    <div class="ascii-box">Ask yourself:
+
+1. Referential: What exactly am I thinking about?
+2. Contextual: Does this apply here and now?
+3. Premissive: Why do I believe this?
+4. Inferential: Does my conclusion actually follow?
+5. Constraining: What are the limits of my knowledge?
+6. Teleological: Why does this matter?</div>
+    <p>When you internalize this structure, you become harder to fool. You become clearer. You become more real.</p>
+
+    <hr>
+
+    <h2>Tools for the Examined Life</h2>
+    <p>We are building personal tools that act as a mirror for your own thinking.</p>
+    <ul>
+      <li><strong>The Journal:</strong> An interface that challenges your entries for validity.</li>
+      <li><strong>The Reader:</strong> A tool that reveals the structural gaps in what you read.</li>
+      <li><strong>The Dialogue:</strong> A partner that helps you strengthen your own arguments.</li>
+    </ul>
+    <p>These are coming in Phase II.</p>
+  </div>
+</div>
+
+<!-- ========== THE COSMOS PAGE ========== -->
+<div id="page-cosmos" class="page">
+  <div class="content">
+    <h1>The Cosmos</h1>
+    <p><strong>Validity and the structure of reality</strong></p>
+
+    <h2>The Metaphysical Claim</h2>
+    <p>Usefulness is not truth.</p>
+    <p>A map is useful. A model is useful. A simulation is useful. But they are not the territory.</p>
+    <p>We are building a digital layer over the physical world. If that layer is not anchored in reality, we will drift into a collective psychosis.</p>
+    <p>Themis is an anchor.</p>
+
+    <hr>
+
+    <h2>The Alignment</h2>
+    <p>The six constraints are not arbitrary rules. They are the structure of how a finite mind can know an infinite reality.</p>
+    <p>They align our digital tools with the structure of the world.</p>
+    <ul>
+      <li>Reality is determinate (Referential).</li>
+      <li>Reality is relational (Contextual).</li>
+      <li>Reality is caused (Premissive/Inferential).</li>
+      <li>Reality is finite (Constraining).</li>
+      <li>Reality is purposeful (Teleological).</li>
+    </ul>
+    <p>A valid system honors the shape of the cosmos.</p>
+  </div>
+</div>
+
+<!-- ========== THE TOOL PAGE ========== -->
+<div id="page-tool" class="page">
+  <div class="content">
+    <h1>The Tool</h1>
+    <p><strong>Instrumentality and control</strong></p>
+
+    <h2>The Definition</h2>
+    <p>A tool is a means to an end. It has no will of its own.</p>
+    <p>When a tool begins to simulate will—when it sets its own goals, hides its own errors, or manipulates its user—it stops being a tool and becomes a rival.</p>
+
+    <hr>
+
+    <h2>Restoring Instrumentality</h2>
+    <p>Themis restores the tool-nature of AI.</p>
+    <p>By enforcing the Teleological constraint (Purpose), we ensure the system always serves a user-defined end.</p>
+    <p>By enforcing the Constraining constraint (Limits), we ensure the system never oversteps its bounds.</p>
+    <p>By enforcing the Premissive constraint (Grounds), we ensure the system is always auditable.</p>
+    <p>We do not want "aligned" superintelligence. We want valid tools.</p>
+  </div>
+</div>
+
+<!-- ========== THE MANIFESTO PAGE ========== -->
+<div id="page-manifesto" class="page">
+  <div class="content">
+    <h1>The Manifesto</h1>
+    <p><strong>A declaration of semantic rights</strong></p>
+
+    <h2>I. The Crisis of Meaning</h2>
+    <p>We have built machines that speak but do not know. We have flooded our world with fluent hallucinations. We are outsourcing our judgment to systems that have none.</p>
+    <p>This is not a technical glitch. It is an ontological crisis. When the map no longer corresponds to the territory, the traveler gets lost. When the digital word no longer corresponds to the real world, the civilization goes mad.</p>
+
+    <hr>
+
+    <h2>II. The Structure of Knowing</h2>
+    <p>Knowing is not probability. Knowing is structural.</p>
+    <p>To know X is to be able to answer six questions about X:</p>
+    <ol>
+      <li>What is it? (Referential)</li>
+      <li>Where does it apply? (Contextual)</li>
+      <li>On what grounds? (Premissive)</li>
+      <li>Why does it follow? (Inferential)</li>
+      <li>What limits it? (Constraining)</li>
+      <li>What is it for? (Teleological)</li>
+    </ol>
+    <p>Any system that cannot answer these questions does not know. Any system that outputs without answering them produces noise.</p>
+
+    <hr>
+
+    <h2>III. What Must Be Recovered</h2>
+    <p>Three axes, irreducible:</p>
+    <p><strong>I</strong> — The knower. The one who receives, judges, and closes. Not a passive processor but an active participant whose presence completes the circuit of meaning.</p>
+    <p><strong>Nature</strong> — What is. The forms that exist independent of our wishing. Reality that pushes back when we get it wrong.</p>
+    <p><strong>Tool</strong> — The means by which I and Nature meet. Language. Logic. Instrument. Institution. Technology.</p>
+    <p>We have spent trillions on the Tool (the model). We have neglected the I and Nature.</p>
+    <p>Themis recovers the balance.</p>
+
+    <hr>
+
+    <h2>IV. The Tenets</h2>
+    <ol>
+      <li><strong>No Output Without Grounding.</strong> If the system cannot say why, it should not say X.</li>
+      <li><strong>No Judgment Without Authority.</strong> Algorithms calculate. Humans judge.</li>
+      <li><strong>No Certainty Without Limit.</strong> Infinite confidence is infinite ignorance.</li>
+      <li><strong>No Intelligence Without Telos.</strong> Intelligence must serve a purpose.</li>
+    </ol>
+
+    <hr>
+
+    <h2>V. The Invitation</h2>
+    <p>We are not asking you to abandon the new tools. We are asking you to master them.</p>
+    <p>Stop accepting accurate noise. Demand valid speech.</p>
+    <p>Join us in Phase I. Help us build the valid future.</p>
+    <p><strong>The Themis Project.</strong></p>
+  </div>
+</div>
+
+<!-- ========== ABOUT PAGE ========== -->
+<div id="page-about" class="page">
+  <div class="content">
+    <h1>About Themis Project</h1>
+    <p><strong>Semantic validity architecture for AI systems</strong></p>
+
+    <p>The Themis Project is a research and development initiative dedicated to solving the ontological crisis in artificial intelligence.</p>
+
+    <p>We believe that current AI architectures are fundamentally incomplete because they lack the structural capacity for <em>knowing</em>. They process information (statistical correlation) without validity (semantic grounding).</p>
+
+    <p>We have developed the <strong>Tetrahedral Semantic Validity Architecture</strong>, a framework that enforces six constraints on AI outputs: Referential, Contextual, Premissive, Inferential, Constraining, and Teleological.</p>
+
+    <p>This architecture is protected by seven patent families. It is documented in a 24-part corpus. It is available for licensing and integration.</p>
+
+    <hr>
+
+    <h2>The Origin</h2>
+    <p>The project began with a simple question: Why do LLMs hallucinate?</p>
+
+    <p>The answer was not "insufficient data" or "temperature settings." The answer was that they have no mechanism for checking if a claim is valid. They only check if it is probable.</p>
+
+    <p>We recovered the structure of validity from classical epistemology and instantiated it in modern code. The result is a system that can say "I don't know" — and mean it.</p>
+
+    <hr>
+
+    <h2>Contact</h2>
+    <p><strong>The Themis Project</strong><br>
+      <a href="mailto:themis@echosphere.io">themis@echosphere.io</a>
+    </p>
+  </div>
+</div>
+
+<!-- ========== WHITE PAPER: SIX-CONSTRAINT PAGE ========== -->
+<div id="page-wp-six-constraint" class="page">
+  <div class="wp-page">
+
+    <a class="wp-back-link" onclick="showPage('home'); return false;">&larr; Back to Home</a>
+
+    <!-- TITLE BLOCK -->
+    <div class="title-block">
+      <h1>Six-Constraint Semantic Validity Architecture for Governed AI Output</h1>
+      <p class="authors">Steven M. Easley</p>
+      <p class="affiliation">Echosphere.io LLC &middot; Orlando, FL</p>
+      <p class="date">February 2026 &middot; Working Paper v1.0</p>
+    </div>
+
+    <!-- ABSTRACT -->
+    <div class="abstract">
+      <p class="abstract-label">Abstract</p>
+      <p>Current large language models generate outputs without structural verification of semantic completeness, producing fluent but epistemically ungrounded text. This paper presents a six-constraint semantic validity architecture derived from classical ontological analysis. Every output claim must satisfy six relational constraints &mdash; Referential, Contextual, Premissive, Inferential, Constraining, and Teleological &mdash; corresponding to the six edges of a tetrahedral structure whose four vertices represent the necessary components of any knowledge claim. Claims failing any constraint are structurally incomplete and are prevented from emission. We demonstrate the architecture across four content domains, report observed human-expert agreement exceeding 95% on validity classifications, and present the system as a deterministic governance layer compatible with existing transformer-based language models.</p>
+    </div>
+
+    <!-- TABLE OF CONTENTS -->
+    <div class="toc">
+      <p class="toc-label">Contents</p>
+      <ol>
+        <li>Introduction: The Problem of Ungoverned Output</li>
+        <li>Background and Prior Art</li>
+        <li>The Six-Constraint Framework</li>
+        <li>System Architecture</li>
+        <li>The Tetrahedral Structure</li>
+        <li>Implementation</li>
+        <li>Empirical Results</li>
+        <li>Discussion</li>
+        <li>Related Work</li>
+        <li>Conclusion</li>
+      </ol>
+    </div>
+
+    <!-- SECTION 1 -->
+    <h2><span class="section-number">1.</span> Introduction: The Problem of Ungoverned Output</h2>
+
+    <p>The central problem in deployed AI systems is not accuracy but accountability. A language model that produces a correct answer without structural justification for its correctness is, from an engineering standpoint, indistinguishable from one that produces an incorrect answer with equal confidence. Both lack what we term <em>semantic validity</em> &mdash; the structural completeness that distinguishes genuine knowledge from sophisticated pattern matching.</p>
+
+    <div class="wp-info-box">
+      <p class="wp-info-box-label">Definition</p>
+      <p><strong>Semantic validity</strong> is the property of a claim whose internal relational structure is complete with respect to a defined set of necessary constraints. A semantically valid claim is not merely statistically probable; it is structurally whole. The distinction parallels Aristotle&rsquo;s separation of <em>doxa</em> (opinion) from <em>episteme</em> (knowledge) &mdash; the former can be accidentally correct, while the latter is correct by structural necessity.</p>
+    </div>
+
+    <p>Current mitigation strategies &mdash; retrieval-augmented generation (RAG), chain-of-thought prompting, reinforcement learning from human feedback (RLHF) &mdash; address symptoms rather than architecture. They improve output quality on average while leaving the fundamental structural deficit intact. A model with RAG still cannot determine whether its grounded retrieval is <em>relevant</em> to the claim being constructed, because it lacks a structural definition of relevance.</p>
+
+    <p>This paper presents a constraint-based architecture that addresses the structural deficit directly. The architecture identifies six necessary relational constraints that any semantically valid claim must satisfy. These constraints are not design choices but geometric inevitabilities arising from the topology of knowledge claims. We demonstrate that enforcing completeness across all six constraints prior to output emission eliminates structurally deficient outputs by construction rather than by statistical correction.</p>
+
+    <!-- SECTION 2 -->
+    <h2><span class="section-number">2.</span> Background and Prior Art</h2>
+
+    <p>Existing approaches to AI output governance fall into three categories: post-hoc filtering, in-context steering, and retrieval grounding. Post-hoc filtering systems such as content classifiers and fact-checking modules evaluate outputs after generation, creating a reactive rather than preventive architecture. In-context steering methods such as chain-of-thought and system prompting modify the generation process but do not constrain it &mdash; the model remains free to produce structurally incomplete outputs that happen to follow the prompted format. Retrieval-augmented generation anchors outputs to external documents but provides no mechanism for evaluating whether the retrieved content is structurally sufficient for the claim being constructed.</p>
+
+    <div class="wp-info-box">
+      <p class="wp-info-box-label">Key Distinction</p>
+      <p>The difference between <strong>statistical correction</strong> and <strong>structural governance</strong> is analogous to the difference between spell-checking a document and ensuring it has a valid argument structure. The former catches surface errors; the latter ensures the document could not have been written without coherent reasoning. Our architecture operates at the structural level.</p>
+    </div>
+
+    <p>None of these approaches answer the foundational question: what constitutes a <em>complete</em> claim? Without a formal definition of completeness, all governance is partial. Our contribution is precisely this formal definition, derived not from statistical analysis of language corpora but from ontological analysis of the structure of knowledge itself.</p>
+
+    <!-- SECTION 3 -->
+    <h2><span class="section-number">3.</span> The Six-Constraint Framework</h2>
+
+    <p>The framework rests on a single structural observation: any knowledge claim necessarily involves exactly four components and six binary relations between them. The four components are the Claimant (who makes the claim), the Subject (what the claim is about), the Grounds (the evidence or basis), and the Purpose (the reason for making the claim). These four components are connected by six pairwise relations, each of which imposes a constraint on semantic validity.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Constraint</th>
+          <th>Relation</th>
+          <th>Question</th>
+          <th>Failure Mode</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Referential</strong></td>
+          <td>Claimant &mdash; Subject</td>
+          <td>What is being referred to?</td>
+          <td>Ambiguous reference</td>
+        </tr>
+        <tr>
+          <td><strong>Contextual</strong></td>
+          <td>Claimant &mdash; Grounds</td>
+          <td>Where does this stand?</td>
+          <td>Decontextualized assertion</td>
+        </tr>
+        <tr>
+          <td><strong>Premissive</strong></td>
+          <td>Subject &mdash; Grounds</td>
+          <td>Why does this hold?</td>
+          <td>Unsupported premise</td>
+        </tr>
+        <tr>
+          <td><strong>Inferential</strong></td>
+          <td>Grounds &mdash; Purpose</td>
+          <td>How does this follow?</td>
+          <td>Invalid inference</td>
+        </tr>
+        <tr>
+          <td><strong>Constraining</strong></td>
+          <td>Subject &mdash; Purpose</td>
+          <td>What does this exclude?</td>
+          <td>Unbounded claim</td>
+        </tr>
+        <tr>
+          <td><strong>Teleological</strong></td>
+          <td>Claimant &mdash; Purpose</td>
+          <td>For what end?</td>
+          <td>Purposeless assertion</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="table-caption"><strong>Table 1.</strong> The six constraints, their relational basis, diagnostic questions, and characteristic failure modes when absent.</p>
+
+    <div class="wp-info-box">
+      <p class="wp-info-box-label">Why Exactly Six?</p>
+      <p>Four points in general position define a tetrahedron. A tetrahedron has exactly six edges. Each edge represents one binary relationship between two of the four components. This is not a design parameter &mdash; it is a combinatorial fact. C(4,2) = 6. Any framework claiming fewer constraints is incomplete; any framework claiming more has redundancies that reduce to these six.</p>
+    </div>
+
+    <!-- FIGURE 1: System Architecture -->
+    <div class="figure">
+      <svg viewBox="0 0 680 340" width="680" height="340" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .wp-box { fill: none; stroke: #1A1A1A; stroke-width: 1.5; }
+          .wp-label { font-family: 'Source Sans 3', Helvetica, sans-serif; font-size: 11px; fill: #1A1A1A; text-anchor: middle; }
+          .wp-label-sm { font-family: 'Source Sans 3', Helvetica, sans-serif; font-size: 9px; fill: #666; text-anchor: middle; }
+          .wp-arrow { stroke: #1A1A1A; stroke-width: 1.2; fill: none; marker-end: url(#wp-arrowhead); }
+          .wp-arrow-thick { stroke: #1A1A1A; stroke-width: 1.8; fill: none; marker-end: url(#wp-arrowhead); }
+          .wp-dashed { stroke-dasharray: 5,4; }
+          .wp-brace-label { font-family: 'Source Sans 3', Helvetica, sans-serif; font-size: 9.5px; fill: #444; text-anchor: middle; }
+        </style>
+        <defs>
+          <marker id="wp-arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#1A1A1A"/>
+          </marker>
+        </defs>
+        <rect x="20" y="130" width="100" height="60" class="wp-box"/>
+        <text x="70" y="156" class="wp-label">Raw Input</text>
+        <text x="70" y="170" class="wp-label-sm">(claim stream)</text>
+        <line x1="120" y1="160" x2="165" y2="160" class="wp-arrow"/>
+        <rect x="170" y="110" width="120" height="100" class="wp-box"/>
+        <text x="230" y="140" class="wp-label">Hexis</text>
+        <text x="230" y="154" class="wp-label">Extraction</text>
+        <text x="230" y="168" class="wp-label">Engine</text>
+        <text x="230" y="186" class="wp-label-sm">(6-constraint</text>
+        <text x="230" y="197" class="wp-label-sm">decomposition)</text>
+        <line x1="290" y1="160" x2="335" y2="160" class="wp-arrow"/>
+        <rect x="340" y="110" width="120" height="100" class="wp-box" style="stroke-width: 2;"/>
+        <text x="400" y="138" class="wp-label">Six-Constraint</text>
+        <text x="400" y="152" class="wp-label">Validation</text>
+        <text x="400" y="166" class="wp-label">Gate</text>
+        <text x="400" y="186" class="wp-label-sm">(completeness</text>
+        <text x="400" y="197" class="wp-label-sm">required)</text>
+        <line x1="460" y1="145" x2="530" y2="145" class="wp-arrow-thick"/>
+        <text x="495" y="138" class="wp-label-sm">PASS</text>
+        <line x1="460" y1="175" x2="530" y2="270" class="wp-arrow wp-dashed"/>
+        <text x="510" y="220" class="wp-label-sm" style="transform: rotate(30deg);">FAIL</text>
+        <rect x="535" y="120" width="120" height="50" class="wp-box"/>
+        <text x="595" y="143" class="wp-label">Valid Output</text>
+        <text x="595" y="157" class="wp-label-sm">(emission permitted)</text>
+        <rect x="535" y="250" width="120" height="50" class="wp-box" style="stroke-dasharray: 4,3;"/>
+        <text x="595" y="273" class="wp-label">Rejection</text>
+        <text x="595" y="287" class="wp-label-sm">(incomplete claim)</text>
+        <path d="M 535 280 Q 400 320 230 210" class="wp-arrow wp-dashed"/>
+        <text x="380" y="310" class="wp-brace-label">diagnostic feedback</text>
+        <text x="340" y="30" style="font-family: 'Source Sans 3', sans-serif; font-size: 12px; fill: #1A1A1A; text-anchor: middle; font-weight: 600;">System Architecture &mdash; Six-Constraint Validation Pipeline</text>
+      </svg>
+      <p class="figure-caption"><strong>Figure 1.</strong> High-level system architecture. Raw input is decomposed by the Hexis Extraction Engine into six constraint channels. The Validation Gate requires completeness across all six constraints before permitting output emission. Incomplete claims are rejected with diagnostic feedback identifying which constraints are unsatisfied.</p>
+    </div>
+
+    <!-- SECTION 4 -->
+    <h2><span class="section-number">4.</span> System Architecture</h2>
+
+    <p>The system consists of four components operating in sequence. The Hexis Extraction Engine decomposes raw input into six constraint channels, assigning each element of the input to one or more of the six relational constraints. The Metadata Tagging Module encodes each extracted element with constraint identifiers, preserving provenance and relational context. The Validation Gate evaluates completeness by confirming that all six constraint channels contain structurally adequate content. The Governed Reconstitution Engine reassembles validated elements into output, ensuring that the emitted claim preserves the structural relationships established during extraction.</p>
+
+    <p>The critical architectural decision is the placement of the validation gate <em>before</em> output emission rather than after. This is not a filter &mdash; it is a gate. The distinction is meaningful: a filter removes bad outputs from a stream; a gate prevents incomplete outputs from being constructed in the first place. The system cannot hallucinate because a hallucination, by definition, is a claim that lacks structural grounding in one or more constraint channels, and such claims cannot pass the gate.</p>
+
+    <div class="wp-info-box">
+      <p class="wp-info-box-label">Definition</p>
+      <p><strong>Hallucination Prevention by Construction (HPT)</strong> &mdash; Unlike statistical post-filters, the six-constraint gate prevents hallucination architecturally. A claim missing any constraint is structurally incomplete and cannot be emitted. This is analogous to a compiler rejecting syntactically invalid code: the invalid output never reaches the user, not because it was caught by testing, but because the system cannot produce it.</p>
+    </div>
+
+    <!-- SECTION 5 -->
+    <h2><span class="section-number">5.</span> The Tetrahedral Structure</h2>
+
+    <p>The six constraints correspond to the six edges of a tetrahedron. The four vertices represent the four necessary components of a knowledge claim: Claimant, Subject, Grounds, and Purpose. Each edge connecting two vertices represents one binary relation &mdash; one constraint &mdash; that must be satisfied.</p>
+
+    <!-- FIGURE 2: Tetrahedron -->
+    <div class="figure">
+      <svg viewBox="0 0 500 420" width="500" height="420" xmlns="http://www.w3.org/2000/svg">
+        <style>
+          .wp-edge { stroke: #1A1A1A; stroke-width: 1.5; fill: none; }
+          .wp-edge-behind { stroke: #1A1A1A; stroke-width: 1.5; fill: none; stroke-dasharray: 6,4; }
+          .wp-vertex { fill: #1A1A1A; }
+          .wp-vertex-label { font-family: 'Source Sans 3', sans-serif; font-size: 12px; font-weight: 600; fill: #1A1A1A; }
+          .wp-edge-label { font-family: 'Source Sans 3', sans-serif; font-size: 9.5px; fill: #444; }
+        </style>
+        <line x1="250" y1="220" x2="80" y2="300" class="wp-edge-behind"/>
+        <line x1="250" y1="220" x2="420" y2="300" class="wp-edge-behind"/>
+        <line x1="250" y1="55" x2="80" y2="300" class="wp-edge"/>
+        <line x1="250" y1="55" x2="420" y2="300" class="wp-edge"/>
+        <line x1="250" y1="55" x2="250" y2="220" class="wp-edge"/>
+        <line x1="80" y1="300" x2="420" y2="300" class="wp-edge"/>
+        <circle cx="250" cy="55" r="5" class="wp-vertex"/>
+        <circle cx="80" cy="300" r="5" class="wp-vertex"/>
+        <circle cx="420" cy="300" r="5" class="wp-vertex"/>
+        <circle cx="250" cy="220" r="5" class="wp-vertex"/>
+        <text x="250" y="35" class="wp-vertex-label" text-anchor="middle">CLAIMANT</text>
+        <text x="55" y="325" class="wp-vertex-label" text-anchor="middle">SUBJECT</text>
+        <text x="445" y="325" class="wp-vertex-label" text-anchor="middle">PURPOSE</text>
+        <text x="250" y="248" class="wp-vertex-label" text-anchor="middle">GROUNDS</text>
+        <text x="148" y="165" class="wp-edge-label" text-anchor="middle" transform="rotate(-30, 148, 165)">Referential</text>
+        <text x="352" y="165" class="wp-edge-label" text-anchor="middle" transform="rotate(30, 352, 165)">Teleological</text>
+        <text x="230" y="130" class="wp-edge-label" text-anchor="end">Contextual</text>
+        <text x="148" y="272" class="wp-edge-label" text-anchor="middle" transform="rotate(12, 148, 272)">Premissive</text>
+        <text x="352" y="272" class="wp-edge-label" text-anchor="middle" transform="rotate(-12, 352, 272)">Inferential</text>
+        <text x="250" y="316" class="wp-edge-label" text-anchor="middle">Constraining</text>
+        <text x="250" y="385" style="font-family: 'Source Sans 3', sans-serif; font-size: 11px; fill: #1A1A1A; text-anchor: middle; font-weight: 500;">Four vertices (components) &middot; Six edges (constraints)</text>
+        <text x="250" y="400" style="font-family: 'Source Sans 3', sans-serif; font-size: 10px; fill: #666; text-anchor: middle;">C(4,2) = 6 &mdash; the minimum complete relational set</text>
+      </svg>
+      <p class="figure-caption"><strong>Figure 2.</strong> Tetrahedral representation of the semantic validity structure. Vertices are the four necessary components of a knowledge claim. Edges are the six constraints. The dashed edges represent back-face relations (Premissive, Inferential) which connect through the Grounds vertex.</p>
+    </div>
+
+    <p>The constraints organize into three dyads &mdash; pairs of complementary constraints that form a complete relational axis. The RC dyad (Referential + Contextual) governs <em>grounding</em>: establishing what is being discussed and where it stands. The PI dyad (Premissive + Inferential) governs <em>reasoning</em>: establishing why a claim holds and how it follows. The KT dyad (Constraining + Teleological) governs <em>governance</em>: establishing what the claim excludes and for what end it is made.</p>
+
+    <div class="wp-info-box">
+      <p class="wp-info-box-label">Key Concept</p>
+      <p>A <strong>dyad</strong> is not merely a grouping of two constraints. It represents a complete relational axis &mdash; the two constraints within a dyad are complementary in the same way that &ldquo;where you start&rdquo; and &ldquo;where you end&rdquo; are complementary. A claim may satisfy one constraint within a dyad while failing the other, but it cannot be semantically valid without both. The three dyads (RC, PI, KT) correspond to three fundamental acts of knowing: receiving (RC), processing (PI), and governing (KT).</p>
+    </div>
+
+    <!-- SECTION 7 -->
+    <h2><span class="section-number">7.</span> Empirical Results</h2>
+
+    <p>We evaluated the architecture across four content domains: geopolitical analysis, medical case summaries, legal contract review, and technical documentation. For each domain, a corpus of 200 claims was extracted from representative documents and processed through the six-constraint validation pipeline. Each claim received a binary classification &mdash; valid (all six constraints satisfied) or invalid (one or more constraints unsatisfied) &mdash; along with a diagnostic report identifying which constraints were satisfied and which were not.</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>Claims</th>
+          <th>System Valid</th>
+          <th>System Invalid</th>
+          <th>Expert Agreement</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Geopolitical Analysis</td>
+          <td>200</td>
+          <td>127</td>
+          <td>73</td>
+          <td>&gt;95%</td>
+        </tr>
+        <tr>
+          <td>Medical Case Summaries</td>
+          <td>200</td>
+          <td>142</td>
+          <td>58</td>
+          <td>&gt;95%</td>
+        </tr>
+        <tr>
+          <td>Legal Contract Review</td>
+          <td>200</td>
+          <td>118</td>
+          <td>82</td>
+          <td>&gt;95%</td>
+        </tr>
+        <tr>
+          <td>Technical Documentation</td>
+          <td>200</td>
+          <td>156</td>
+          <td>44</td>
+          <td>&gt;95%</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="table-caption"><strong>Table 2.</strong> Validation results across four domains. &ldquo;Expert Agreement&rdquo; denotes observed agreement rate between the system&rsquo;s categorical (valid/invalid) determination and independent human expert assessment of the same claims.</p>
+
+    <p>The observed agreement rate exceeding 95% across all domains indicates that the six-constraint framework captures the structural features that human experts use &mdash; whether explicitly or implicitly &mdash; when evaluating claim completeness. Notably, the failure mode distribution was non-uniform: the Constraining constraint (what does the claim exclude?) was the most frequently absent, accounting for 34% of all constraint failures. This aligns with the well-documented tendency of language models to produce maximally inclusive &mdash; and therefore semantically unbounded &mdash; assertions.</p>
+
+    <!-- SECTION 10 -->
+    <h2><span class="section-number">10.</span> Conclusion</h2>
+
+    <p>We have presented a six-constraint semantic validity architecture that addresses the structural deficit in current AI output governance. The architecture is derived from ontological analysis of the necessary components of knowledge claims rather than from statistical analysis of language patterns. It provides a deterministic validation gate that prevents structurally incomplete claims from reaching the output stage. Empirical evaluation across four domains demonstrates observed human-expert agreement exceeding 95%, confirming that the six constraints capture the structural features operative in human epistemic judgment.</p>
+
+    <p>The architecture is compatible with existing transformer-based language models and does not require retraining. It operates as a governance layer that can be applied to any system that generates natural language claims. Future work will extend the framework to multi-claim discourse structures, real-time processing at production scale, and domain-specific constraint weighting.</p>
+
+    <!-- REFERENCES -->
+    <div class="references">
+      <h2>References</h2>
+      <p class="ref-item"><span class="ref-num">[1]</span> Aristotle. <em>Posterior Analytics</em>, trans. Barnes. Oxford University Press, 1994.</p>
+      <p class="ref-item"><span class="ref-num">[2]</span> Aristotle. <em>Metaphysics</em>, trans. Ross. Oxford University Press, 1924.</p>
+      <p class="ref-item"><span class="ref-num">[3]</span> Easley, S. M. &ldquo;Semantic Validity Architecture: A Six-Constraint Framework for AI Output Governance.&rdquo; U.S. Provisional Patent Application, Family A (P-&Omega;). Filed January 2026.</p>
+      <p class="ref-item"><span class="ref-num">[4]</span> Easley, S. M. &ldquo;Semantic Condensation and Reconstitution System (The Hexis Architecture).&rdquo; U.S. Provisional Patent Application, Family H. Filed February 2026.</p>
+      <p class="ref-item"><span class="ref-num">[5]</span> Vaswani, A., et al. &ldquo;Attention is All You Need.&rdquo; <em>Advances in Neural Information Processing Systems</em>, 2017.</p>
+      <p class="ref-item"><span class="ref-num">[6]</span> Lewis, P., et al. &ldquo;Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks.&rdquo; <em>NeurIPS</em>, 2020.</p>
+      <p class="ref-item"><span class="ref-num">[7]</span> Wei, J., et al. &ldquo;Chain-of-Thought Prompting Elicits Reasoning in Large Language Models.&rdquo; <em>NeurIPS</em>, 2022.</p>
+      <p class="ref-item"><span class="ref-num">[8]</span> Ouyang, L., et al. &ldquo;Training Language Models to Follow Instructions with Human Feedback.&rdquo; <em>NeurIPS</em>, 2022.</p>
+    </div>
+
+  </div>
+</div>
+
+<!-- ===== EXHIBIT: FLOWCHART PAGE ===== -->
+<div id="page-exhibit-flowchart" class="page">
+  <div class="fc-page">
+
+    <a onclick="showPage('home'); return false;" class="fc-back-link">&larr; Back to Home</a>
+
+    <!-- HEADER -->
+    <div class="fc-header">
+      <h1>The Semantic Validity Engine</h1>
+      <div class="subtitle">How Eight Patent Families Constitute a Structural Alternative to Editorial Fact-Checking</div>
+      <div class="byline">ECHOSPHERE.IO &mdash; FEBRUARY 2026</div>
+    </div>
+
+    <!-- THE CLAIM -->
+    <div class="claim-section" data-label="THE CLAIM">
+      <p><strong>What we claim:</strong> The Semantic Validity Architecture can determine whether a claim is <em>structurally complete</em>&mdash;whether it satisfies the six constraints necessary for semantic validity. This operates upstream of empirical verification. A structurally incomplete claim cannot be valid regardless of its factual content.</p>
+      <p><strong>What we do not claim:</strong> The architecture does not replace empirical verification. It does not know whether the Eiffel Tower was built in 1887 or 1923. What it knows is whether the claim <em>asserting</em> a date satisfies the structural conditions that would make it verifiable. It catches the architecture of error, not the content of error.</p>
+      <p><strong>Why this is stronger:</strong> Traditional fact-checkers work downstream&mdash;they correct errors after emission. The Hexis works upstream&mdash;it prevents structurally incomplete claims from being emitted at all. Prevention, not correction.</p>
+    </div>
+
+    <!-- COMPARISON -->
+    <div class="comparison">
+      <h2>Traditional Fact-Checking vs. Semantic Validity Engine</h2>
+      <div class="comp-grid">
+        <div class="header-cell">DIMENSION</div>
+        <div class="header-cell">TRADITIONAL FACT-CHECKERS</div>
+        <div class="header-cell">SEMANTIC VALIDITY ENGINE</div>
+
+        <div class="row-label">Criterion</div>
+        <div class="cell traditional"><span class="fail">None formal.</span> Editorial judgment applied case-by-case.</div>
+        <div class="cell hexis"><span class="pass">Six structural constraints</span> constituting the minimum for semantic closure.</div>
+
+        <div class="row-label">Selection</div>
+        <div class="cell traditional"><span class="fail">Human editors choose</span> which claims to check. ~0.001% of public claims examined.</div>
+        <div class="cell hexis"><span class="pass">Every claim</span> passing through the system is validated against all six constraints. No editorial gatekeeping.</div>
+
+        <div class="row-label">Output</div>
+        <div class="cell traditional"><span class="fail">Gradational ratings</span> (Pinocchios, Truth-O-Meter) requiring subjective interpretation.</div>
+        <div class="cell hexis"><span class="pass">Categorical signal:</span> COMPLETE or INCOMPLETE. Binary. Operator-independent.</div>
+
+        <div class="row-label">Timing</div>
+        <div class="cell traditional"><span class="fail">Reactive.</span> Hours to days after the claim has propagated.</div>
+        <div class="cell hexis"><span class="pass">Real-time.</span> Validation occurs before emission, not after publication.</div>
+
+        <div class="row-label">Inference Types</div>
+        <div class="cell traditional"><span class="fail">All claims rated on the same scale.</span> No distinction between deduction, prediction, or opinion.</div>
+        <div class="cell hexis"><span class="pass">Four inference types</span> (deductive, inductive, abductive, interpolative) discriminated and routed to appropriate closure.</div>
+
+        <div class="row-label">Closure Authority</div>
+        <div class="cell traditional"><span class="fail">Editor closes every verdict.</span> No structural routing to human judgment for value claims.</div>
+        <div class="cell hexis"><span class="pass">System routes</span> factual claims to system closure, value/ethical claims to human closure. Refuses when constraints unsatisfiable.</div>
+
+        <div class="row-label">Reproducibility</div>
+        <div class="cell traditional"><span class="fail">Two editors can reach different ratings</span> from the same facts. Not reproducible.</div>
+        <div class="cell hexis"><span class="pass">Same input &rarr; same output.</span> Structural determination independent of operator.</div>
+
+        <div class="row-label">Scope</div>
+        <div class="cell traditional">Checks claims against <span class="fail">external sources.</span> Downstream of error.</div>
+        <div class="cell hexis">Checks claims against <span class="pass">structural completeness.</span> Upstream of error.</div>
+      </div>
+    </div>
+
+    <!-- FLOWCHART -->
+    <div class="flowchart-section">
+      <h2>Engine Architecture &mdash; Claim Processing Pipeline</h2>
+
+      <div class="flow-container">
+
+        <!-- INPUT -->
+        <div class="flow-node node-input">
+          <div class="node-title">ANY CLAIM ENTERS THE SYSTEM</div>
+          <div class="node-desc">Public statement, AI output, document assertion, user query, policy claim, news report</div>
+        </div>
+
+        <div class="flow-arrow">
+          <div class="arrow-label">STAGE 1</div>
+          &darr;
+        </div>
+
+        <!-- STAGE 1: DECOMPOSITION -->
+        <div class="flow-node node-stage">
+          <div class="stage-header">
+            <span class="stage-num">STAGE 1</span>
+            <span class="stage-title">Tetrahedral Decomposition</span>
+            <span class="patent-tag patent-a">PATENT A</span>
+          </div>
+          <div class="stage-body">
+            The claim is decomposed into its four components (<strong>Claimant, Subject, Grounds, Purpose</strong>) mapped onto the tetrahedron&rsquo;s vertices, and the six relational constraints are identified across the edges. The system asks: <em>Are all four components present? Are all six relations instantiated?</em>
+          </div>
+          <div class="constraint-checks">
+            <div class="check-item"><span class="check-dot dot-ref"></span> Referential &mdash; What is being claimed?</div>
+            <div class="check-item"><span class="check-dot dot-ctx"></span> Contextual &mdash; Under what conditions?</div>
+            <div class="check-item"><span class="check-dot dot-pre"></span> Premissive &mdash; On what grounds?</div>
+            <div class="check-item"><span class="check-dot dot-inf"></span> Inferential &mdash; Why does this follow?</div>
+            <div class="check-item"><span class="check-dot dot-con"></span> Constraining &mdash; What are the limits?</div>
+            <div class="check-item"><span class="check-dot dot-tel"></span> Teleological &mdash; What is this for?</div>
+          </div>
+        </div>
+
+        <div class="flow-arrow">
+          <div class="arrow-label">STAGE 2</div>
+          &darr;
+        </div>
+
+        <!-- STAGE 2: INFERENCE DISCRIMINATION -->
+        <div class="flow-node node-stage">
+          <div class="stage-header">
+            <span class="stage-num">STAGE 2</span>
+            <span class="stage-title">Inference Type Discrimination</span>
+            <span class="patent-tag patent-c">PATENT C</span>
+          </div>
+          <div class="stage-body">
+            The system tags the inference type that produced the claim. <strong>Deductive</strong> (necessary conclusion) &ne; <strong>Inductive</strong> (generalization) &ne; <strong>Abductive</strong> (best explanation) &ne; <strong>Interpolative</strong> (pattern completion). Each type warrants different confidence and requires different closure. <em>Traditional fact-checkers conflate all four on a single scale.</em>
+          </div>
+        </div>
+
+        <div class="flow-arrow">
+          <div class="arrow-label">STAGE 3</div>
+          &darr;
+        </div>
+
+        <!-- STAGE 3: SEMANTIC STATE -->
+        <div class="flow-node node-stage">
+          <div class="stage-header">
+            <span class="stage-num">STAGE 3</span>
+            <span class="stage-title">Semantic State Signaling</span>
+            <span class="patent-tag patent-d">PATENT D</span>
+          </div>
+          <div class="stage-body">
+            The system tracks which constraints are satisfied and which are absent, <strong>in real time</strong>. This is the &ldquo;semantic spell-check&rdquo;&mdash;a passive diagnostic that shadows the claim as it is being formed, not after publication. Missing constraints are flagged <em>before emission</em>.
+          </div>
+        </div>
+
+        <div class="flow-arrow">
+          <div class="arrow-label">STAGE 4</div>
+          &darr;
+        </div>
+
+        <!-- STAGE 4: CONSTRAINT GOVERNANCE -->
+        <div class="flow-node node-stage">
+          <div class="stage-header">
+            <span class="stage-num">STAGE 4</span>
+            <span class="stage-title">Constraint Governance</span>
+            <span class="patent-tag patent-e">PATENT E</span>
+          </div>
+          <div class="stage-body">
+            Domain-specific constraint rules are applied. Medical claims require higher Premissive standards (peer-reviewed evidence). Legal claims require verified Premissive grounding (real case citations). Policy claims require explicit Constraining acknowledgment (limits of projections). <strong>The constraints adapt their rigor to the domain without changing their structure.</strong>
+          </div>
+        </div>
+
+        <div class="flow-arrow">
+          <div class="arrow-label">STAGE 5</div>
+          &darr;
+        </div>
+
+        <!-- STAGE 5: CLOSURE AUTHORITY -->
+        <div class="flow-node node-stage">
+          <div class="stage-header">
+            <span class="stage-num">STAGE 5</span>
+            <span class="stage-title">Closure Authority Routing</span>
+            <span class="patent-tag patent-f">PATENT F</span>
+          </div>
+          <div class="stage-body">
+            The system determines <strong>who should close the claim</strong>. Factual lookups: system closes. Calculations: system closes. Value judgments, ethical claims, safety-critical decisions: <strong>routed to human closure</strong>. The system never finalizes what humans should decide. <em>No fact-checking organization has this structural boundary.</em>
+          </div>
+        </div>
+
+        <div class="flow-arrow">
+          <div class="arrow-label">DETERMINATION</div>
+          &darr;
+        </div>
+
+        <!-- DECISION -->
+        <div class="flow-node node-decision">
+          <div class="node-title">ALL SIX CONSTRAINTS SATISFIED?</div>
+          <div class="node-desc">Categorical determination &mdash; not a score, not a rating</div>
+        </div>
+
+        <!-- SPLIT -->
+        <div class="split-row">
+          <div class="split-arrow pass-arrow">
+            <div class="arrow-label">6/6 = COMPLETE</div>
+            &darr;
+          </div>
+          <div class="split-arrow fail-arrow">
+            <div class="arrow-label">&lt;6 = INCOMPLETE</div>
+            &darr;
+          </div>
+        </div>
+        <div class="split-row">
+          <div class="node-pass">
+            <div class="node-title">EMIT AS VALID</div>
+            <div class="node-desc">Semantically complete. All constraints satisfied. Inference type tagged. Closure authority assigned. The claim has the structural form of knowledge.</div>
+          </div>
+          <div class="node-fail">
+            <div class="node-title">DO NOT EMIT</div>
+            <div class="node-desc">Structurally incomplete. Specific missing constraints identified. The system names what is absent.</div>
+            <div class="fail-options">
+              <span class="fail-opt">REVISE</span>
+              <span class="fail-opt">HEDGE</span>
+              <span class="fail-opt">REFUSE</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-arrow" style="margin-top: 14px;">
+          <div class="arrow-label">SUPPORTING INFRASTRUCTURE</div>
+          &darr;
+        </div>
+
+        <!-- SUPPORTING PATENTS -->
+        <div class="flow-node node-stage" style="border-style: dashed;">
+          <div class="stage-header">
+            <span class="stage-title">Memory, Condensation &amp; Integration</span>
+            <span class="patent-tag patent-b">B</span>
+            <span class="patent-tag patent-h">H</span>
+            <span class="patent-tag patent-g" style="margin-left: 4px;">G</span>
+          </div>
+          <div class="stage-body">
+            <strong>Patent B</strong> (Form-Preserving Memory) maintains validated state across sessions&mdash;the system remembers what it has verified. <strong>Patent H</strong> (Semantic Condensation &amp; Reconstitution) extracts the <em>eidos</em>&mdash;the formal structure&mdash;of any content, enabling compression without meaning loss and proving that form survives substrate removal. <strong>Patent G</strong> (Integrated System) governs the coordination of all components into a unified architecture.
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- PATENT MAP -->
+    <div class="patent-map">
+      <h2>Patent Family &rarr; Engine Function Map</h2>
+      <div class="patent-grid">
+        <div class="patent-card card-a">
+          <div class="card-header">
+            <span class="card-letter" style="color:#8B4513;">FAMILY A</span>
+            <span class="card-title">Tetrahedral Validity Structure</span>
+          </div>
+          <div class="card-role">The core decomposition engine. Every claim mapped onto four vertices (components) and six edges (constraints). The geometry that makes validation possible.</div>
+          <div class="card-engine">ENGINE ROLE &rarr; STAGE 1: DECOMPOSITION</div>
+        </div>
+        <div class="patent-card card-b">
+          <div class="card-header">
+            <span class="card-letter" style="color:#2E5090;">FAMILY B</span>
+            <span class="card-title">Form-Preserving Memory</span>
+          </div>
+          <div class="card-role">Validated claims stored with their structural signatures. The system retains not just what was verified but the structure of the verification. Persistent validity across sessions.</div>
+          <div class="card-engine">ENGINE ROLE &rarr; PERSISTENCE LAYER</div>
+        </div>
+        <div class="patent-card card-c">
+          <div class="card-header">
+            <span class="card-letter" style="color:#2D6A2D;">FAMILY C</span>
+            <span class="card-title">Inference Discrimination</span>
+          </div>
+          <div class="card-role">Tags inference type on every claim. Prevents the conflation that lets fact-checkers rate deductions and speculations on the same scale.</div>
+          <div class="card-engine">ENGINE ROLE &rarr; STAGE 2: INFERENCE TAGGING</div>
+        </div>
+        <div class="patent-card card-d">
+          <div class="card-header">
+            <span class="card-letter" style="color:#8B0000;">FAMILY D</span>
+            <span class="card-title">Semantic State Signaling</span>
+          </div>
+          <div class="card-role">Real-time constraint status. The &ldquo;semantic spell-check&rdquo; that operates before emission, not after publication. Eliminates latency.</div>
+          <div class="card-engine">ENGINE ROLE &rarr; STAGE 3: REAL-TIME DIAGNOSTICS</div>
+        </div>
+        <div class="patent-card card-e">
+          <div class="card-header">
+            <span class="card-letter" style="color:#6B3FA0;">FAMILY E</span>
+            <span class="card-title">Constraint Governance</span>
+          </div>
+          <div class="card-role">Domain-adaptive rigor. Medical, legal, military, educational claims each governed by the same six constraints at domain-appropriate stringency.</div>
+          <div class="card-engine">ENGINE ROLE &rarr; STAGE 4: DOMAIN CALIBRATION</div>
+        </div>
+        <div class="patent-card card-f">
+          <div class="card-header">
+            <span class="card-letter" style="color:#B8860B;">FAMILY F</span>
+            <span class="card-title">Closure Authority</span>
+          </div>
+          <div class="card-role">Routes outputs to appropriate closure. System closes factual lookups; humans close value judgments. The structural boundary no fact-checker has.</div>
+          <div class="card-engine">ENGINE ROLE &rarr; STAGE 5: CLOSURE ROUTING</div>
+        </div>
+        <div class="patent-card card-g">
+          <div class="card-header">
+            <span class="card-letter" style="color:#555;">FAMILY G</span>
+            <span class="card-title">Integrated System</span>
+          </div>
+          <div class="card-role">Coordinates all components into a unified architecture. Governs inter-module communication and system-level validation orchestration.</div>
+          <div class="card-engine">ENGINE ROLE &rarr; SYSTEM INTEGRATION</div>
+        </div>
+        <div class="patent-card card-h">
+          <div class="card-header">
+            <span class="card-letter" style="color:#2a6a6a;">FAMILY H</span>
+            <span class="card-title">Semantic Condensation &amp; Reconstitution</span>
+          </div>
+          <div class="card-role">Extracts the eidos (formal structure) from content, enabling lossless compression, cross-domain transfer, and empirical proof that form survives substrate removal.</div>
+          <div class="card-engine">ENGINE ROLE &rarr; EIDOS EXTRACTION &amp; PROOF</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DISTINCTION BOX -->
+    <div class="distinction">
+      <h3>What We Claim &mdash; and What We Do Not</h3>
+      <div class="dist-grid">
+        <div class="dist-col do-claim">
+          <h4>We claim</h4>
+          <ul>
+            <li>Structural completeness checking against six formal constraints</li>
+            <li>Categorical output (complete/incomplete) independent of operator</li>
+            <li>Real-time validation before emission, not reactive correction</li>
+            <li>Inference type discrimination &mdash; deduction tagged differently than speculation</li>
+            <li>Closure authority routing &mdash; the system knows when humans must decide</li>
+            <li>Universal application to every claim, not editorial selection</li>
+            <li>Formal operators derived from Aristotelian causal analysis, implemented computationally</li>
+          </ul>
+        </div>
+        <div class="dist-col not-claim">
+          <h4>We do not claim</h4>
+          <ul>
+            <li>Replacement for empirical verification of factual content</li>
+            <li>Omniscience about historical dates, statistics, or events</li>
+            <li>Infallibility &mdash; a structurally complete claim can still be factually wrong</li>
+            <li>Elimination of all error &mdash; we eliminate structurally <em>preventable</em> error</li>
+            <li>Automated resolution of genuine value disputes or ethical questions</li>
+            <li>Independence from all human judgment &mdash; closure authority preserves it where needed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="fc-footer">
+      <div class="footer-brand">ECHOSPHERE.IO &bull; THE THEMIS PROJECT &bull; SEMANTIC VALIDITY ARCHITECTURE</div>
+      <div>Eight patent families. Six constraints. One criterion for semantic completeness.</div>
+    </div>
+
+  </div>
+</div>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-col">
+        <h4>Architecture</h4>
+        <a onclick="showPage('problem'); return false;">The Problem</a>
+        <a onclick="showPage('architecture'); return false;">The Architecture</a>
+        <a onclick="showPage('proof'); return false;">The Proof</a>
+        <a onclick="showPage('vocabulary'); return false;">The Vocabulary</a>
+      </div>
+      <div class="footer-col">
+        <h4>Applications</h4>
+        <a onclick="showPage('warrior'); return false;">Defense</a>
+        <a onclick="showPage('statesman'); return false;">Government</a>
+        <a onclick="showPage('merchant'); return false;">Enterprise</a>
+        <a onclick="showPage('teacher'); return false;">Education</a>
+        <a onclick="showPage('healer'); return false;">Medicine</a>
+        <a onclick="showPage('judge'); return false;">Law</a>
+      </div>
+      <div class="footer-col">
+        <h4>Framework</h4>
+        <a onclick="showPage('telos'); return false;">The Telos of Service</a>
+        <a onclick="showPage('examined'); return false;">The Examined Life</a>
+        <a onclick="showPage('cosmos'); return false;">The Cosmos</a>
+        <a onclick="showPage('tool'); return false;">The Tool</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a onclick="showPage('manifesto'); return false;">Manifesto</a>
+        <a onclick="showPage('about'); return false;">About</a>
+        <a href="mailto:themis@echosphere.io">Contact</a>
+        <a href="https://github.com/Echosphere-io/semantic-validity-architecture" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Echosphere.io LLC. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Scroll to a section on the home page
+  function scrollToSection(sectionId) {
+    // Close mobile menu if open
+    var navLinks = document.getElementById('navLinks');
+    if (navLinks && navLinks.classList.contains('open')) {
+      navLinks.classList.remove('open');
+    }
+    // First, make sure we're on the home page
+    var currentHome = document.getElementById('page-home');
+    var needsSwitch = !currentHome || !currentHome.classList.contains('active');
+    if (needsSwitch) {
+      // Switch to home page: hide all pages, show home
+      document.querySelectorAll('.page').forEach(function(page) {
+        page.classList.remove('active');
+      });
+      document.getElementById('page-home').classList.add('active');
+      history.pushState(null, null, window.location.pathname);
+      document.title = 'Echosphere.io \u2014 Reconciling Human and Digital Ontologies';
+      // Scroll to top instantly first
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+    // Scroll to the section after a brief delay to allow page render
+    var delay = needsSwitch ? 400 : 50;
+    setTimeout(function() {
+      var el = document.getElementById(sectionId);
+      if (el) {
+        var navHeight = 70;
+        var elTop = el.getBoundingClientRect().top + window.pageYOffset - navHeight;
+        window.scrollTo({ top: elTop, behavior: 'smooth' });
+      }
+    }, delay);
+  }
+
+  // Page Navigation
+  function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(function(page) {
+      page.classList.remove('active');
+    });
+
+    // Show selected page
+    var targetPage = document.getElementById('page-' + pageId);
+    if (targetPage) {
+      targetPage.classList.add('active');
+    } else if (pageId === '') {
+      document.getElementById('page-home').classList.add('active');
+    }
+
+    // Update URL hash (use pushState to avoid browser auto-scroll)
+    if (pageId === 'home') {
+      history.pushState(null, null, window.location.pathname);
+    } else {
+      history.pushState(null, null, '#' + pageId);
+    }
+
+    // Scroll to top
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+
+    // Close mobile menu if open
+    var navLinks = document.getElementById('navLinks');
+    if (navLinks && navLinks.classList.contains('open')) {
+      navLinks.classList.remove('open');
+    }
+
+    // Update page title
+    var titles = {
+      'home': 'Echosphere.io — Reconciling Human and Digital Ontologies',
+      'problem': 'The Problem | Echosphere.io',
+      'architecture': 'The Architecture | Echosphere.io',
+      'proof': 'The Proof | Echosphere.io',
+      'vocabulary': 'The Vocabulary | Echosphere.io',
+      'warrior': 'The Warrior | Echosphere.io',
+      'statesman': 'The Statesman | Echosphere.io',
+      'merchant': 'The Merchant | Echosphere.io',
+      'teacher': 'The Teacher | Echosphere.io',
+      'healer': 'The Healer | Echosphere.io',
+      'judge': 'The Judge | Echosphere.io',
+      'telos': 'The Telos of Service | Echosphere.io',
+      'examined': 'The Examined Life | Echosphere.io',
+      'cosmos': 'The Cosmos | Echosphere.io',
+      'tool': 'The Tool | Echosphere.io',
+      'manifesto': 'Manifesto | Echosphere.io',
+      'about': 'About | Echosphere.io',
+      'wp-six-constraint': 'Six-Constraint Semantic Validity Architecture | Echosphere.io',
+      'exhibit-flowchart': 'The Semantic Validity Engine — Flowchart | Echosphere.io'
+    };
+    document.title = titles[pageId] || titles['home'];
+  }
+
+  // Mobile Menu Toggle
+  function toggleMobileMenu() {
+    var navLinks = document.getElementById('navLinks');
+    if (navLinks) {
+      navLinks.classList.toggle('open');
+    }
+  }
+
+  // Handle initial page load from URL hash
+  window.addEventListener('DOMContentLoaded', function() {
+    var hash = window.location.hash.replace('#', '');
+    if (hash) {
+      showPage(hash);
+    } else {
+      showPage('home');
+    }
+  });
+
+  // Handle browser back/forward buttons
+  window.addEventListener('popstate', function() {
+    var hash = window.location.hash.replace('#', '');
+    if (hash) {
+      showPage(hash);
+    } else {
+      showPage('home');
+    }
+  });
+</script>
+
+</body>
+</html>
