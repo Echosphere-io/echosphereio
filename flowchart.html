@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semantic Validity Engine — Patent Architecture Flowchart</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --ink: #1a1a1a;
+    --parchment: #f8f6f0;
+    --cream: #ede8d8;
+    --warm: #c4a86a;
+    --rust: #8B4513;
+    --deep-blue: #2E5090;
+    --forest: #2D6A2D;
+    --crimson: #8B0000;
+    --purple: #6B3FA0;
+    --gold: #B8860B;
+    --muted: #777;
+    --light-line: #d4cbb8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    background: var(--parchment);
+    color: var(--ink);
+    line-height: 1.5;
+    padding: 40px 20px;
+  }
+
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ===== HEADER ===== */
+  .header {
+    text-align: center;
+    padding-bottom: 30px;
+    border-bottom: 2px solid var(--ink);
+    margin-bottom: 40px;
+  }
+  .header h1 {
+    font-size: 2.4rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 1.15rem;
+    font-style: italic;
+    color: var(--muted);
+  }
+  .header .byline {
+    font-size: 0.9rem;
+    color: #999;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== CLAIM BOX ===== */
+  .claim-section {
+    background: #fff;
+    border: 2px solid var(--ink);
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .claim-section::before {
+    content: 'THE CLAIM';
+    position: absolute;
+    top: -11px;
+    left: 24px;
+    background: var(--parchment);
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .claim-section p {
+    font-size: 1.1rem;
+    line-height: 1.7;
+  }
+  .claim-section p + p { margin-top: 12px; }
+  .claim-section strong { font-weight: 700; }
+  .claim-section em { font-style: italic; color: #555; }
+
+  /* ===== COMPARISON TABLE ===== */
+  .comparison {
+    margin-bottom: 50px;
+  }
+  .comparison h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--light-line);
+  }
+  .comp-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr 1fr;
+    gap: 0;
+    border: 2px solid var(--ink);
+    font-size: 0.95rem;
+  }
+  .comp-grid .header-cell {
+    background: var(--ink);
+    color: #fff;
+    padding: 10px 14px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+  .comp-grid .row-label {
+    background: var(--cream);
+    padding: 12px 14px;
+    font-weight: 700;
+    border-bottom: 1px solid var(--light-line);
+    border-right: 1px solid var(--light-line);
+  }
+  .comp-grid .cell {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--light-line);
+    border-right: 1px solid var(--light-line);
+    line-height: 1.5;
+  }
+  .comp-grid .cell:last-child { border-right: none; }
+  .comp-grid .cell.traditional { background: #fff8f0; }
+  .comp-grid .cell.hexis { background: #f0f8f0; }
+  .comp-grid .fail { color: var(--crimson); font-weight: 600; }
+  .comp-grid .pass { color: var(--forest); font-weight: 600; }
+
+  /* ===== FLOWCHART ===== */
+  .flowchart-section {
+    margin-bottom: 50px;
+  }
+  .flowchart-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--light-line);
+  }
+
+  .flow-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  .flow-node {
+    position: relative;
+    width: 85%;
+    max-width: 750px;
+    padding: 20px 24px;
+    border-radius: 6px;
+    text-align: left;
+  }
+
+  .flow-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 4px 0;
+    color: var(--muted);
+    font-size: 1.4rem;
+    line-height: 1;
+  }
+  .flow-arrow .arrow-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.08em;
+    color: #999;
+    margin-bottom: 2px;
+  }
+
+  /* Node types */
+  .node-input {
+    background: #e8e4da;
+    border: 2px solid #999;
+    text-align: center;
+  }
+  .node-input .node-title { font-size: 1rem; font-weight: 700; }
+  .node-input .node-desc { font-size: 0.85rem; color: #666; margin-top: 4px; }
+
+  .node-stage {
+    background: #fff;
+    border: 2px solid var(--ink);
+    position: relative;
+  }
+  .node-stage .stage-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--light-line);
+  }
+  .node-stage .stage-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #fff;
+    background: var(--ink);
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .node-stage .stage-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .node-stage .patent-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-left: auto;
+    letter-spacing: 0.05em;
+  }
+  .patent-a { background: var(--rust); }
+  .patent-b { background: var(--deep-blue); }
+  .patent-c { background: var(--forest); }
+  .patent-d { background: var(--crimson); }
+  .patent-e { background: var(--purple); }
+  .patent-f { background: var(--gold); }
+  .patent-g { background: #555; }
+  .patent-h { background: #2a6a6a; }
+
+  .node-stage .stage-body {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: #444;
+  }
+  .node-stage .stage-body strong { color: var(--ink); }
+  .node-stage .constraint-checks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px 20px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+  }
+  .constraint-checks .check-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .check-item .check-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .dot-ref { background: var(--rust); }
+  .dot-ctx { background: var(--deep-blue); }
+  .dot-pre { background: var(--forest); }
+  .dot-inf { background: var(--crimson); }
+  .dot-con { background: var(--purple); }
+  .dot-tel { background: var(--gold); }
+
+  /* Decision diamond */
+  .node-decision {
+    background: var(--cream);
+    border: 3px solid var(--ink);
+    text-align: center;
+    width: 65%;
+    max-width: 500px;
+    padding: 18px;
+  }
+  .node-decision .node-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .node-decision .node-desc {
+    font-size: 0.85rem;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  /* Split outcomes */
+  .split-row {
+    display: flex;
+    gap: 30px;
+    width: 85%;
+    max-width: 750px;
+  }
+  .split-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+    padding: 6px 0;
+    font-size: 1.2rem;
+    color: var(--muted);
+  }
+  .split-arrow .arrow-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 2px;
+  }
+  .split-arrow.pass-arrow .arrow-label { color: var(--forest); }
+  .split-arrow.fail-arrow .arrow-label { color: var(--crimson); }
+
+  .node-pass {
+    flex: 1;
+    background: #d4edda;
+    border: 2px solid var(--forest);
+    border-radius: 6px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .node-pass .node-title { font-size: 1rem; font-weight: 700; color: var(--forest); }
+  .node-pass .node-desc { font-size: 0.85rem; color: #2a5a2a; margin-top: 6px; }
+
+  .node-fail {
+    flex: 1;
+    background: #f8d7da;
+    border: 2px solid var(--crimson);
+    border-radius: 6px;
+    padding: 16px 18px;
+    text-align: center;
+  }
+  .node-fail .node-title { font-size: 1rem; font-weight: 700; color: var(--crimson); }
+  .node-fail .node-desc { font-size: 0.85rem; color: #5a1a1a; margin-top: 6px; }
+
+  .fail-options {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-top: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+  }
+  .fail-opt {
+    padding: 4px 10px;
+    border-radius: 3px;
+    background: #f0b8bd;
+    color: var(--crimson);
+    font-weight: 600;
+  }
+
+  /* ===== PATENT MAP ===== */
+  .patent-map {
+    margin-bottom: 50px;
+  }
+  .patent-map h2 {
+    font-size: 1.5rem;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--light-line);
+  }
+  .patent-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .patent-card {
+    background: #fff;
+    border: 1px solid var(--light-line);
+    border-left: 4px solid;
+    padding: 16px 18px;
+    border-radius: 0 4px 4px 0;
+  }
+  .patent-card .card-header {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .patent-card .card-letter {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  .patent-card .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .patent-card .card-role {
+    font-size: 0.85rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  .patent-card .card-engine {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    color: #888;
+    margin-top: 6px;
+    letter-spacing: 0.03em;
+  }
+  .card-a { border-left-color: var(--rust); }
+  .card-b { border-left-color: var(--deep-blue); }
+  .card-c { border-left-color: var(--forest); }
+  .card-d { border-left-color: var(--crimson); }
+  .card-e { border-left-color: var(--purple); }
+  .card-f { border-left-color: var(--gold); }
+  .card-g { border-left-color: #555; }
+  .card-h { border-left-color: #2a6a6a; }
+
+  /* ===== DISTINCTION ===== */
+  .distinction {
+    background: #fff;
+    border: 2px solid var(--ink);
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+  .distinction::before {
+    content: 'THE DISTINCTION';
+    position: absolute;
+    top: -11px;
+    left: 24px;
+    background: var(--parchment);
+    padding: 0 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+  }
+  .distinction h3 {
+    font-size: 1.15rem;
+    margin-bottom: 12px;
+  }
+  .dist-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  .dist-col h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .dist-col ul {
+    list-style: none;
+    padding: 0;
+  }
+  .dist-col ul li {
+    padding: 4px 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .dist-col ul li::before {
+    content: '\2022';
+    margin-right: 8px;
+    color: var(--warm);
+  }
+  .dist-col.not-claim li::before { content: '\2717'; color: var(--crimson); }
+  .dist-col.do-claim li::before { content: '\2713'; color: var(--forest); }
+
+  /* ===== FOOTER ===== */
+  .footer {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 2px solid var(--ink);
+    margin-top: 40px;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .footer .footer-brand {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <h1>The Semantic Validity Engine</h1>
+    <div class="subtitle">How Eight Patent Families Constitute a Structural Alternative to Editorial Fact-Checking</div>
+    <div class="byline">ECHOSPHERE.IO &mdash; FEBRUARY 2026</div>
+  </div>
+
+  <!-- THE CLAIM -->
+  <div class="claim-section">
+    <p><strong>What we claim:</strong> The Semantic Validity Architecture can determine whether a claim is <em>structurally complete</em>&mdash;whether it satisfies the six constraints necessary for semantic validity. This operates upstream of empirical verification. A structurally incomplete claim cannot be valid regardless of its factual content.</p>
+    <p><strong>What we do not claim:</strong> The architecture does not replace empirical verification. It does not know whether the Eiffel Tower was built in 1887 or 1923. What it knows is whether the claim <em>asserting</em> a date satisfies the structural conditions that would make it verifiable. It catches the architecture of error, not the content of error.</p>
+    <p><strong>Why this is stronger:</strong> Traditional fact-checkers work downstream&mdash;they correct errors after emission. The Hexis works upstream&mdash;it prevents structurally incomplete claims from being emitted at all. Prevention, not correction.</p>
+  </div>
+
+  <!-- COMPARISON -->
+  <div class="comparison">
+    <h2>Traditional Fact-Checking vs. Semantic Validity Engine</h2>
+    <div class="comp-grid">
+      <div class="header-cell">DIMENSION</div>
+      <div class="header-cell">TRADITIONAL FACT-CHECKERS</div>
+      <div class="header-cell">SEMANTIC VALIDITY ENGINE</div>
+
+      <div class="row-label">Criterion</div>
+      <div class="cell traditional"><span class="fail">None formal.</span> Editorial judgment applied case-by-case.</div>
+      <div class="cell hexis"><span class="pass">Six structural constraints</span> constituting the minimum for semantic closure.</div>
+
+      <div class="row-label">Selection</div>
+      <div class="cell traditional"><span class="fail">Human editors choose</span> which claims to check. ~0.001% of public claims examined.</div>
+      <div class="cell hexis"><span class="pass">Every claim</span> passing through the system is validated against all six constraints. No editorial gatekeeping.</div>
+
+      <div class="row-label">Output</div>
+      <div class="cell traditional"><span class="fail">Gradational ratings</span> (Pinocchios, Truth-O-Meter) requiring subjective interpretation.</div>
+      <div class="cell hexis"><span class="pass">Categorical signal:</span> COMPLETE or INCOMPLETE. Binary. Operator-independent.</div>
+
+      <div class="row-label">Timing</div>
+      <div class="cell traditional"><span class="fail">Reactive.</span> Hours to days after the claim has propagated.</div>
+      <div class="cell hexis"><span class="pass">Real-time.</span> Validation occurs before emission, not after publication.</div>
+
+      <div class="row-label">Inference Types</div>
+      <div class="cell traditional"><span class="fail">All claims rated on the same scale.</span> No distinction between deduction, prediction, or opinion.</div>
+      <div class="cell hexis"><span class="pass">Four inference types</span> (deductive, inductive, abductive, interpolative) discriminated and routed to appropriate closure.</div>
+
+      <div class="row-label">Closure Authority</div>
+      <div class="cell traditional"><span class="fail">Editor closes every verdict.</span> No structural routing to human judgment for value claims.</div>
+      <div class="cell hexis"><span class="pass">System routes</span> factual claims to system closure, value/ethical claims to human closure. Refuses when constraints unsatisfiable.</div>
+
+      <div class="row-label">Reproducibility</div>
+      <div class="cell traditional"><span class="fail">Two editors can reach different ratings</span> from the same facts. Not reproducible.</div>
+      <div class="cell hexis"><span class="pass">Same input &rarr; same output.</span> Structural determination independent of operator.</div>
+
+      <div class="row-label">Scope</div>
+      <div class="cell traditional">Checks claims against <span class="fail">external sources.</span> Downstream of error.</div>
+      <div class="cell hexis">Checks claims against <span class="pass">structural completeness.</span> Upstream of error.</div>
+    </div>
+  </div>
+
+  <!-- FLOWCHART -->
+  <div class="flowchart-section">
+    <h2>Engine Architecture &mdash; Claim Processing Pipeline</h2>
+
+    <div class="flow-container">
+
+      <!-- INPUT -->
+      <div class="flow-node node-input">
+        <div class="node-title">ANY CLAIM ENTERS THE SYSTEM</div>
+        <div class="node-desc">Public statement, AI output, document assertion, user query, policy claim, news report</div>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="arrow-label">STAGE 1</div>
+        &darr;
+      </div>
+
+      <!-- STAGE 1: DECOMPOSITION -->
+      <div class="flow-node node-stage">
+        <div class="stage-header">
+          <span class="stage-num">STAGE 1</span>
+          <span class="stage-title">Tetrahedral Decomposition</span>
+          <span class="patent-tag patent-a">PATENT A</span>
+        </div>
+        <div class="stage-body">
+          The claim is decomposed into its four components (<strong>Claimant, Subject, Grounds, Purpose</strong>) mapped onto the tetrahedron&rsquo;s vertices, and the six relational constraints are identified across the edges. The system asks: <em>Are all four components present? Are all six relations instantiated?</em>
+        </div>
+        <div class="constraint-checks">
+          <div class="check-item"><span class="check-dot dot-ref"></span> Referential &mdash; What is being claimed?</div>
+          <div class="check-item"><span class="check-dot dot-ctx"></span> Contextual &mdash; Under what conditions?</div>
+          <div class="check-item"><span class="check-dot dot-pre"></span> Premissive &mdash; On what grounds?</div>
+          <div class="check-item"><span class="check-dot dot-inf"></span> Inferential &mdash; Why does this follow?</div>
+          <div class="check-item"><span class="check-dot dot-con"></span> Constraining &mdash; What are the limits?</div>
+          <div class="check-item"><span class="check-dot dot-tel"></span> Teleological &mdash; What is this for?</div>
+        </div>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="arrow-label">STAGE 2</div>
+        &darr;
+      </div>
+
+      <!-- STAGE 2: INFERENCE DISCRIMINATION -->
+      <div class="flow-node node-stage">
+        <div class="stage-header">
+          <span class="stage-num">STAGE 2</span>
+          <span class="stage-title">Inference Type Discrimination</span>
+          <span class="patent-tag patent-c">PATENT C</span>
+        </div>
+        <div class="stage-body">
+          The system tags the inference type that produced the claim. <strong>Deductive</strong> (necessary conclusion) &ne; <strong>Inductive</strong> (generalization) &ne; <strong>Abductive</strong> (best explanation) &ne; <strong>Interpolative</strong> (pattern completion). Each type warrants different confidence and requires different closure. <em>Traditional fact-checkers conflate all four on a single scale.</em>
+        </div>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="arrow-label">STAGE 3</div>
+        &darr;
+      </div>
+
+      <!-- STAGE 3: SEMANTIC STATE -->
+      <div class="flow-node node-stage">
+        <div class="stage-header">
+          <span class="stage-num">STAGE 3</span>
+          <span class="stage-title">Semantic State Signaling</span>
+          <span class="patent-tag patent-d">PATENT D</span>
+        </div>
+        <div class="stage-body">
+          The system tracks which constraints are satisfied and which are absent, <strong>in real time</strong>. This is the &ldquo;semantic spell-check&rdquo;&mdash;a passive diagnostic that shadows the claim as it is being formed, not after publication. Missing constraints are flagged <em>before emission</em>.
+        </div>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="arrow-label">STAGE 4</div>
+        &darr;
+      </div>
+
+      <!-- STAGE 4: CONSTRAINT GOVERNANCE -->
+      <div class="flow-node node-stage">
+        <div class="stage-header">
+          <span class="stage-num">STAGE 4</span>
+          <span class="stage-title">Constraint Governance</span>
+          <span class="patent-tag patent-e">PATENT E</span>
+        </div>
+        <div class="stage-body">
+          Domain-specific constraint rules are applied. Medical claims require higher Premissive standards (peer-reviewed evidence). Legal claims require verified Premissive grounding (real case citations). Policy claims require explicit Constraining acknowledgment (limits of projections). <strong>The constraints adapt their rigor to the domain without changing their structure.</strong>
+        </div>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="arrow-label">STAGE 5</div>
+        &darr;
+      </div>
+
+      <!-- STAGE 5: CLOSURE AUTHORITY -->
+      <div class="flow-node node-stage">
+        <div class="stage-header">
+          <span class="stage-num">STAGE 5</span>
+          <span class="stage-title">Closure Authority Routing</span>
+          <span class="patent-tag patent-f">PATENT F</span>
+        </div>
+        <div class="stage-body">
+          The system determines <strong>who should close the claim</strong>. Factual lookups: system closes. Calculations: system closes. Value judgments, ethical claims, safety-critical decisions: <strong>routed to human closure</strong>. The system never finalizes what humans should decide. <em>No fact-checking organization has this structural boundary.</em>
+        </div>
+      </div>
+
+      <div class="flow-arrow">
+        <div class="arrow-label">DETERMINATION</div>
+        &darr;
+      </div>
+
+      <!-- DECISION -->
+      <div class="flow-node node-decision">
+        <div class="node-title">ALL SIX CONSTRAINTS SATISFIED?</div>
+        <div class="node-desc">Categorical determination &mdash; not a score, not a rating</div>
+      </div>
+
+      <!-- SPLIT -->
+      <div class="split-row">
+        <div class="split-arrow pass-arrow">
+          <div class="arrow-label">6/6 = COMPLETE</div>
+          &darr;
+        </div>
+        <div class="split-arrow fail-arrow">
+          <div class="arrow-label">&lt;6 = INCOMPLETE</div>
+          &darr;
+        </div>
+      </div>
+      <div class="split-row">
+        <div class="node-pass">
+          <div class="node-title">EMIT AS VALID</div>
+          <div class="node-desc">Semantically complete. All constraints satisfied. Inference type tagged. Closure authority assigned. The claim has the structural form of knowledge.</div>
+        </div>
+        <div class="node-fail">
+          <div class="node-title">DO NOT EMIT</div>
+          <div class="node-desc">Structurally incomplete. Specific missing constraints identified. The system names what is absent.</div>
+          <div class="fail-options">
+            <span class="fail-opt">REVISE</span>
+            <span class="fail-opt">HEDGE</span>
+            <span class="fail-opt">REFUSE</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow-arrow" style="margin-top: 14px;">
+        <div class="arrow-label">SUPPORTING INFRASTRUCTURE</div>
+        &darr;
+      </div>
+
+      <!-- SUPPORTING PATENTS -->
+      <div class="flow-node node-stage" style="border-style: dashed;">
+        <div class="stage-header">
+          <span class="stage-title">Memory, Condensation &amp; Integration</span>
+          <span class="patent-tag patent-b">B</span>
+          <span class="patent-tag patent-h">H</span>
+          <span class="patent-tag patent-g" style="margin-left: 4px;">G</span>
+        </div>
+        <div class="stage-body">
+          <strong>Patent B</strong> (Form-Preserving Memory) maintains validated state across sessions&mdash;the system remembers what it has verified. <strong>Patent H</strong> (Semantic Condensation &amp; Reconstitution) extracts the <em>eidos</em>&mdash;the formal structure&mdash;of any content, enabling compression without meaning loss and proving that form survives substrate removal. <strong>Patent G</strong> (Integrated System) governs the coordination of all components into a unified architecture.
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- PATENT MAP -->
+  <div class="patent-map">
+    <h2>Patent Family &rarr; Engine Function Map</h2>
+    <div class="patent-grid">
+      <div class="patent-card card-a">
+        <div class="card-header">
+          <span class="card-letter" style="color:var(--rust);">FAMILY A</span>
+          <span class="card-title">Tetrahedral Validity Structure</span>
+        </div>
+        <div class="card-role">The core decomposition engine. Every claim mapped onto four vertices (components) and six edges (constraints). The geometry that makes validation possible.</div>
+        <div class="card-engine">ENGINE ROLE &rarr; STAGE 1: DECOMPOSITION</div>
+      </div>
+      <div class="patent-card card-b">
+        <div class="card-header">
+          <span class="card-letter" style="color:var(--deep-blue);">FAMILY B</span>
+          <span class="card-title">Form-Preserving Memory</span>
+        </div>
+        <div class="card-role">Validated claims stored with their structural signatures. The system retains not just what was verified but the structure of the verification. Persistent validity across sessions.</div>
+        <div class="card-engine">ENGINE ROLE &rarr; PERSISTENCE LAYER</div>
+      </div>
+      <div class="patent-card card-c">
+        <div class="card-header">
+          <span class="card-letter" style="color:var(--forest);">FAMILY C</span>
+          <span class="card-title">Inference Discrimination</span>
+        </div>
+        <div class="card-role">Tags inference type on every claim. Prevents the conflation that lets fact-checkers rate deductions and speculations on the same scale.</div>
+        <div class="card-engine">ENGINE ROLE &rarr; STAGE 2: INFERENCE TAGGING</div>
+      </div>
+      <div class="patent-card card-d">
+        <div class="card-header">
+          <span class="card-letter" style="color:var(--crimson);">FAMILY D</span>
+          <span class="card-title">Semantic State Signaling</span>
+        </div>
+        <div class="card-role">Real-time constraint status. The &ldquo;semantic spell-check&rdquo; that operates before emission, not after publication. Eliminates latency.</div>
+        <div class="card-engine">ENGINE ROLE &rarr; STAGE 3: REAL-TIME DIAGNOSTICS</div>
+      </div>
+      <div class="patent-card card-e">
+        <div class="card-header">
+          <span class="card-letter" style="color:var(--purple);">FAMILY E</span>
+          <span class="card-title">Constraint Governance</span>
+        </div>
+        <div class="card-role">Domain-adaptive rigor. Medical, legal, military, educational claims each governed by the same six constraints at domain-appropriate stringency.</div>
+        <div class="card-engine">ENGINE ROLE &rarr; STAGE 4: DOMAIN CALIBRATION</div>
+      </div>
+      <div class="patent-card card-f">
+        <div class="card-header">
+          <span class="card-letter" style="color:var(--gold);">FAMILY F</span>
+          <span class="card-title">Closure Authority</span>
+        </div>
+        <div class="card-role">Routes outputs to appropriate closure. System closes factual lookups; humans close value judgments. The structural boundary no fact-checker has.</div>
+        <div class="card-engine">ENGINE ROLE &rarr; STAGE 5: CLOSURE ROUTING</div>
+      </div>
+      <div class="patent-card card-g">
+        <div class="card-header">
+          <span class="card-letter" style="color:#555;">FAMILY G</span>
+          <span class="card-title">Integrated System</span>
+        </div>
+        <div class="card-role">Coordinates all components into a unified architecture. Governs inter-module communication and system-level validation orchestration.</div>
+        <div class="card-engine">ENGINE ROLE &rarr; SYSTEM INTEGRATION</div>
+      </div>
+      <div class="patent-card card-h">
+        <div class="card-header">
+          <span class="card-letter" style="color:#2a6a6a;">FAMILY H</span>
+          <span class="card-title">Semantic Condensation &amp; Reconstitution</span>
+        </div>
+        <div class="card-role">Extracts the eidos (formal structure) from content, enabling lossless compression, cross-domain transfer, and empirical proof that form survives substrate removal.</div>
+        <div class="card-engine">ENGINE ROLE &rarr; EIDOS EXTRACTION &amp; PROOF</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISTINCTION BOX -->
+  <div class="distinction">
+    <h3>What We Claim &mdash; and What We Do Not</h3>
+    <div class="dist-grid">
+      <div class="dist-col do-claim">
+        <h4>We claim</h4>
+        <ul>
+          <li>Structural completeness checking against six formal constraints</li>
+          <li>Categorical output (complete/incomplete) independent of operator</li>
+          <li>Real-time validation before emission, not reactive correction</li>
+          <li>Inference type discrimination &mdash; deduction tagged differently than speculation</li>
+          <li>Closure authority routing &mdash; the system knows when humans must decide</li>
+          <li>Universal application to every claim, not editorial selection</li>
+          <li>Formal operators derived from Aristotelian causal analysis, implemented computationally</li>
+        </ul>
+      </div>
+      <div class="dist-col not-claim">
+        <h4>We do not claim</h4>
+        <ul>
+          <li>Replacement for empirical verification of factual content</li>
+          <li>Omniscience about historical dates, statistics, or events</li>
+          <li>Infallibility &mdash; a structurally complete claim can still be factually wrong</li>
+          <li>Elimination of all error &mdash; we eliminate structurally <em>preventable</em> error</li>
+          <li>Automated resolution of genuine value disputes or ethical questions</li>
+          <li>Independence from all human judgment &mdash; closure authority preserves it where needed</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-brand">ECHOSPHERE.IO &bull; THE THEMIS PROJECT &bull; SEMANTIC VALIDITY ARCHITECTURE</div>
+    <div>Eight patent families. Six constraints. One criterion for semantic completeness.</div>
+    <div style="margin-top:6px;"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" 
