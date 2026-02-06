@@ -1,819 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Echosphere.io — Reconciling Human and Digital Ontologies</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        :root {
-            --charcoal: #0d0d0d;
-            --charcoal-light: #1a1a1a;
-            --charcoal-mid: #2a2a2a;
-            --gold: #c9a227;
-            --gold-dim: rgba(201, 162, 39, 0.4);
-            --gold-ghost: rgba(201, 162, 39, 0.15);
-            --gold-bright: #e6bc2f;
-            --cream: #f5f3ef;
-            --text-primary: #e8e6e1;
-            --text-secondary: #8a8885;
-            --text-dim: #5a5855;
-        }
-
-        html { scroll-behavior: smooth; }
-
-        body {
-            font-family: 'IBM Plex Sans', sans-serif;
-            background-color: var(--charcoal);
-            color: var(--text-primary);
-            line-height: 1.6;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Navigation */
-        nav {
-            position: fixed;
-            top: 0; left: 0; right: 0;
-            z-index: 1000;
-            padding: 1.5rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: linear-gradient(to bottom, var(--charcoal) 0%, transparent 100%);
-        }
-
-        .logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--cream);
-            text-decoration: none;
-            letter-spacing: 0.05em;
-        }
-        .logo span { color: var(--gold); }
-
-        .nav-links {
-            display: flex;
-            gap: 2.5rem;
-            list-style: none;
-        }
-        .nav-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
-        .nav-links a:hover { color: var(--gold); }
-
-        /* Hero */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 6rem 2rem 4rem;
-        }
-
-        .hero-content { max-width: 800px; }
-
-        .hero-eyebrow {
-            font-size: 0.85rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 1.5rem;
-            font-weight: 500;
-        }
-
-        .hero-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 3.5rem;
-            font-weight: 700;
-            color: var(--cream);
-            margin-bottom: 1rem;
-            line-height: 1.15;
-        }
-
-        .hero-subtitle {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-style: italic;
-            color: var(--text-secondary);
-        }
-
-        /* Journey Section */
-        .journey-section { padding: 4rem 2rem 6rem; }
-
-        .journey-container {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: 4rem;
-        }
-
-        .tetrahedron-visual {
-            flex: 0 0 400px;
-            height: 450px;
-        }
-
-        .tetrahedron-svg { width: 100%; height: 100%; }
-
-        .foundation-point, .phase1-point { fill: var(--gold); }
-        .phase1-edge { stroke: var(--gold); stroke-width: 2; }
-        .phase2-point { fill: var(--gold-dim); }
-        .phase2-edge { stroke: var(--gold-dim); stroke-width: 1.5; stroke-dasharray: 4, 4; }
-        .phase3-point { fill: var(--gold-ghost); }
-        .phase3-edge { stroke: var(--gold-ghost); stroke-width: 1; stroke-dasharray: 2, 4; }
-
-        .telos-glow {
-            fill: none;
-            stroke: var(--gold);
-            stroke-width: 1;
-            opacity: 0.3;
-            animation: pulse 3s ease-in-out infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.2; }
-            50% { opacity: 0.5; }
-        }
-
-        .phase-label {
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 10px;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            fill: var(--text-secondary);
-        }
-        .phase-label.active { fill: var(--gold); font-weight: 500; }
-        .phase-label.dim { fill: var(--text-dim); }
-
-        .phase-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 14px;
-            font-style: italic;
-            fill: var(--text-secondary);
-        }
-        .phase-name.active { fill: var(--cream); font-size: 16px; }
-
-        .journey-text { flex: 1; max-width: 500px; }
-
-        .journey-phase {
-            margin-bottom: 2rem;
-            padding-left: 1.5rem;
-            border-left: 2px solid var(--charcoal-mid);
-        }
-        .journey-phase.active { border-left-color: var(--gold); }
-        .journey-phase.dim { opacity: 0.4; }
-
-        .phase-marker {
-            font-size: 0.7rem;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-            margin-bottom: 0.25rem;
-        }
-        .journey-phase.active .phase-marker { color: var(--gold); }
-
-        .phase-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.4rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: 0.5rem;
-        }
-        .journey-phase.active .phase-title { color: var(--cream); }
-
-        .phase-desc {
-            font-size: 0.9rem;
-            color: var(--text-dim);
-            line-height: 1.6;
-        }
-        .journey-phase.active .phase-desc { color: var(--text-secondary); }
-
-        .phase-link {
-            display: inline-block;
-            margin-top: 0.75rem;
-            font-size: 0.8rem;
-            color: var(--gold);
-            text-decoration: none;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            font-weight: 500;
-        }
-        .phase-link:hover { color: var(--gold-bright); }
-
-        /* Telos Section */
-        .telos-section {
-            padding: 5rem 2rem;
-            text-align: center;
-            background: linear-gradient(to bottom, var(--charcoal) 0%, var(--charcoal-light) 100%);
-        }
-
-        .telos-line {
-            width: 1px;
-            height: 60px;
-            background: linear-gradient(to bottom, transparent, var(--gold));
-            margin: 0 auto 2rem;
-        }
-
-        .telos-label {
-            font-size: 0.75rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--gold-dim);
-            margin-bottom: 1.5rem;
-        }
-
-        .telos-statement {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2.2rem;
-            font-style: italic;
-            color: var(--cream);
-            max-width: 700px;
-            margin: 0 auto 1rem;
-        }
-
-        .telos-sub {
-            font-size: 1rem;
-            color: var(--text-dim);
-        }
-
-        /* Section Headers */
-        .section-header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-eyebrow {
-            font-size: 0.75rem;
-            letter-spacing: 0.25em;
-            text-transform: uppercase;
-            color: var(--gold);
-            margin-bottom: 0.75rem;
-        }
-
-        .section-title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 2rem;
-            font-weight: 600;
-            color: var(--cream);
-        }
-
-        /* Applications Section */
-        .applications-section {
-            padding: 5rem 4rem;
-            background: var(--charcoal-light);
-        }
-
-        .applications-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1px;
-            background: var(--charcoal-mid);
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .app-card {
-            background: var(--charcoal);
-            padding: 1.75rem;
-            text-decoration: none;
-            transition: background 0.3s ease;
-        }
-        .app-card:hover { background: var(--charcoal-mid); }
-
-        .app-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-
-        .app-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.15rem;
-            font-weight: 600;
-            color: var(--cream);
-            margin-bottom: 0.25rem;
-        }
-
-        .app-role {
-            font-size: 0.8rem;
-            color: var(--text-dim);
-            font-style: italic;
-        }
-
-        .foundations-row {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 1px;
-            background: var(--charcoal-mid);
-            max-width: 900px;
-            margin: 1.5rem auto 0;
-        }
-
-        .foundation-card {
-            background: var(--charcoal);
-            padding: 1.25rem;
-            text-decoration: none;
-            text-align: center;
-            transition: background 0.3s ease;
-        }
-        .foundation-card:hover { background: var(--charcoal-mid); }
-
-        .foundation-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-        }
-
-        /* Tools Section */
-        .tools-section {
-            padding: 5rem 4rem;
-            background: var(--charcoal);
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1.25rem;
-            max-width: 950px;
-            margin: 0 auto;
-        }
-
-        .tool-card {
-            background: var(--charcoal-light);
-            border: 1px solid var(--charcoal-mid);
-            padding: 1.75rem;
-            transition: border-color 0.3s ease;
-        }
-        .tool-card:hover { border-color: var(--gold-dim); }
-
-        .tool-card--featured {
-            border-color: var(--gold);
-            grid-column: span 3;
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            align-items: center;
-            gap: 1.5rem;
-        }
-        .tool-card--featured .tool-icon {
-            font-size: 2rem;
-            color: var(--gold);
-            margin-bottom: 0;
-        }
-        .tool-card--featured .tool-name { margin-bottom: 0.25rem; }
-        .tool-card--featured .tool-desc { margin-bottom: 0; }
-
-        .tool-icon {
-            font-size: 1.25rem;
-            color: var(--gold-dim);
-            margin-bottom: 0.75rem;
-        }
-
-        .tool-name {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--cream);
-            margin-bottom: 0.5rem;
-        }
-
-        .tool-desc {
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-            line-height: 1.5;
-            margin-bottom: 0.75rem;
-        }
-
-        .tool-status {
-            font-size: 0.7rem;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--text-dim);
-        }
-
-        /* Manifesto Section */
-        .manifesto-section {
-            padding: 5rem 2rem;
-            text-align: center;
-            background: var(--charcoal-light);
-        }
-
-        .manifesto-quote {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.5rem;
-            font-style: italic;
-            color: var(--cream);
-            max-width: 650px;
-            margin: 0 auto 1.5rem;
-            line-height: 1.5;
-        }
-
-        .manifesto-link {
-            font-size: 0.8rem;
-            color: var(--gold);
-            text-decoration: none;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-        }
-        .manifesto-link:hover { color: var(--gold-bright); }
-
-        /* Footer */
-        footer {
-            padding: 2.5rem 4rem;
-            border-top: 1px solid var(--charcoal-mid);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-        }
-
-        .footer-left { display: flex; flex-direction: column; gap: 0.25rem; }
-
-        .footer-logo {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--cream);
-        }
-        .footer-logo span { color: var(--gold); }
-
-        .footer-copy { font-size: 0.7rem; color: var(--text-dim); }
-
-        .footer-links { display: flex; gap: 2rem; }
-        .footer-links a {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            text-decoration: none;
-        }
-        .footer-links a:hover { color: var(--gold); }
-
-        .footer-contact a {
-            font-size: 0.85rem;
-            color: var(--gold);
-            text-decoration: none;
-        }
-
-        /* Ask Themis */
-        .ask-themis {
-            position: fixed;
-            bottom: 2rem;
-            right: 2rem;
-            z-index: 999;
-        }
-
-        .ask-themis__button {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-            background: var(--gold);
-            color: var(--charcoal);
-            border: none;
-            padding: 0.875rem 1.5rem;
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-        }
-        .ask-themis__button:hover {
-            background: var(--gold-bright);
-            transform: translateY(-2px);
-        }
-
-        .ask-themis__icon { font-size: 1rem; }
-
-        .ask-themis__panel {
-            display: none;
-            position: absolute;
-            bottom: 100%;
-            right: 0;
-            width: 340px;
-            background: var(--charcoal-light);
-            border: 1px solid var(--charcoal-mid);
-            margin-bottom: 1rem;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-        }
-        .ask-themis__panel.active { display: block; }
-
-        .ask-themis__header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.25rem;
-            border-bottom: 1px solid var(--charcoal-mid);
-        }
-
-        .ask-themis__title {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--cream);
-        }
-
-        .ask-themis__close {
-            background: none;
-            border: none;
-            color: var(--text-dim);
-            font-size: 1.25rem;
-            cursor: pointer;
-        }
-        .ask-themis__close:hover { color: var(--gold); }
-
-        .ask-themis__context {
-            padding: 0.75rem 1.25rem;
-            background: var(--charcoal);
-            font-size: 0.75rem;
-            color: var(--text-dim);
-            border-bottom: 1px solid var(--charcoal-mid);
-        }
-
-        .ask-themis__body { padding: 1.25rem; }
-        .ask-themis__body p {
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            line-height: 1.5;
-        }
-
-        .ask-themis__input-wrap {
-            padding: 1rem 1.25rem;
-            border-top: 1px solid var(--charcoal-mid);
-        }
-
-        .ask-themis__input {
-            width: 100%;
-            background: var(--charcoal);
-            border: 1px solid var(--charcoal-mid);
-            color: var(--text-primary);
-            padding: 0.75rem;
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 0.85rem;
-            resize: none;
-        }
-        .ask-themis__input:focus {
-            outline: none;
-            border-color: var(--gold-dim);
-        }
-        .ask-themis__input::placeholder { color: var(--text-dim); }
-
-        .ask-themis__submit {
-            width: 100%;
-            margin-top: 0.75rem;
-            background: var(--gold);
-            color: var(--charcoal);
-            border: none;
-            padding: 0.625rem;
-            font-family: 'IBM Plex Sans', sans-serif;
-            font-size: 0.8rem;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        .ask-themis__submit:hover { background: var(--gold-bright); }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .journey-container { flex-direction: column; }
-            .tetrahedron-visual { flex: none; width: 100%; max-width: 320px; height: 360px; }
-            .applications-grid { grid-template-columns: repeat(2, 1fr); }
-            .foundations-row { grid-template-columns: repeat(2, 1fr); }
-            .tools-grid { grid-template-columns: 1fr; }
-            .tool-card--featured { grid-column: span 1; display: block; }
-            .tool-card--featured .tool-icon { margin-bottom: 0.75rem; }
-        }
-
-        @media (max-width: 600px) {
-            nav { padding: 1rem 1.5rem; }
-            .nav-links { display: none; }
-            .hero-title { font-size: 2.4rem; }
-            .applications-grid, .foundations-row { grid-template-columns: 1fr; }
-            footer { flex-direction: column; text-align: center; }
-        }
-    </style>
-</head>
-<body>
-    <nav>
-        <a href="#" class="logo">ECHO<span>SPHERE</span></a>
-        <ul class="nav-links">
-            <li><a href="#journey">The Journey</a></li>
-            <li><a href="#applications">Applications</a></li>
-            <li><a href="#tools">AI Tools</a></li>
-            <li><a href="#manifesto">Manifesto</a></li>
-            <li><a href="https://github.com/Echosphere-io/semantic-validity-architecture">GitHub</a></li>
-        </ul>
-    </nav>
-
-    <section class="hero">
-        <div class="hero-content">
-            <p class="hero-eyebrow">Echosphere.io</p>
-            <h1 class="hero-title">Reconciling Human<br>and Digital Ontologies</h1>
-            <p class="hero-subtitle">Structure for knowing in the age of artificial intelligence</p>
-        </div>
-    </section>
-
-    <section class="journey-section" id="journey">
-        <div class="journey-container">
-            <div class="tetrahedron-visual">
-                <svg class="tetrahedron-svg" viewBox="0 0 400 450">
-                    <polygon class="telos-glow" points="200,120 70,290 330,290"/>
-                    <line class="phase3-edge" x1="200" y1="150" x2="100" y2="280"/>
-                    <line class="phase3-edge" x1="200" y1="150" x2="300" y2="280"/>
-                    <line class="phase3-edge" x1="200" y1="150" x2="200" y2="380"/>
-                    <line class="phase2-edge" x1="200" y1="180" x2="120" y2="270"/>
-                    <line class="phase2-edge" x1="200" y1="180" x2="280" y2="270"/>
-                    <line class="phase2-edge" x1="200" y1="180" x2="200" y2="350"/>
-                    <line class="phase1-edge" x1="200" y1="380" x2="100" y2="280"/>
-                    <line class="phase1-edge" x1="200" y1="380" x2="300" y2="280"/>
-                    <line class="phase1-edge" x1="100" y1="280" x2="300" y2="280"/>
-                    <circle class="foundation-point" cx="200" cy="380" r="6"/>
-                    <circle class="phase1-point" cx="100" cy="280" r="6"/>
-                    <circle class="phase1-point" cx="300" cy="280" r="6"/>
-                    <circle class="phase2-point" cx="200" cy="180" r="5"/>
-                    <circle class="phase3-point" cx="200" cy="150" r="4"/>
-                    <text x="200" y="410" text-anchor="middle" class="phase-label active">Foundation</text>
-                    <text x="200" y="425" text-anchor="middle" class="phase-name">Research Complete</text>
-                    <text x="200" y="310" text-anchor="middle" class="phase-label active">Phase I</text>
-                    <text x="200" y="328" text-anchor="middle" class="phase-name active">The Themis Project</text>
-                    <text x="200" y="210" text-anchor="middle" class="phase-label dim">Phase II</text>
-                    <text x="200" y="135" text-anchor="middle" class="phase-label dim">Phase III</text>
-                    <text x="200" y="100" text-anchor="middle" style="font-family: 'Cormorant Garamond', serif; font-size: 12px; font-style: italic; fill: #5a5855;">telos</text>
-                </svg>
-            </div>
-            <div class="journey-text">
-                <div class="journey-phase">
-                    <p class="phase-marker">Foundation</p>
-                    <h3 class="phase-title">The Research</h3>
-                    <p class="phase-desc">Fifteen years recovering the structure of knowing from First Philosophy. Homer to Aristotle. The six constraints identified.</p>
-                </div>
-                <div class="journey-phase active">
-                    <p class="phase-marker">Phase I — Current</p>
-                    <h3 class="phase-title">The Themis Project</h3>
-                    <p class="phase-desc">Semantic Validity Architecture. The six constraints applied to AI systems. Seven patent families filed. The structure that allows machines to know what they know — and what they don't.</p>
-                    <a href="/themis" class="phase-link">Enter Phase I</a>
-                </div>
-                <div class="journey-phase dim">
-                    <p class="phase-marker">Phase II</p>
-                    <h3 class="phase-title">The Platform</h3>
-                    <p class="phase-desc">Infrastructure for genuine ownership in the digital age.</p>
-                </div>
-                <div class="journey-phase dim">
-                    <p class="phase-marker">Phase III</p>
-                    <h3 class="phase-title">The Commons</h3>
-                    <p class="phase-desc">A new institutional form for human-digital civilization.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="telos-section">
-        <div class="telos-line"></div>
-        <p class="telos-label">telos</p>
-        <p class="telos-statement">"Restoring the Aristotelian Soul"</p>
-        <p class="telos-sub">The structure of genuine knowing — recovered, applied, engineered.</p>
-    </section>
-
-    <section class="applications-section" id="applications">
-        <div class="section-header">
-            <p class="section-eyebrow">Phase I</p>
-            <h2 class="section-title">The Six Constraints Applied</h2>
-        </div>
-        <div class="applications-grid">
-            <a href="/warrior" class="app-card">
-                <div class="app-icon">&#9876;</div>
-                <h3 class="app-name">The Warrior</h3>
-                <p class="app-role">Defense</p>
-            </a>
-            <a href="/statesman" class="app-card">
-                <div class="app-icon">&#9878;</div>
-                <h3 class="app-name">The Statesman</h3>
-                <p class="app-role">Government</p>
-            </a>
-            <a href="/merchant" class="app-card">
-                <div class="app-icon">&#9672;</div>
-                <h3 class="app-name">The Merchant</h3>
-                <p class="app-role">Enterprise</p>
-            </a>
-            <a href="/teacher" class="app-card">
-                <div class="app-icon">&#9673;</div>
-                <h3 class="app-name">The Teacher</h3>
-                <p class="app-role">Education</p>
-            </a>
-            <a href="/healer" class="app-card">
-                <div class="app-icon">&#10010;</div>
-                <h3 class="app-name">The Healer</h3>
-                <p class="app-role">Medicine</p>
-            </a>
-            <a href="/judge" class="app-card">
-                <div class="app-icon">&#9871;</div>
-                <h3 class="app-name">The Judge</h3>
-                <p class="app-role">Law</p>
-            </a>
-        </div>
-        <div class="foundations-row">
-            <a href="/examined-life" class="foundation-card">
-                <p class="foundation-name">The Examined Life</p>
-            </a>
-            <a href="/cosmos" class="foundation-card">
-                <p class="foundation-name">The Cosmos</p>
-            </a>
-            <a href="/telos" class="foundation-card">
-                <p class="foundation-name">The Telos of Service</p>
-            </a>
-            <a href="/tool" class="foundation-card">
-                <p class="foundation-name">The Tool</p>
-            </a>
-        </div>
-    </section>
-
-    <section class="tools-section" id="tools">
-        <div class="section-header">
-            <p class="section-eyebrow">Coming Soon</p>
-            <h2 class="section-title">AI Tools — The Six Constraints Applied</h2>
-        </div>
-        <div class="tools-grid">
-            <div class="tool-card">
-                <div class="tool-icon">&#9671;</div>
-                <h3 class="tool-name">Test Any Claim</h3>
-                <p class="tool-desc">Which of the six constraints does it satisfy? Paste any assertion — see where it holds and where it fails.</p>
-                <span class="tool-status">Coming 2025</span>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">&#9672;</div>
-                <h3 class="tool-name">Map Your Document</h3>
-                <p class="tool-desc">Reveal its structure against the six constraints. Upload any text — expose the gaps.</p>
-                <span class="tool-status">Coming 2025</span>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">&#9673;</div>
-                <h3 class="tool-name">Find Your Path</h3>
-                <p class="tool-desc">The six constraints applied to your field. Select your domain — get tailored guidance.</p>
-                <span class="tool-status">Coming 2025</span>
-            </div>
-            <div class="tool-card">
-                <div class="tool-icon">&#11041;</div>
-                <h3 class="tool-name">Build With Themis</h3>
-                <p class="tool-desc">Add six-constraint validation to your systems. API access for developers and enterprises.</p>
-                <span class="tool-status">Coming 2025</span>
-            </div>
-            <div class="tool-card tool-card--featured">
-                <div class="tool-icon">&#9651;</div>
-                <div class="tool-content">
-                    <h3 class="tool-name">Six Constraints for Learners</h3>
-                    <p class="tool-desc">From exposure to structured understanding. For students, parents, autodidacts — anyone serious about genuine knowing.</p>
-                </div>
-                <span class="tool-status">Coming 2025</span>
-            </div>
-        </div>
-    </section>
-
-    <section class="manifesto-section" id="manifesto">
-        <p class="manifesto-quote">"We built a machine that speaks but does not know. We fed it the sum of human expression. But we forgot what knowing is."</p>
-        <a href="/manifesto" class="manifesto-link">Read the Manifesto</a>
-    </section>
-
-    <footer id="contact">
-        <div class="footer-left">
-            <p class="footer-logo">ECHO<span>SPHERE</span>.io</p>
-            <p class="footer-copy">2025 Echosphere.io LLC. All rights reserved.</p>
-        </div>
-        <div class="footer-links">
-            <a href="/about">About</a>
-            <a href="/manifesto">Manifesto</a>
-            <a href="https://github.com/Echosphere-io/semantic-validity-architecture">GitHub</a>
-        </div>
-        <div class="footer-contact">
-            <a href="/cdn-cgi/l/email-protection#94e0fcf1f9fde7d4f1f7fcfbe7e4fcf1e6f1bafdfb"><span class="__cf_email__" data-cfemail="2a5e424f4743596a4f494245595a424f584f044345">[email&#160;protected]</span></a>
-        </div>
-    </footer>
-
-    <div class="ask-themis">
-        <div class="ask-themis__panel" id="askThemisPanel">
-            <div class="ask-themis__header">
-                <span class="ask-themis__title">Ask Themis</span>
-                <button class="ask-themis__close" onclick="toggleAskThemis()">&times;</button>
-            </div>
-            <div class="ask-themis__context" id="askThemisContext">You are viewing: The Landing Page</div>
-            <div class="ask-themis__body">
-                <p>Ask about the six constraints, the architecture, applications, or how Themis applies to your domain.</p>
-            </div>
-            <div class="ask-themis__input-wrap">
-                <textarea class="ask-themis__input" rows="3" placeholder="What would you like to know?"></textarea>
-                <button class="ask-themis__submit">Send to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f2869a979f9b81b297919a9d81829a978097dc9b9d">[email&#160;protected]</a></button>
-            </div>
-        </div>
-        <button class="ask-themis__button" onclick="toggleAskThemis()">
-            <span class="ask-themis__icon">&#9670;</span>
-            <span>Ask Themis</span>
-        </button>
-    </div>
-
- <!DOCTYPE html>
-<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -869,7 +55,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: linear-gradient(to bottom, var(--charcoal) 0%, transparent 100%);
+            background: rgba(13, 13, 13, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .logo {
@@ -1735,7 +925,9 @@
     <nav>
         <a href="#" onclick="showPage('home'); return false;" class="logo">ECHO<span>SPHERE</span></a>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#" onclick="showPage('home'); return false;">The Journey</a></li>
+            <li><a href="#"
+                    onclick="showPage('home'); document.getElementById('journey-text').scrollIntoView({behavior: 'smooth'}); return false;">The
+                    Journey</a></li>
             <li><a href="#" onclick="showPage('problem'); return false;">The Problem</a></li>
             <li><a href="#" onclick="showPage('architecture'); return false;">Architecture</a></li>
             <li><a href="#" onclick="showPage('manifesto'); return false;">Manifesto</a></li>
@@ -1797,7 +989,7 @@
                     </div>
 
                     <!-- The Text -->
-                    <div class="journey-text">
+                    <div class="journey-text" id="journey-text">
                         <div class="journey-phase">
                             <p class="phase-marker">Foundation</p>
                             <h3 class="phase-title">The Research</h3>
@@ -2089,20 +1281,119 @@
                 <h2>The Geometry of the Problem</h2>
                 <p>This isn't arbitrary. Six constraints is the minimum for structural closure.</p>
                 <p>Think of a tetrahedron—the simplest three-dimensional shape:</p>
-                <div class="ascii-box"> ◆
-                    /|\
-                    / | \
-                    / | \
-                    / | \
-                    ◆----+----◆
-                    \ | /
-                    \ | /
-                    \ | /
-                    \|/
-                    ◆
+                <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 620"
+                        font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+                        <defs>
+                            <marker id="arrow1" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+                                <path d="M0,0 L8,3 L0,6" fill="none" stroke="#333" stroke-width="1" />
+                            </marker>
+                            <linearGradient id="vertexGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f8f6f0" />
+                                <stop offset="100%" style="stop-color:#ede8d8" />
+                            </linearGradient>
+                            <filter id="shadow1" x="-5%" y="-5%" width="115%" height="115%">
+                                <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.15" />
+                            </filter>
+                        </defs>
 
-                    Four vertices. Six edges.
-                    Fewer edges = no enclosure.
+                        <!-- Title -->
+                        <text x="350" y="35" text-anchor="middle" font-size="18" font-weight="bold" fill="#e8e6e1">The
+                            Geometry of Semantic Completeness</text>
+                        <text x="350" y="55" text-anchor="middle" font-size="12" fill="#8a8885" font-style="italic">Four
+                            components. Six constraints. The minimum structure for closure.</text>
+
+                        <!-- Tetrahedron edges (the SIX CONSTRAINTS) -->
+                        <!-- Edge: Claimant-Subject (Referential) -->
+                        <line x1="350" y1="105" x2="150" y2="390" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="185" y="225" width="95" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="232" y="237" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">REFERENTIAL</text>
+                        <text x="232" y="250" text-anchor="middle" font-size="8" fill="#c9a227">What is claimed?</text>
+
+                        <!-- Edge: Claimant-Grounds (Contextual) -->
+                        <line x1="350" y1="105" x2="550" y2="390" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="420" y="225" width="90" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="465" y="237" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">CONTEXTUAL</text>
+                        <text x="465" y="250" text-anchor="middle" font-size="8" fill="#c9a227">Conditions?</text>
+
+                        <!-- Edge: Claimant-Purpose (Premissive) -->
+                        <line x1="350" y1="105" x2="350" y2="510" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="355" y="285" width="85" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="397" y="297" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">PREMISSIVE</text>
+                        <text x="397" y="310" text-anchor="middle" font-size="8" fill="#c9a227">On what grounds?</text>
+
+                        <!-- Edge: Subject-Grounds (Inferential) -->
+                        <line x1="150" y1="390" x2="550" y2="390" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="302" y="395" width="95" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="349" y="407" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">INFERENTIAL</text>
+                        <text x="349" y="420" text-anchor="middle" font-size="8" fill="#c9a227">Why does it
+                            follow?</text>
+
+                        <!-- Edge: Subject-Purpose (Constraining) -->
+                        <line x1="150" y1="390" x2="350" y2="510" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="190" y="445" width="100" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="240" y="457" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">CONSTRAINING</text>
+                        <text x="240" y="470" text-anchor="middle" font-size="8" fill="#c9a227">What are the
+                            limits?</text>
+
+                        <!-- Edge: Grounds-Purpose (Teleological) -->
+                        <line x1="550" y1="390" x2="350" y2="510" stroke="#c9a227" stroke-width="2.5" />
+                        <rect x="420" y="445" width="100" height="32" rx="4" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" filter="url(#shadow1)" />
+                        <text x="470" y="457" text-anchor="middle" font-size="9" fill="#c9a227"
+                            font-weight="bold">TELEOLOGICAL</text>
+                        <text x="470" y="470" text-anchor="middle" font-size="8" fill="#c9a227">What is it for?</text>
+
+                        <!-- Vertices (the FOUR COMPONENTS) -->
+                        <!-- Top: Claimant -->
+                        <circle cx="350" cy="105" r="38" fill="url(#vertexGrad1)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow1)" />
+                        <text x="350" y="101" text-anchor="middle" font-size="11" font-weight="bold"
+                            fill="#0d0d0d">CLAIMANT</text>
+                        <text x="350" y="115" text-anchor="middle" font-size="9" fill="#2a2a2a">(Who asserts)</text>
+
+                        <!-- Bottom-left: Subject -->
+                        <circle cx="150" cy="390" r="38" fill="url(#vertexGrad1)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow1)" />
+                        <text x="150" y="386" text-anchor="middle" font-size="11" font-weight="bold"
+                            fill="#0d0d0d">SUBJECT</text>
+                        <text x="150" y="400" text-anchor="middle" font-size="9" fill="#2a2a2a">(What is
+                            discussed)</text>
+
+                        <!-- Bottom-right: Grounds -->
+                        <circle cx="550" cy="390" r="38" fill="url(#vertexGrad1)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow1)" />
+                        <text x="550" y="386" text-anchor="middle" font-size="11" font-weight="bold"
+                            fill="#0d0d0d">GROUNDS</text>
+                        <text x="550" y="400" text-anchor="middle" font-size="9" fill="#2a2a2a">(What supports
+                            it)</text>
+
+                        <!-- Bottom-center: Purpose -->
+                        <circle cx="350" cy="510" r="38" fill="url(#vertexGrad1)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow1)" />
+                        <text x="350" y="506" text-anchor="middle" font-size="11" font-weight="bold"
+                            fill="#0d0d0d">PURPOSE</text>
+                        <text x="350" y="520" text-anchor="middle" font-size="9" fill="#2a2a2a">(What it is for)</text>
+
+                        <!-- Bottom annotation -->
+                        <text x="350" y="575" text-anchor="middle" font-size="11" fill="#e8e6e1" font-weight="bold">4
+                            vertices = components. 6 edges = constraints.</text>
+                        <text x="350" y="593" text-anchor="middle" font-size="11" fill="#8a8885">Remove any edge and the
+                            structure collapses. Meaning leaks out.</text>
+                        <text x="350" y="611" text-anchor="middle" font-size="10" fill="#5a5855" font-style="italic">The
+                            simplest closed three-dimensional structure. Discovered 2,400 years ago. Recovered
+                            here.</text>
+                    </svg>
                     <p><i>Figure 1</i></p>
                 </div>
                 <p>The four vertices represent the components of any claim:</p>
@@ -2252,21 +1543,125 @@
 
                 <h2>Why Six?</h2>
                 <p>Consider the simplest three-dimensional enclosure: a tetrahedron.</p>
-                <div class="ascii-box"> ◆ (Purpose)
-                    /|\
-                    / | \
-                    / | \
-                    / | \
-                    / | \
-                    (Grounds) ◆─────◆ (Limits)
-                    \ | /
-                    \ | /
-                    \ | /
-                    \ | /
-                    \|/
-                    ◆ (Subject)
-                
-                <p><i>Figure 2</i></p>
+                <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 650"
+                        font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+                        <defs>
+                            <linearGradient id="vertexGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f8f6f0" />
+                                <stop offset="100%" style="stop-color:#ede8d8" />
+                            </linearGradient>
+                            <linearGradient id="edgeHighlight" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#c41e3a" />
+                                <stop offset="100%" style="stop-color:#8B0000" />
+                            </linearGradient>
+                            <filter id="shadow2" x="-5%" y="-5%" width="115%" height="115%">
+                                <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.15" />
+                            </filter>
+                        </defs>
+
+                        <!-- Title -->
+                        <text x="350" y="32" text-anchor="middle" font-size="18" font-weight="bold" fill="#e8e6e1">Why
+                            Six?</text>
+                        <text x="350" y="52" text-anchor="middle" font-size="12" fill="#8a8885" font-style="italic">The
+                            tetrahedron: simplest three-dimensional enclosure</text>
+
+                        <!-- Main tetrahedron structure -->
+                        <!-- Edges first (behind vertices) -->
+                        <!-- 1. Claimant ↔ Subject: REFERENTIAL -->
+                        <line x1="350" y1="120" x2="140" y2="380" stroke="#c9a227" stroke-width="3" />
+                        <!-- 2. Claimant ↔ Grounds: CONTEXTUAL -->
+                        <line x1="350" y1="120" x2="560" y2="380" stroke="#c9a227" stroke-width="3" />
+                        <!-- 3. Claimant ↔ Purpose: PREMISSIVE -->
+                        <line x1="350" y1="120" x2="350" y2="500" stroke="#c9a227" stroke-width="3" />
+                        <!-- 4. Subject ↔ Grounds: INFERENTIAL -->
+                        <line x1="140" y1="380" x2="560" y2="380" stroke="#c9a227" stroke-width="3" />
+                        <!-- 5. Subject ↔ Purpose: CONSTRAINING -->
+                        <line x1="140" y1="380" x2="350" y2="500" stroke="#c9a227" stroke-width="3" />
+                        <!-- 6. Grounds ↔ Purpose: TELEOLOGICAL -->
+                        <line x1="560" y1="380" x2="350" y2="500" stroke="#c9a227" stroke-width="3" />
+
+                        <!-- Edge labels with constraint names -->
+                        <!-- 1. Referential -->
+                        <rect x="178" y="228" width="100" height="22" rx="3" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" opacity="0.95" />
+                        <text x="228" y="243" text-anchor="middle" font-size="10" fill="#c9a227" font-weight="bold">1.
+                            Referential</text>
+
+                        <!-- 2. Contextual -->
+                        <rect x="422" y="228" width="95" height="22" rx="3" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" opacity="0.95" />
+                        <text x="469" y="243" text-anchor="middle" font-size="10" fill="#c9a227" font-weight="bold">2.
+                            Contextual</text>
+
+                        <!-- 3. Premissive -->
+                        <rect x="355" y="295" width="90" height="22" rx="3" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" opacity="0.95" />
+                        <text x="400" y="310" text-anchor="middle" font-size="10" fill="#c9a227" font-weight="bold">3.
+                            Premissive</text>
+
+                        <!-- 4. Inferential -->
+                        <rect x="300" y="385" width="100" height="22" rx="3" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" opacity="0.95" />
+                        <text x="350" y="400" text-anchor="middle" font-size="10" fill="#c9a227" font-weight="bold">4.
+                            Inferential</text>
+
+                        <!-- 5. Constraining -->
+                        <rect x="180" y="438" width="105" height="22" rx="3" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" opacity="0.95" />
+                        <text x="232" y="453" text-anchor="middle" font-size="10" fill="#c9a227" font-weight="bold">5.
+                            Constraining</text>
+
+                        <!-- 6. Teleological -->
+                        <rect x="420" y="438" width="105" height="22" rx="3" fill="#1a1a1a" stroke="#c9a227"
+                            stroke-width="1" opacity="0.95" />
+                        <text x="472" y="453" text-anchor="middle" font-size="10" fill="#c9a227" font-weight="bold">6.
+                            Teleological</text>
+
+                        <!-- Vertices -->
+                        <!-- Top: Claimant -->
+                        <circle cx="350" cy="120" r="40" fill="url(#vertexGrad2)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow2)" />
+                        <text x="350" y="116" text-anchor="middle" font-size="12" font-weight="bold"
+                            fill="#0d0d0d">Claimant</text>
+                        <text x="350" y="130" text-anchor="middle" font-size="9" fill="#2a2a2a">(who asserts)</text>
+
+                        <!-- Bottom-left: Subject -->
+                        <circle cx="140" cy="380" r="40" fill="url(#vertexGrad2)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow2)" />
+                        <text x="140" y="376" text-anchor="middle" font-size="12" font-weight="bold"
+                            fill="#0d0d0d">Subject</text>
+                        <text x="140" y="390" text-anchor="middle" font-size="9" fill="#2a2a2a">(what is
+                            discussed)</text>
+
+                        <!-- Bottom-right: Grounds -->
+                        <circle cx="560" cy="380" r="40" fill="url(#vertexGrad2)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow2)" />
+                        <text x="560" y="376" text-anchor="middle" font-size="12" font-weight="bold"
+                            fill="#0d0d0d">Grounds</text>
+                        <text x="560" y="390" text-anchor="middle" font-size="9" fill="#2a2a2a">(what supports
+                            it)</text>
+
+                        <!-- Bottom-center: Purpose -->
+                        <circle cx="350" cy="500" r="40" fill="url(#vertexGrad2)" stroke="#c9a227" stroke-width="2.5"
+                            filter="url(#shadow2)" />
+                        <text x="350" y="496" text-anchor="middle" font-size="12" font-weight="bold"
+                            fill="#0d0d0d">Purpose</text>
+                        <text x="350" y="510" text-anchor="middle" font-size="9" fill="#2a2a2a">(what it is for)</text>
+
+                        <!-- Legend -->
+                        <rect x="50" y="560" width="600" height="75" rx="6" fill="#1a1a1a" stroke="#2a2a2a"
+                            stroke-width="1" />
+                        <circle cx="80" cy="580" r="8" fill="url(#vertexGrad2)" stroke="#c9a227" stroke-width="1.5" />
+                        <text x="95" y="584" font-size="11" fill="#e8e6e1">= Component (vertex)</text>
+                        <line x1="65" y1="605" x2="95" y2="605" stroke="#c9a227" stroke-width="3" />
+                        <text x="105" y="609" font-size="11" fill="#e8e6e1">= Constraint (edge) — the relation between
+                            components</text>
+                        <text x="350" y="630" text-anchor="middle" font-size="11" fill="#8a8885"
+                            font-weight="bold">Remove any edge → structure collapses → no enclosure → meaning leaks
+                            out</text>
+                    </svg>
+                    <p><i>Figure 2</i></p>
                 </div>
                 <ul>
                     <li><strong>4 vertices</strong> — the components being related</li>
@@ -2282,15 +1677,97 @@
 
                 <h2>The Three Axes</h2>
                 <p>Every claim exists in a three-dimensional space:</p>
-                <div class="ascii-box"> USER
-                    (who's asking)
-                    │
-                    │
-                    ▼
-                    SUBJECT ◄────►◄────► METHOD
-                    (what's claimed) (how it's derived)
+                <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 480"
+                        font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+                        <defs>
+                            <marker id="axisArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+                            </marker>
+                            <marker id="axisArrowRev" markerWidth="10" markerHeight="7" refX="0" refY="3.5"
+                                orient="auto">
+                                <polygon points="10 0, 0 3.5, 10 7" fill="#333" />
+                            </marker>
+                            <filter id="shadow3" x="-5%" y="-5%" width="115%" height="115%">
+                                <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+                            </filter>
+                            <linearGradient id="userGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#e8f0fe" />
+                                <stop offset="100%" style="stop-color:#c5d9f7" />
+                            </linearGradient>
+                            <linearGradient id="subjectGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#fce8e8" />
+                                <stop offset="100%" style="stop-color:#f5c4c4" />
+                            </linearGradient>
+                            <linearGradient id="methodGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#e8f5e8" />
+                                <stop offset="100%" style="stop-color:#c4e8c4" />
+                            </linearGradient>
+                        </defs>
 
-                <p><i>Figure 3</i></p>
+                        <!-- Title -->
+                        <text x="300" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#e8e6e1">The
+                            Three Axes of Semantic Space</text>
+                        <text x="300" y="50" text-anchor="middle" font-size="12" fill="#8a8885"
+                            font-style="italic">Every claim exists in three-dimensional space. Current systems flatten
+                            this to one.</text>
+
+                        <!-- Central point -->
+                        <circle cx="300" cy="240" r="6" fill="#333" />
+
+                        <!-- Vertical axis: USER (up) -->
+                        <line x1="300" y1="235" x2="300" y2="90" stroke="#c9a227" stroke-width="2.5"
+                            marker-end="url(#axisArrow)" />
+                        <!-- USER box -->
+                        <rect x="230" y="65" width="140" height="50" rx="8" fill="#1a1a1a" stroke="#2E5090"
+                            stroke-width="2" filter="url(#shadow3)" />
+                        <text x="300" y="85" text-anchor="middle" font-size="14" font-weight="bold"
+                            fill="#2E5090">USER</text>
+                        <text x="300" y="101" text-anchor="middle" font-size="9" fill="#8a8885">(who is asking)</text>
+
+                        <!-- USER details -->
+                        <text x="395" y="82" font-size="9" fill="#8a8885">Expertise level</text>
+                        <text x="395" y="96" font-size="9" fill="#8a8885">Intent</text>
+                        <text x="395" y="110" font-size="9" fill="#8a8885">Context of use</text>
+
+                        <!-- Left axis: SUBJECT -->
+                        <line x1="295" y1="243" x2="108" y2="358" stroke="#c9a227" stroke-width="2.5"
+                            marker-end="url(#axisArrow)" />
+                        <!-- SUBJECT box -->
+                        <rect x="18" y="345" width="140" height="50" rx="8" fill="#1a1a1a" stroke="#8B0000"
+                            stroke-width="2" filter="url(#shadow3)" />
+                        <text x="88" y="365" text-anchor="middle" font-size="14" font-weight="bold"
+                            fill="#8B0000">SUBJECT</text>
+                        <text x="88" y="381" text-anchor="middle" font-size="9" fill="#8a8885">(what is claimed)</text>
+
+                        <!-- SUBJECT details -->
+                        <text x="28" y="410" font-size="9" fill="#8a8885">Domain</text>
+                        <text x="28" y="424" font-size="9" fill="#8a8885">Certainty level</text>
+                        <text x="28" y="438" font-size="9" fill="#8a8885">Settled vs. disputed</text>
+
+                        <!-- Right axis: METHOD -->
+                        <line x1="305" y1="243" x2="492" y2="358" stroke="#c9a227" stroke-width="2.5"
+                            marker-end="url(#axisArrow)" />
+                        <!-- METHOD box -->
+                        <rect x="442" y="345" width="140" height="50" rx="8" fill="#1a1a1a" stroke="#2D6A2D"
+                            stroke-width="2" filter="url(#shadow3)" />
+                        <text x="512" y="365" text-anchor="middle" font-size="14" font-weight="bold"
+                            fill="#2D6A2D">METHOD</text>
+                        <text x="512" y="381" text-anchor="middle" font-size="9" fill="#8a8885">(how it is
+                            derived)</text>
+
+                        <!-- METHOD details -->
+                        <text x="452" y="410" font-size="9" fill="#8a8885">Inference type</text>
+                        <text x="452" y="424" font-size="9" fill="#8a8885">Confidence warranted</text>
+                        <text x="452" y="438" font-size="9" fill="#8a8885">Deduction &#x2260; speculation</text>
+
+                        <!-- Comparison annotation -->
+                        <rect x="100" y="455" width="400" height="22" rx="4" fill="#2a2a2a" stroke="#555"
+                            stroke-width="1" />
+                        <text x="300" y="470" text-anchor="middle" font-size="10" fill="#aeaeae">Current systems: Input
+                            &#x2192; Output (one axis). Valid systems: track all three throughout.</text>
+                    </svg>
+                    <p><i>Figure 3</i></p>
                 </div>
                 <table>
                     <thead>
@@ -2324,36 +1801,151 @@
                 <hr>
 
                 <h2>The Validation Process</h2>
-                <div class="ascii-box">
-                    ┌─────────────────────────────────────────────────────┐
-                    │ GENERATED OUTPUT                                    │
-                    └───────────────────────┬─────────────────────────────┘
-                                            │
-                                            ▼
-                    ┌─────────────────────────────────────────────────────┐
-                    │ SIX-CONSTRAINT VALIDATOR                            │
-                    ├─────────────────────────────────────────────────────┤
-                    │ □ Referential — Is it determinate?                  │
-                    │ □ Contextual — Are conditions specified?            │
-                    │ □ Premissive — Are grounds provided?                │
-                    │ □ Inferential — Does it follow?                     │
-                    │ □ Constraining — Are limits acknowledged?           │
-                    │ □ Teleological — Is purpose clear?                  │
-                    │ □ Teleological — Is purpose clear?                  │
-                    └───────────────────────┬─────────────────────────────┘
-                                            │
-                              ┌─────────────┴─────────────┐
-                              │                           │
-                              ▼                           ▼
-                    ┌─────────────┐                 ┌─────────────┐
-                    │ 6/6 PASS    │                 │ &lt;6 FAIL  │
-                    │             │                 │             │
-                    │ Output      │                 │ Revise      │
-                    │ as valid    │                 │ or refuse   │
-                    └─────────────┘                 └─────────────┘
-                <p><i>Figure 4</i></p>
+                <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 700"
+                        font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+                        <defs>
+                            <filter id="shadow4" x="-3%" y="-3%" width="108%" height="108%">
+                                <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+                            </filter>
+                            <marker id="flowArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+                            </marker>
+                            <linearGradient id="inputGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#e3e9f0" />
+                                <stop offset="100%" style="stop-color:#d0dae8" />
+                            </linearGradient>
+                            <linearGradient id="passGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#d4edda" />
+                                <stop offset="100%" style="stop-color:#b8dcc4" />
+                            </linearGradient>
+                            <linearGradient id="failGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#f8d7da" />
+                                <stop offset="100%" style="stop-color:#f0b8bd" />
+                            </linearGradient>
+                        </defs>
+
+                        <!-- Title -->
+                        <text x="325" y="30" text-anchor="middle" font-size="18" font-weight="bold" fill="#e8e6e1">The
+                            Validation Process</text>
+
+                        <!-- Input box -->
+                        <rect x="150" y="50" width="350" height="45" rx="8" fill="url(#inputGrad)" stroke="#555"
+                            stroke-width="2" filter="url(#shadow4)" />
+                        <text x="325" y="70" text-anchor="middle" font-size="14" font-weight="bold"
+                            fill="#333">GENERATED OUTPUT</text>
+                        <text x="325" y="85" text-anchor="middle" font-size="10" fill="#666">Any claim, response, or
+                            assertion</text>
+
+                        <!-- Arrow down -->
+                        <line x1="325" y1="95" x2="325" y2="125" stroke="#c9a227" stroke-width="2"
+                            marker-end="url(#flowArrow)" />
+
+                        <!-- Validator box -->
+                        <rect x="100" y="130" width="450" height="310" rx="10" fill="#fafaf5" stroke="#1a1a1a"
+                            stroke-width="2.5" filter="url(#shadow4)" />
+                        <rect x="100" y="130" width="450" height="38" rx="10" fill="#1a1a1a" />
+                        <rect x="100" y="155" width="450" height="13" fill="#1a1a1a" />
+                        <text x="325" y="155" text-anchor="middle" font-size="14" font-weight="bold"
+                            fill="#c9a227">SIX-CONSTRAINT VALIDATOR</text>
+
+                        <!-- Constraint checks -->
+                        <!-- 1. Referential -->
+                        <rect x="130" y="180" width="26" height="26" rx="4" fill="#fff" stroke="#8B4513"
+                            stroke-width="2" />
+                        <text x="170" y="198" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#8B4513">Referential</tspan> &#x2014; Is it determinate?
+                        </text>
+
+                        <!-- 2. Contextual -->
+                        <rect x="130" y="220" width="26" height="26" rx="4" fill="#fff" stroke="#2E5090"
+                            stroke-width="2" />
+                        <text x="170" y="238" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#2E5090">Contextual</tspan> &#x2014; Are conditions
+                            specified?
+                        </text>
+
+                        <!-- 3. Premissive -->
+                        <rect x="130" y="260" width="26" height="26" rx="4" fill="#fff" stroke="#2D6A2D"
+                            stroke-width="2" />
+                        <text x="170" y="278" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#2D6A2D">Premissive</tspan> &#x2014; Are grounds provided?
+                        </text>
+
+                        <!-- 4. Inferential -->
+                        <rect x="130" y="300" width="26" height="26" rx="4" fill="#fff" stroke="#8B0000"
+                            stroke-width="2" />
+                        <text x="170" y="318" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#8B0000">Inferential</tspan> &#x2014; Does it follow?
+                        </text>
+
+                        <!-- 5. Constraining -->
+                        <rect x="130" y="340" width="26" height="26" rx="4" fill="#fff" stroke="#6B3FA0"
+                            stroke-width="2" />
+                        <text x="170" y="358" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#6B3FA0">Constraining</tspan> &#x2014; Are limits
+                            acknowledged?
+                        </text>
+
+                        <!-- 6. Teleological (ONCE - fixing the duplicate) -->
+                        <rect x="130" y="380" width="26" height="26" rx="4" fill="#fff" stroke="#B8860B"
+                            stroke-width="2" />
+                        <text x="170" y="398" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#B8860B">Teleological</tspan> &#x2014; Is purpose clear?
+                        </text>
+
+                        <!-- Checkmark indicators -->
+                        <text x="139" y="199" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+                        <text x="139" y="239" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+                        <text x="139" y="279" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+                        <text x="139" y="319" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+                        <text x="139" y="359" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+                        <text x="139" y="399" text-anchor="middle" font-size="14" fill="#2D6A2D">&#x2713;</text>
+
+                        <!-- Arrow down from validator -->
+                        <line x1="325" y1="440" x2="325" y2="475" stroke="#c9a227" stroke-width="2"
+                            marker-end="url(#flowArrow)" />
+
+                        <!-- Decision split -->
+                        <!-- Left arrow to PASS -->
+                        <line x1="325" y1="480" x2="190" y2="520" stroke="#2D6A2D" stroke-width="2"
+                            marker-end="url(#flowArrow)" />
+                        <!-- Right arrow to FAIL -->
+                        <line x1="325" y1="480" x2="460" y2="520" stroke="#8B0000" stroke-width="2"
+                            marker-end="url(#flowArrow)" />
+
+                        <!-- PASS box -->
+                        <rect x="95" y="525" width="195" height="100" rx="10" fill="url(#passGrad)" stroke="#2D6A2D"
+                            stroke-width="2.5" filter="url(#shadow4)" />
+                        <text x="192" y="555" text-anchor="middle" font-size="16" font-weight="bold" fill="#1a5c1a">6/6
+                            PASS</text>
+                        <line x1="125" y1="565" x2="260" y2="565" stroke="#2D6A2D" stroke-width="1" />
+                        <text x="192" y="585" text-anchor="middle" font-size="12" fill="#333">Output as valid</text>
+                        <text x="192" y="602" text-anchor="middle" font-size="10" fill="#555">Semantically
+                            complete</text>
+
+                        <!-- FAIL box -->
+                        <rect x="360" y="525" width="195" height="100" rx="10" fill="url(#failGrad)" stroke="#8B0000"
+                            stroke-width="2.5" filter="url(#shadow4)" />
+                        <text x="457" y="555" text-anchor="middle" font-size="16" font-weight="bold"
+                            fill="#8B0000">&lt;6 FAIL</text>
+                        <line x1="390" y1="565" x2="525" y2="565" stroke="#8B0000" stroke-width="1" />
+                        <text x="457" y="585" text-anchor="middle" font-size="12" fill="#333">Revise, hedge, or
+                            refuse</text>
+                        <text x="457" y="602" text-anchor="middle" font-size="10" fill="#555">Incomplete &#x2014; do not
+                            emit</text>
+
+                        <!-- Bottom annotation -->
+                        <rect x="100" y="645" width="450" height="40" rx="6" fill="#1a1a1a" stroke="#2a2a2a"
+                            stroke-width="1" />
+                        <text x="325" y="662" text-anchor="middle" font-size="10" fill="#8a8885">A system that refuses
+                            when it cannot satisfy the constraints is more trustworthy</text>
+                        <text x="325" y="677" text-anchor="middle" font-size="10" fill="#8a8885">than a system that
+                            always produces output. Refusal is a feature, not a failure.</text>
+                    </svg>
+                    <p><i>Figure 4</i></p>
                 </div>
-                
+
                 <p>Claims that fail any constraint have three options:</p>
                 <ol>
                     <li><strong>Revise</strong> — Fix the missing constraint</li>
@@ -2708,13 +2300,70 @@
 
                 <h3>The Three Axes</h3>
                 <p>Every claim exists in three-dimensional semantic space:</p>
-                <div class="ascii-box"> USER
-                    │
-                    │
-                    SUBJECT ◄─────┼─────► METHOD
-                <p><i>Figure 5</i></p>
+                <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 420"
+                        font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+                        <defs>
+                            <marker id="vocabArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5"
+                                orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#333" />
+                            </marker>
+                            <filter id="shadow5" x="-5%" y="-5%" width="115%" height="115%">
+                                <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+                            </filter>
+                        </defs>
+
+                        <!-- Title -->
+                        <text x="275" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#e8e6e1">The
+                            Three Axes</text>
+                        <text x="275" y="46" text-anchor="middle" font-size="11" fill="#8a8885"
+                            font-style="italic">Three-dimensional semantic space</text>
+
+                        <!-- Central intersection -->
+                        <circle cx="275" cy="210" r="5" fill="#333" />
+
+                        <!-- Vertical axis: USER -->
+                        <line x1="275" y1="205" x2="275" y2="80" stroke="#c9a227" stroke-width="2.5"
+                            marker-end="url(#vocabArrow)" />
+                        <rect x="215" y="60" width="120" height="35" rx="6" fill="#1a1a1a" stroke="#2E5090"
+                            stroke-width="2" filter="url(#shadow5)" />
+                        <text x="275" y="82" text-anchor="middle" font-size="13" font-weight="bold"
+                            fill="#2E5090">USER</text>
+
+                        <!-- Left axis: SUBJECT -->
+                        <line x1="270" y1="213" x2="110" y2="320" stroke="#c9a227" stroke-width="2.5"
+                            marker-end="url(#vocabArrow)" />
+                        <rect x="25" y="310" width="120" height="35" rx="6" fill="#1a1a1a" stroke="#8B0000"
+                            stroke-width="2" filter="url(#shadow5)" />
+                        <text x="85" y="332" text-anchor="middle" font-size="13" font-weight="bold"
+                            fill="#8B0000">SUBJECT</text>
+
+                        <!-- Right axis: METHOD -->
+                        <line x1="280" y1="213" x2="440" y2="320" stroke="#c9a227" stroke-width="2.5"
+                            marker-end="url(#vocabArrow)" />
+                        <rect x="400" y="310" width="120" height="35" rx="6" fill="#1a1a1a" stroke="#2D6A2D"
+                            stroke-width="2" filter="url(#shadow5)" />
+                        <text x="460" y="332" text-anchor="middle" font-size="13" font-weight="bold"
+                            fill="#2D6A2D">METHOD</text>
+
+                        <!-- Definitions -->
+                        <text x="400" y="80" font-size="10" fill="#8a8885">Who is asking, their expertise</text>
+                        <text x="400" y="94" font-size="10" fill="#8a8885">level, their intent.</text>
+
+                        <text x="25" y="362" font-size="10" fill="#8a8885">What is being discussed, its</text>
+                        <text x="25" y="376" font-size="10" fill="#8a8885">certainty level, its domain.</text>
+
+                        <text x="400" y="362" font-size="10" fill="#8a8885">How the claim was derived,</text>
+                        <text x="400" y="376" font-size="10" fill="#8a8885">what inference type, what</text>
+                        <text x="400" y="390" font-size="10" fill="#8a8885">confidence is warranted.</text>
+
+                        <!-- Bottom note -->
+                        <text x="275" y="412" text-anchor="middle" font-size="10" fill="#555"
+                            font-style="italic">Three-axis tracking: maintaining all three throughout processing.</text>
+                    </svg>
+                    <p><i>Figure 5</i></p>
                 </div>
-                
+
                 <dl>
                     <dt>User</dt>
                     <dd>Who is asking, their expertise level, their intent. The same answer isn't right for everyone.
@@ -3261,17 +2910,116 @@
                 <p><strong>Standard AI:</strong> "Correct. The French Revolution (1789) had many causes..." (proceeds
                     to write the essay)</p>
                 <p><strong>Themis Architecture:</strong></p>
-                <div class="ascii-box">CLAIM ANALYSIS:
-                    Referential: ✅ "French Revolution", "economic inequality"
-                    Contextual: ⚠️ Which period? 1789?
-                    Premissive: ❌ Missing evidence. What economic data?
-                    Inferential: ⚠️ Correlation ≠ causation. Mechanism?
-                    Constraining: ❌ Too broad. Was it the ONLY cause?
-                    Teleological: ⚠️ Thesis unclear.
+                <div class="figure-container" style="text-align: center; margin: 3rem 0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 520"
+                        font-family="'Georgia', 'Times New Roman', serif" style="max-width: 100%; height: auto;">
+                        <defs>
+                            <filter id="shadow6" x="-3%" y="-3%" width="108%" height="108%">
+                                <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.12" />
+                            </filter>
+                        </defs>
 
-                    System Refusal to Close.
-                    Prompt: "You've identified a factor, but not a cause. What specific economic conditions? And were
-                    they sufficient on their own?"</div>
+                        <!-- Title -->
+                        <text x="310" y="28" text-anchor="middle" font-size="16" font-weight="bold" fill="#e8e6e1">The
+                            Socratic Validator</text>
+                        <text x="310" y="46" text-anchor="middle" font-size="11" fill="#8a8885" font-style="italic">The
+                            system refuses to do the thinking. It demands the student complete the structure.</text>
+
+                        <!-- Student claim box -->
+                        <rect x="40" y="60" width="540" height="42" rx="6" fill="#f5f5f5" stroke="#999"
+                            stroke-width="1.5" filter="url(#shadow6)" />
+                        <text x="55" y="76" font-size="10" fill="#888" font-weight="bold">STUDENT CLAIM:</text>
+                        <text x="55" y="92" font-size="12" fill="#333" font-style="italic">"The French Revolution was
+                            caused by economic inequality."</text>
+
+                        <!-- Arrow -->
+                        <line x1="310" y1="102" x2="310" y2="125" stroke="#c9a227" stroke-width="1.5" />
+                        <polygon points="305,125 310,135 315,125" fill="#c9a227" />
+
+                        <!-- Analysis box -->
+                        <rect x="40" y="140" width="540" height="260" rx="8" fill="#fafaf5" stroke="#1a1a1a"
+                            stroke-width="2" filter="url(#shadow6)" />
+                        <rect x="40" y="140" width="540" height="32" rx="8" fill="#1a1a1a" />
+                        <rect x="40" y="162" width="540" height="10" fill="#1a1a1a" />
+                        <text x="310" y="162" text-anchor="middle" font-size="13" font-weight="bold"
+                            fill="#c9a227">CLAIM ANALYSIS</text>
+
+                        <!-- 1. Referential - PASS -->
+                        <circle cx="68" cy="195" r="10" fill="#d4edda" stroke="#2D6A2D" stroke-width="1.5" />
+                        <text x="68" y="199" text-anchor="middle" font-size="12" fill="#2D6A2D"
+                            font-weight="bold">&#x2713;</text>
+                        <text x="88" y="199" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#8B4513">Referential:</tspan> "French Revolution", "economic
+                            inequality" &#x2014; identified
+                        </text>
+
+                        <!-- 2. Contextual - WARNING -->
+                        <circle cx="68" cy="228" r="10" fill="#fff3cd" stroke="#B8860B" stroke-width="1.5" />
+                        <text x="68" y="232" text-anchor="middle" font-size="12" fill="#B8860B"
+                            font-weight="bold">!</text>
+                        <text x="88" y="232" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#2E5090">Contextual:</tspan> Which period? 1789? The Terror?
+                            Thermidor?
+                        </text>
+
+                        <!-- 3. Premissive - FAIL -->
+                        <circle cx="68" cy="261" r="10" fill="#f8d7da" stroke="#8B0000" stroke-width="1.5" />
+                        <text x="68" y="265" text-anchor="middle" font-size="12" fill="#8B0000"
+                            font-weight="bold">&#x2717;</text>
+                        <text x="88" y="265" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#2D6A2D">Premissive:</tspan> Missing evidence. What economic
+                            data supports this?
+                        </text>
+
+                        <!-- 4. Inferential - WARNING -->
+                        <circle cx="68" cy="294" r="10" fill="#fff3cd" stroke="#B8860B" stroke-width="1.5" />
+                        <text x="68" y="298" text-anchor="middle" font-size="12" fill="#B8860B"
+                            font-weight="bold">!</text>
+                        <text x="88" y="298" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#8B0000">Inferential:</tspan> Correlation &#x2260;
+                            causation. What is the mechanism?
+                        </text>
+
+                        <!-- 5. Constraining - FAIL -->
+                        <circle cx="68" cy="327" r="10" fill="#f8d7da" stroke="#8B0000" stroke-width="1.5" />
+                        <text x="68" y="331" text-anchor="middle" font-size="12" fill="#8B0000"
+                            font-weight="bold">&#x2717;</text>
+                        <text x="88" y="331" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#6B3FA0">Constraining:</tspan> Too broad. Was economic
+                            inequality the ONLY cause?
+                        </text>
+
+                        <!-- 6. Teleological - WARNING -->
+                        <circle cx="68" cy="360" r="10" fill="#fff3cd" stroke="#B8860B" stroke-width="1.5" />
+                        <text x="68" y="364" text-anchor="middle" font-size="12" fill="#B8860B"
+                            font-weight="bold">!</text>
+                        <text x="88" y="364" font-size="12" fill="#333">
+                            <tspan font-weight="bold" fill="#B8860B">Teleological:</tspan> Thesis unclear. What argument
+                            are you making?
+                        </text>
+
+                        <!-- Result bar -->
+                        <rect x="40" y="388" width="540" height="12" rx="0" fill="#8B0000" />
+
+                        <!-- Refusal box -->
+                        <rect x="60" y="415" width="500" height="40" rx="6" fill="#fff0f0" stroke="#8B0000"
+                            stroke-width="1.5" />
+                        <text x="310" y="432" text-anchor="middle" font-size="12" font-weight="bold"
+                            fill="#8B0000">SYSTEM REFUSAL TO CLOSE</text>
+                        <text x="310" y="448" text-anchor="middle" font-size="10" fill="#666">Claim incomplete. 2
+                            failures, 3 warnings. Cannot validate.</text>
+
+                        <!-- Prompt box -->
+                        <rect x="40" y="468" width="540" height="42" rx="6" fill="#e8f0fe" stroke="#2E5090"
+                            stroke-width="1.5" filter="url(#shadow6)" />
+                        <text x="55" y="484" font-size="10" fill="#2E5090" font-weight="bold">SYSTEM PROMPT TO
+                            STUDENT:</text>
+                        <text x="55" y="500" font-size="11" fill="#333">"You've identified a factor, but not a cause.
+                            What specific economic conditions?</text>
+                        <text x="55" y="514" font-size="11" fill="#333">And were they sufficient on their own?"</text>
+                    </svg>
+                    <p><i>Figure 6</i></p>
+                </div>
                 <p>The system refuses to do the thinking. It demands the student complete the semantic structure.</p>
 
                 <hr>
